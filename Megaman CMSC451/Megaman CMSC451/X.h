@@ -26,4 +26,4 @@ class X {
 		// Responses
 		void damage(int damage);
 		void die();
-}
+};
