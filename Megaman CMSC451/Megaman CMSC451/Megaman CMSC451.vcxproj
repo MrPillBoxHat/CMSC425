@@ -85,7 +85,17 @@
   <ItemGroup>
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="Sigma.cpp" />
+    <ClCompile Include="World.cpp" />
     <ClCompile Include="X.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Sprites\Megaman\Entry\X_Entry.gif" />
+    <Image Include="..\Sprites\Megaman\jump\jump right.gif" />
+    <Image Include="..\Sprites\Megaman\jump\jump_left.gif" />
+    <Image Include="..\Sprites\Megaman\Run\run_left.gif" />
+    <Image Include="..\Sprites\Megaman\Run\run_right.gif" />
+    <Image Include="..\Sprites\Megaman\stand\face_left.gif" />
+    <Image Include="..\Sprites\Megaman\stand\face_right.gif" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

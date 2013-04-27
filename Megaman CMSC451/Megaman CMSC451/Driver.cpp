@@ -1,5 +1,4 @@
 #include <cstdlib>						// C++ standard definitions
-#include <iostream>						// I/O stream
 #include <GL/glut.h>                    // GLUT
 #include <GL/glu.h>                     // GLU
 #include <GL/gl.h>                      // OpenGL

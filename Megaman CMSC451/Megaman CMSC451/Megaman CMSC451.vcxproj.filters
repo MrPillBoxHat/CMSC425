@@ -25,6 +25,21 @@
     <Filter Include="Header Files\Characters\Objects">
       <UniqueIdentifier>{20e2f0c7-4e5a-4838-a6d6-53ea148ed844}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Megaman X Sprites">
+      <UniqueIdentifier>{2cf55c41-f015-4e2d-963f-8f657f6209e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Megaman X Sprites\Run">
+      <UniqueIdentifier>{82a8afbb-3b98-492a-a19e-f71dee0c75d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Megaman X Sprites\Stand">
+      <UniqueIdentifier>{9cf3c060-5e87-4b4d-b6ee-4eff5fd4c1b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Megaman X Sprites\Jump">
+      <UniqueIdentifier>{3b782c68-905e-4041-8755-88cb975054ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Megaman X Sprites\Level Entrance">
+      <UniqueIdentifier>{ad821f57-0fc4-4e75-8513-d832454a7918}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sigma.h">
@@ -53,5 +68,31 @@
     <ClCompile Include="Driver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Sprites\Megaman\Entry\X_Entry.gif">
+      <Filter>Resource Files\Megaman X Sprites\Level Entrance</Filter>
+    </Image>
+    <Image Include="..\Sprites\Megaman\jump\jump right.gif">
+      <Filter>Resource Files\Megaman X Sprites\Jump</Filter>
+    </Image>
+    <Image Include="..\Sprites\Megaman\jump\jump_left.gif">
+      <Filter>Resource Files\Megaman X Sprites\Jump</Filter>
+    </Image>
+    <Image Include="..\Sprites\Megaman\stand\face_left.gif">
+      <Filter>Resource Files\Megaman X Sprites\Stand</Filter>
+    </Image>
+    <Image Include="..\Sprites\Megaman\stand\face_right.gif">
+      <Filter>Resource Files\Megaman X Sprites\Stand</Filter>
+    </Image>
+    <Image Include="..\Sprites\Megaman\Run\run_left.gif">
+      <Filter>Resource Files\Megaman X Sprites\Run</Filter>
+    </Image>
+    <Image Include="..\Sprites\Megaman\Run\run_right.gif">
+      <Filter>Resource Files\Megaman X Sprites\Run</Filter>
+    </Image>
   </ItemGroup>
 </Project>
