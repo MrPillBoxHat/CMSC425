@@ -9,7 +9,7 @@ World world;
 
 void changeSize(int x, int y);
 void update();
-void draw();
+void drawWorld();
 void processNormalKeys(unsigned char key, int xx, int yy);
 void mouseButton(int button, int state, int xx, int yy);
 
@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 
 	// register callbacks
 	glutReshapeFunc(changeSize); // window reshape callback
-	glutDisplayFunc(draw); // (re)display callback
+	glutDisplayFunc(drawWorld); // (re)display callback
 	glutIdleFunc(update); // incremental update 
 	//glutIgnoreKeyRepeat(); // ignore key repeat when holding key down
 	glutMouseFunc(mouseButton); // process mouse button push/release
@@ -52,7 +52,7 @@ void update()
 {
 	 world.update();
 }
-void draw() 
+void drawWorld() 
 {
 	 world.draw();
 }

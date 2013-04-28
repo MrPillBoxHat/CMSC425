@@ -99,9 +99,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\CMSC 425\Simple OpenGL Image Library\lib\libSOIL.a" />
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="Megaman CMSC451.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
