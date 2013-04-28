@@ -1,5 +1,7 @@
 #pragma once
 
+#include <SOIL.h>
+
 class World
 {
 
