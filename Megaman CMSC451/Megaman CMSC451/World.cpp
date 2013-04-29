@@ -10,7 +10,7 @@
 #include <GL/glu.h>                     // GLU
 #include <GL/gl.h>                      // OpenGL
 
-#define SET_BG_COLOR glClearColor(0.5, 0.5, 0.5, 1.0)
+#define SET_BG_COLOR glClearColor(0.1, 0.5, 0.5, 1.0)
 
 void done(unsigned char key, int x, int y);
 void noDraw() {};
@@ -20,7 +20,6 @@ using namespace std;
 World::World(unsigned int w, unsigned int h) 
 {
 
-	
 }
 
 
