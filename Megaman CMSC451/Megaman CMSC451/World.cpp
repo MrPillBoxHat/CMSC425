@@ -6,6 +6,7 @@
 *********************************************************************************/
 
 #include "World.h"
+#include "X.h"
 #include <GL/glut.h>                    // GLUT
 #include <GL/glu.h>                     // GLU
 #include <GL/gl.h>                      // OpenGL
@@ -17,6 +18,10 @@ void noDraw() {};
 
 using namespace std;
 
+// Create Hero character
+X *x = new X();
+
+// Constructor for the World class
 World::World(unsigned int w, unsigned int h) 
 {
 
@@ -39,7 +44,7 @@ void World::draw(void)
 {
 	SET_BG_COLOR;
 	glClear(GL_COLOR_BUFFER_BIT);
-	
+	x->draw(); //Draws X
 	/* stuff */
 	glutSwapBuffers();
 }

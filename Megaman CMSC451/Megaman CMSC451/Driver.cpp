@@ -29,10 +29,7 @@ int main(int argc, char **argv)
 	glutIdleFunc(update); // incremental update 
 	//glutIgnoreKeyRepeat(); // ignore key repeat when holding key down
 	glutMouseFunc(mouseButton); // process mouse button push/release
-	//glutMotionFunc(); // process mouse dragging motion
 	glutKeyboardFunc(processNormalKeys); // process standard key clicks
-	//glutSpecialFunc(); // process special key pressed
-	//glutSpecialUpFunc(); // process special key release
 
 	// OpenGL init
 	glEnable(GL_DEPTH_TEST);
