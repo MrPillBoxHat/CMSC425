@@ -10,20 +10,28 @@ class X {
 		float x_coordinate;
 		float y_coordinate;
 		int health;
+		int state;
+		int direction;
 
 	// Contains public functions
 	public:
 		// Contructor
 		X();
+		// Getters
+		int getState(){return state;}
+		int getDirection(){return direction;}
+		// setters
+		void setHealth(int number){health += number;}
 		// Draw X
 		void draw();
 		// Actions
-		void move(int direction);
-		void jump(int direction);
-		void fire(int direction);
-		void charge(int direction);
-		void dash(int direction);
+		void stand();
+		void move();
+		void jump();
+		void fire();
+		void charge();
+		void dash();
 		// Responses
-		void damage(int damage);
+		void damage();
 		void die();
 };
