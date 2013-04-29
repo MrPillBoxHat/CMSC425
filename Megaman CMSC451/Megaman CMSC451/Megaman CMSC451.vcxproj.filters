@@ -76,19 +76,5 @@
     <Image Include="..\Sprites\Megaman\stand\stand_right.png">
       <Filter>Resource Files\Megaman X Sprites\Stand</Filter>
     </Image>
-<<<<<<< HEAD
-    <Image Include="..\Sprites\Megaman\Run\run_left.gif">
-      <Filter>Resource Files\Megaman X Sprites\Run</Filter>
-    </Image>
-    <Image Include="..\Sprites\Megaman\Run\run_right.gif">
-      <Filter>Resource Files\Megaman X Sprites\Run</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Megaman CMSC451.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
-=======
->>>>>>> update
   </ItemGroup>
 </Project>

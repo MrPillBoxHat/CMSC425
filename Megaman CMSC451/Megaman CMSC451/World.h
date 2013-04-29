@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SOIL.h>
+//#include <SOIL.h>
 
 class World
 {
