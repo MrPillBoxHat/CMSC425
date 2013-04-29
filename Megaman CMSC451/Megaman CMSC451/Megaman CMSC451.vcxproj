@@ -101,9 +101,12 @@
     <Image Include="..\Sprites\Megaman\stand\face_left.gif" />
     <Image Include="..\Sprites\Megaman\stand\face_right.gif" />
   </ItemGroup>
+<<<<<<< HEAD
   <ItemGroup>
     <ResourceCompile Include="Megaman CMSC451.rc" />
   </ItemGroup>
+=======
+>>>>>>> 5eb2f67297dc1b17407ba84d9604dd4d25144f18
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
