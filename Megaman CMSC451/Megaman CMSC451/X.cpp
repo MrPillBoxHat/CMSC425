@@ -32,6 +32,8 @@ X::X()
 	health = 50;
 	x_coordinate = 10.0;
 	y_coordinate = 10.0;
+	x_coord_frame = 0.0;
+	y_coord_frame = 0.0;
 	state = STAND;
 	direction = RIGHT;
 }
@@ -77,6 +79,7 @@ void X::loadStand()
 	if( 0 == textureID )
 	{
 		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
 	}
 
 	cout << "textureID: " << textureID << endl;
@@ -177,17 +180,25 @@ void X::draw()
 *************************************************************************************************/
 void X::stand()
 {
+	// How many frames to jump
+	float x_offset = 0.2;
+	float y_offset = 0.2;
+	// Draws the frame
 	cout << "Drawing standing" << endl;
-
 	glEnable(GL_TEXTURE_2D); // enable texturing
 	glBindTexture(GL_TEXTURE_2D, textures[STAND_RIGHT]); // select the active texture
-	glColor3f(0.0, 0.0, 0.0);
+	glColor3f(1.0, 1.0, 1.0);
 	glBegin(GL_POLYGON); // draw the object(s)
-		glTexCoord2d(0.0,0.0); glVertex2d(0.0,0.0);
-		glTexCoord2d(1.0,0.0); glVertex2d(200.0,0.0);
-		glTexCoord2d(1.0,1.0); glVertex2d(200.0,200.0);
-		glTexCoord2d(0.0,1.0); glVertex2d(0.0,200.0);
+		glTexCoord2d(x_coord_frame, 0.0); glVertex2d(0.0,0.0);
+		glTexCoord2d(x_coord_frame + x_offset, 0.0); glVertex2d(75.0,0.0);
+		glTexCoord2d(x_coord_frame + x_offset, 1.0); glVertex2d(75.0,75.0);
+		glTexCoord2d(x_coord_frame, 1.0); glVertex2d(0.0,75.0);
 	glEnd();
+	//update next frame or reset if reached the end
+	x_coord_frame += x_offset;
+	if(x_coord_frame >= 1.0){
+		x_coord_frame = 0.0;
+	}
 	glDisable(GL_TEXTURE_2D); // disable texturing
 }
 

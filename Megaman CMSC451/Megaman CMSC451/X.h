@@ -15,6 +15,8 @@ class X {
 		int health;
 		int state;
 		int direction;
+		float x_coord_frame;
+		float y_coord_frame;
 		GLuint textures[15];
 
 		// Private helper functions
