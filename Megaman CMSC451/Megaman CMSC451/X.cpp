@@ -9,8 +9,8 @@
 #include <GL/glut.h>                    // GLUT
 #include <GL/glu.h>                     // GLU
 #include <GL/gl.h>                      // OpenGL
-#include <SOIL.h>						// Library for loading images
-#include "X.h"							// X header file
+#include "SOIL.h" 						// Library for loading images
+#include "X.h" 							// X header file
 
 /*********************************************************************************************
 * Enumerations
@@ -23,6 +23,8 @@ enum states {STAND, MOVE, JUMP, FIRE, CHARGE, DASH, DAMAGE, DIE};
 enum texture_states{STAND_RIGHT, STAND_LEFT, MOVE_LEFT, MOVE_RIGHT, JUMP_LEFT, JUMP_RIGHT,
 					FIRE_LEFT, FIRE_RIGHT, DASH_LEFT, DASH_RIGHT, DAMAGE_LEFT, DAMAGE_RIGHT,
 					DIE_LEFT, DIE_RIGHT, CHARGE_TEXTURE};
+
+using namespace std;
 
 // Contructor
 X::X()
@@ -74,8 +76,9 @@ void X::loadStand()
 	/* check for an error during the load process */
 	if( 0 == textureID )
 	{
-		std::cout << "SOIL loading error:" << SOIL_last_result() << std::endl;
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
 	}
+
 	textures[STAND_RIGHT] = textureID; // Assign it to the texture array
 	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
 	// (use GL_REPLACE below for skyboxes)

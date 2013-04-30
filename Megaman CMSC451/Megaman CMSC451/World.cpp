@@ -7,16 +7,14 @@
 
 #include "World.h"
 #include "X.h"
+
 #include <GL/glut.h>                    // GLUT
-#include <GL/glu.h>                     // GLU
-#include <GL/gl.h>                      // OpenGL
 
 #define SET_BG_COLOR glClearColor(0.1, 0.5, 0.5, 1.0)
 
 void done(unsigned char key, int x, int y);
 void noDraw() {};
 
-using namespace std;
 
 // Constructor for the World class
 World::World(unsigned int w, unsigned int h) 
@@ -30,7 +28,7 @@ World::World(unsigned int w, unsigned int h)
 
 World::~World(void) 
 {
-	
+	delete x;
 }
 
 
@@ -44,7 +42,7 @@ void World::draw(void)
 {
 	SET_BG_COLOR;
 	glClear(GL_COLOR_BUFFER_BIT);
-	x->draw(); //Draws X
+	//x->draw(); //Draws X
 	/* stuff */
 	glutSwapBuffers();
 }
@@ -74,5 +72,5 @@ void World::mouseButton(int button, int state, int x, int y)
 
 
 void done(unsigned char key, int x, int y) {
-	exit(0);
+	
 }

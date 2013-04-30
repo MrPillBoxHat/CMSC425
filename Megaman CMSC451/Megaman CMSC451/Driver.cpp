@@ -1,3 +1,5 @@
+#include <iostream>						// input/outout stream
+
 #include <cstdlib>						// C++ standard definitions
 #include <GL/glut.h>                    // GLUT
 #include <GL/glu.h>                     // GLU
@@ -5,7 +7,7 @@
 
 #include "World.h"
 
-World world;
+World * world;
 
 void changeSize(int x, int y);
 void update();
@@ -13,12 +15,15 @@ void drawWorld();
 void processNormalKeys(unsigned char key, int xx, int yy);
 void mouseButton(int button, int state, int xx, int yy);
 
+using namespace std;
 
 int main(int argc, char **argv) 
 {
+	cout << "Starting.." << endl;
+
 	// general initializations
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(100, 100);
 	glutInitWindowSize(800, 800);
 	glutCreateWindow("Megaman CMSC425");
@@ -31,6 +36,7 @@ int main(int argc, char **argv)
 	glutMouseFunc(mouseButton); // process mouse button push/release
 	glutKeyboardFunc(processNormalKeys); // process standard key clicks
 
+	world = new World(800, 800); // textures have to be loaded after init
 	// OpenGL init
 	glEnable(GL_DEPTH_TEST);
 
@@ -42,24 +48,24 @@ int main(int argc, char **argv)
 
 void changeSize(int x, int y) 
 {
-	 world.setSize(x, y);
+	 world->setSize(x, y);
 }
 
 void update() 
 {
-	 world.update();
+	 world->update();
 }
 void drawWorld() 
 {
-	 world.draw();
+	 world->draw();
 }
 
 void mouseButton(int button, int state, int x, int y) 
 {
-	 world.mouseButton(button, state, x, y);
+	 world->mouseButton(button, state, x, y);
 }
 
 void processNormalKeys(unsigned char key, int xx, int yy) 
 {
-	world.processKeys(key, xx, yy);
+	world->processKeys(key, xx, yy);
 }

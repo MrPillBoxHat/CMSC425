@@ -40,6 +40,12 @@
     <Filter Include="Resource Files\Megaman X Sprites\Level Entrance">
       <UniqueIdentifier>{ad821f57-0fc4-4e75-8513-d832454a7918}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\SOIL">
+      <UniqueIdentifier>{333dddd7-df17-4d39-b9ae-e8b7bba5d3f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SOIL">
+      <UniqueIdentifier>{e0b4bf5c-682f-48b3-b9bc-330f364df2d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sigma.h">
@@ -57,6 +63,24 @@
     <ClInclude Include="X_Bullet.h">
       <Filter>Header Files\Characters\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\CMSC 425\Simple OpenGL Image Library\src\image_helper.h">
+      <Filter>Header Files\SOIL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\CMSC 425\Simple OpenGL Image Library\src\stbi_DDS_aug.h">
+      <Filter>Header Files\SOIL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\CMSC 425\Simple OpenGL Image Library\src\stbi_DDS_aug_c.h">
+      <Filter>Header Files\SOIL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\CMSC 425\Simple OpenGL Image Library\src\image_DXT.h">
+      <Filter>Header Files\SOIL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\CMSC 425\Simple OpenGL Image Library\src\SOIL.h">
+      <Filter>Header Files\SOIL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\CMSC 425\Simple OpenGL Image Library\src\stb_image_aug.h">
+      <Filter>Header Files\SOIL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="X.cpp">
@@ -70,6 +94,18 @@
     </ClCompile>
     <ClCompile Include="World.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\CMSC 425\Simple OpenGL Image Library\src\stb_image_aug.c">
+      <Filter>Source Files\SOIL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\CMSC 425\Simple OpenGL Image Library\src\image_DXT.c">
+      <Filter>Source Files\SOIL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\CMSC 425\Simple OpenGL Image Library\src\image_helper.c">
+      <Filter>Source Files\SOIL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\CMSC 425\Simple OpenGL Image Library\src\SOIL.c">
+      <Filter>Source Files\SOIL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

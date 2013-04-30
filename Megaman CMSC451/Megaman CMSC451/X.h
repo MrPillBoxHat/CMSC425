@@ -3,6 +3,9 @@
 *	Contains all function definitions
 *   and state of the character
 *******************************************************/
+#pragma once
+
+#include <GL\glut.h>
 
 class X {
 	// Contains X's health and location
