@@ -1,5 +1,6 @@
 #pragma once
 
+#include "X.h"
 //#include <SOIL.h>
 
 class World
@@ -7,6 +8,7 @@ class World
 private:
 	int width;
 	int height;
+	X *x;
 
 public:
 	World(unsigned int w, unsigned int h);
@@ -18,6 +20,5 @@ public:
 	void draw(void);
 	void processKeys(unsigned char key, int x, int y);
 	void mouseButton(int button, int state, int x, int y);
-
 
 };

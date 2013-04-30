@@ -18,13 +18,13 @@ void noDraw() {};
 
 using namespace std;
 
-// Create Hero character
-X *x = new X();
-
 // Constructor for the World class
 World::World(unsigned int w, unsigned int h) 
 {
-
+	width = width;
+	height = height;
+	x = new X();
+	x->loadTextures();
 }
 
 
@@ -76,4 +76,3 @@ void World::mouseButton(int button, int state, int x, int y)
 void done(unsigned char key, int x, int y) {
 	exit(0);
 }
-

@@ -28,8 +28,8 @@ enum texture_states{STAND_RIGHT, STAND_LEFT, MOVE_LEFT, MOVE_RIGHT, JUMP_LEFT, J
 X::X()
 {
 	health = 50;
-	x_coordinate = 0.0;
-	y_coordinate = 0.0;
+	x_coordinate = 10.0;
+	y_coordinate = 10.0;
 	state = STAND;
 	direction = RIGHT;
 }
@@ -62,7 +62,6 @@ void X::loadTextures()
 // Loads standing images
 void X::loadStand()
 {
-	glGenTextures(1, &textures[STAND_RIGHT]);
 	/* load an image file directly as a new OpenGL texture */
 	GLuint textureID = SOIL_load_OGL_texture
 	(
@@ -77,6 +76,7 @@ void X::loadStand()
 	{
 		std::cout << "SOIL loading error:" << SOIL_last_result() << std::endl;
 	}
+	textures[STAND_RIGHT] = textureID; // Assign it to the texture array
 	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
 	// (use GL_REPLACE below for skyboxes)
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -87,30 +87,6 @@ void X::loadStand()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glGenTextures(1, &textures[STAND_RIGHT]);
-
-	/* load an image file directly as a new OpenGL texture */
-	GLuint textureID = SOIL_load_OGL_texture
-	(
-		"stand_left.png",
-		SOIL_LOAD_AUTO,
-		SOIL_CREATE_NEW_ID,
-		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
-	);
-	
-	/* check for an error during the load process */
-	if( 0 == textureID )
-	{
-		std::cout << "SOIL loading error:" << SOIL_last_result() << std::endl;
-	}
-	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
-	// (use GL_REPLACE below for skyboxes)
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	// repeat texture
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// reasonable filter choices
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 }
 
 // Loads running images
@@ -198,35 +174,13 @@ void X::draw()
 *************************************************************************************************/
 void X::stand()
 {
-	/* load an image file directly as a new OpenGL texture */
-	GLuint textureID = SOIL_load_OGL_texture
-	(
-		"stand_right.png",
-		SOIL_LOAD_AUTO,
-		SOIL_CREATE_NEW_ID,
-		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
-	);
-	
-	/* check for an error during the load process */
-	if( 0 == textureID )
-	{
-		std::cout << "SOIL loading error:" << SOIL_last_result() << std::endl;
-	}
 	glEnable(GL_TEXTURE_2D); // enable texturing
-	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
-	// (use GL_REPLACE below for skyboxes)
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	// repeat texture
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// reasonable filter choices
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, textures[STAND_RIGHT]); // select the active texture
 	glBegin(GL_POLYGON); // draw the object(s)
-		glNormal3f( ... ); // set the surface normal
-		glTexCoord2f( ... ); // set texture coords
-		glVertex3f( ... ); // draw vertex
-	// ... (repeat for other vertices)
+		glTexCoord2d(0.0,0.0); glVertex2d(0.0,0.0);
+		glTexCoord2d(1.0,0.0); glVertex2d(1.0,0.0);
+		glTexCoord2d(1.0,1.0); glVertex2d(1.0,1.0);
+		glTexCoord2d(0.0,1.0); glVertex2d(0.0,1.0);
 	glEnd();
 	glDisable(GL_TEXTURE_2D); // disable texturing
 }

@@ -52,12 +52,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\Nelson\Documents\GitHub\CMSC425\Megaman CMSC451\Simple OpenGL Image Library\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Pissed off\Documents\GitHub\CMSC425\Megaman CMSC451\Simple OpenGL Image Library\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Nelson\Documents\GitHub\CMSC425\Megaman CMSC451\Simple OpenGL Image Library\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Pissed off\Documents\GitHub\CMSC425\Megaman CMSC451\Simple OpenGL Image Library\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -93,9 +93,14 @@
     <ClCompile Include="X.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\Sprites\Megaman\Entry\X_Entry.png" />
+    <Image Include="..\Sprites\Megaman\jump\jump_right.png" />
+    <Image Include="..\Sprites\Megaman\jump\jump_left.png" />
+    <Image Include="..\Sprites\Megaman\Run\run_left.png" />
+    <Image Include="..\Sprites\Megaman\Run\run_right.png" />
+    <Image Include="..\Sprites\Megaman\stand\stand_left.png" />
     <Image Include="..\Sprites\Megaman\stand\stand_right.png" />
   </ItemGroup>
-
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

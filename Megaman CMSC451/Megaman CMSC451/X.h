@@ -14,6 +14,17 @@ class X {
 		int direction;
 		GLuint textures[15];
 
+		// Private helper functions
+		// Helper functions to load textures
+		void loadStand();
+		void loadMove();
+		void loadJump();
+		void loadFire();
+		void loadCharge();
+		void loadDash();
+		void loadDamage();
+		void loadDie();
+
 	// Contains public functions
 	public:
 		// Contructor
@@ -37,13 +48,4 @@ class X {
 		void die();
 		// Loads textures
 		void loadTextures();
-		// Helper functions to load textures
-		void loadStand();
-		void loadMove();
-		void loadJump();
-		void loadFire();
-		void loadCharge();
-		void loadDash();
-		void loadDamage();
-		void loadDie();
 };

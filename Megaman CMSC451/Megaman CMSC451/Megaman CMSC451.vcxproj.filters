@@ -76,5 +76,23 @@
     <Image Include="..\Sprites\Megaman\stand\stand_right.png">
       <Filter>Resource Files\Megaman X Sprites\Stand</Filter>
     </Image>
+    <Image Include="..\Sprites\Megaman\stand\stand_left.png">
+      <Filter>Resource Files\Megaman X Sprites\Stand</Filter>
+    </Image>
+    <Image Include="..\Sprites\Megaman\Run\run_left.png">
+      <Filter>Resource Files\Megaman X Sprites\Run</Filter>
+    </Image>
+    <Image Include="..\Sprites\Megaman\Run\run_right.png">
+      <Filter>Resource Files\Megaman X Sprites\Run</Filter>
+    </Image>
+    <Image Include="..\Sprites\Megaman\Entry\X_Entry.png">
+      <Filter>Resource Files\Megaman X Sprites\Level Entrance</Filter>
+    </Image>
+    <Image Include="..\Sprites\Megaman\jump\jump_left.png">
+      <Filter>Resource Files\Megaman X Sprites\Jump</Filter>
+    </Image>
+    <Image Include="..\Sprites\Megaman\jump\jump_right.png">
+      <Filter>Resource Files\Megaman X Sprites\Jump</Filter>
+    </Image>
   </ItemGroup>
 </Project>
