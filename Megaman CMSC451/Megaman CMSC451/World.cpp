@@ -10,7 +10,7 @@
 
 #include <GL/glut.h>                    // GLUT
 
-#define SET_BG_COLOR glClearColor(0.1, 0.5, 0.5, 1.0)
+#define SET_BG_COLOR glClearColor(1.0, 1.0, 1.0, 1.0)
 
 void done(unsigned char key, int x, int y);
 void noDraw() {};
@@ -42,7 +42,7 @@ void World::draw(void)
 {
 	SET_BG_COLOR;
 	glClear(GL_COLOR_BUFFER_BIT);
-	//x->draw(); //Draws X
+	x->draw(); //Draws X
 	/* stuff */
 	glutSwapBuffers();
 }

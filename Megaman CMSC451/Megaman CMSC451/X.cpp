@@ -79,6 +79,8 @@ void X::loadStand()
 		cout << "SOIL loading error: " << SOIL_last_result() << endl;
 	}
 
+	cout << "textureID: " << textureID << endl;
+
 	textures[STAND_RIGHT] = textureID; // Assign it to the texture array
 	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
 	// (use GL_REPLACE below for skyboxes)
@@ -177,13 +179,19 @@ void X::draw()
 *************************************************************************************************/
 void X::stand()
 {
+	cout << "Drawing standing" << endl;
+
 	glEnable(GL_TEXTURE_2D); // enable texturing
 	glBindTexture(GL_TEXTURE_2D, textures[STAND_RIGHT]); // select the active texture
+
+	const int w = 15;
 	glBegin(GL_POLYGON); // draw the object(s)
+		//glNormal3d(0, 0, 1);
+
 		glTexCoord2d(0.0,0.0); glVertex2d(0.0,0.0);
-		glTexCoord2d(1.0,0.0); glVertex2d(1.0,0.0);
-		glTexCoord2d(1.0,1.0); glVertex2d(1.0,1.0);
-		glTexCoord2d(0.0,1.0); glVertex2d(0.0,1.0);
+		glTexCoord2d(1.0,0.0); glVertex2d(w*1.0,0.0);
+		glTexCoord2d(1.0,1.0); glVertex2d(w*1.0,w*1.0);
+		glTexCoord2d(0.0,1.0); glVertex2d(0.0,w*1.0);
 	glEnd();
 	glDisable(GL_TEXTURE_2D); // disable texturing
 }

@@ -133,7 +133,6 @@ void World::drawBackground()
 	const GLfloat h = -2.0;
 	glBegin(GL_POLYGON);
 		glNormal3d(0, 0, 1);
-
 		glTexCoord2f(0, 0);
 		glVertex3f(-w, -w, h);
 
