@@ -12,6 +12,7 @@ class X {
 		int health;
 		int state;
 		int direction;
+		GLuint textures[15];
 
 	// Contains public functions
 	public:
@@ -34,4 +35,15 @@ class X {
 		// Responses
 		void damage();
 		void die();
+		// Loads textures
+		void loadTextures();
+		// Helper functions to load textures
+		void loadStand();
+		void loadMove();
+		void loadJump();
+		void loadFire();
+		void loadCharge();
+		void loadDash();
+		void loadDamage();
+		void loadDie();
 };
