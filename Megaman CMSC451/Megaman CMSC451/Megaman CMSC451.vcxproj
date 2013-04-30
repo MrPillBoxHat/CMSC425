@@ -52,7 +52,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\Henry\Documents\GitHub\CMSC425\Megaman CMSC451\Simple OpenGL Image Library\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\CMSC425\lib\Simple OpenGL Image Library\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <AdditionalOptions> /NODEFAULTLIB:"MSVCRT"</AdditionalOptions>
     </ClCompile>
@@ -84,12 +84,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\CMSC 425\Simple OpenGL Image Library\src\image_DXT.h" />
-    <ClInclude Include="..\..\..\..\CMSC 425\Simple OpenGL Image Library\src\image_helper.h" />
-    <ClInclude Include="..\..\..\..\CMSC 425\Simple OpenGL Image Library\src\SOIL.h" />
-    <ClInclude Include="..\..\..\..\CMSC 425\Simple OpenGL Image Library\src\stbi_DDS_aug.h" />
-    <ClInclude Include="..\..\..\..\CMSC 425\Simple OpenGL Image Library\src\stbi_DDS_aug_c.h" />
-    <ClInclude Include="..\..\..\..\CMSC 425\Simple OpenGL Image Library\src\stb_image_aug.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\image_DXT.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\image_helper.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\SOIL.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\stbi_DDS_aug.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\stbi_DDS_aug_c.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\stb_image_aug.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Sigma.h" />
     <ClInclude Include="World.h" />
@@ -97,10 +97,10 @@
     <ClInclude Include="X_Bullet.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\CMSC 425\Simple OpenGL Image Library\src\image_DXT.c" />
-    <ClCompile Include="..\..\..\..\CMSC 425\Simple OpenGL Image Library\src\image_helper.c" />
-    <ClCompile Include="..\..\..\..\CMSC 425\Simple OpenGL Image Library\src\SOIL.c" />
-    <ClCompile Include="..\..\..\..\CMSC 425\Simple OpenGL Image Library\src\stb_image_aug.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\image_DXT.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\image_helper.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\SOIL.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\stb_image_aug.c" />
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="Sigma.cpp" />
     <ClCompile Include="World.cpp" />
