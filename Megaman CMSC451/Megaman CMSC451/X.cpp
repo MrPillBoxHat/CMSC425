@@ -67,7 +67,7 @@ void X::loadStand()
 	/* load an image file directly as a new OpenGL texture */
 	GLuint textureID = SOIL_load_OGL_texture
 	(
-		"stand_right.png",
+		"Sprites/Megaman/stand/stand_right.png",
 		SOIL_LOAD_AUTO,
 		SOIL_CREATE_NEW_ID,
 		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
@@ -83,7 +83,6 @@ void X::loadStand()
 
 	textures[STAND_RIGHT] = textureID; // Assign it to the texture array
 	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
-	// (use GL_REPLACE below for skyboxes)
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	// repeat texture
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -91,7 +90,6 @@ void X::loadStand()
 	// reasonable filter choices
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glGenTextures(1, &textures[STAND_RIGHT]);
 }
 
 // Loads running images
@@ -183,15 +181,12 @@ void X::stand()
 
 	glEnable(GL_TEXTURE_2D); // enable texturing
 	glBindTexture(GL_TEXTURE_2D, textures[STAND_RIGHT]); // select the active texture
-
-	const int w = 15;
+	glColor3f(0.0, 0.0, 0.0);
 	glBegin(GL_POLYGON); // draw the object(s)
-		//glNormal3d(0, 0, 1);
-
 		glTexCoord2d(0.0,0.0); glVertex2d(0.0,0.0);
-		glTexCoord2d(1.0,0.0); glVertex2d(w*1.0,0.0);
-		glTexCoord2d(1.0,1.0); glVertex2d(w*1.0,w*1.0);
-		glTexCoord2d(0.0,1.0); glVertex2d(0.0,w*1.0);
+		glTexCoord2d(1.0,0.0); glVertex2d(200.0,0.0);
+		glTexCoord2d(1.0,1.0); glVertex2d(200.0,200.0);
+		glTexCoord2d(0.0,1.0); glVertex2d(0.0,200.0);
 	glEnd();
 	glDisable(GL_TEXTURE_2D); // disable texturing
 }

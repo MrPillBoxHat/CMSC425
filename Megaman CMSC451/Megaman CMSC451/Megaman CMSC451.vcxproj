@@ -107,13 +107,13 @@
     <ClCompile Include="X.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\Sprites\Megaman\Entry\X_Entry.png" />
-    <Image Include="..\Sprites\Megaman\jump\jump_right.png" />
-    <Image Include="..\Sprites\Megaman\jump\jump_left.png" />
-    <Image Include="..\Sprites\Megaman\Run\run_left.png" />
-    <Image Include="..\Sprites\Megaman\Run\run_right.png" />
-    <Image Include="..\Sprites\Megaman\stand\stand_left.png" />
-    <Image Include="..\Sprites\Megaman\stand\stand_right.png" />
+    <Image Include="Sprites\Megaman\Entry\X_Entry.png" />
+    <Image Include="Sprites\Megaman\jump\jump_left.png" />
+    <Image Include="Sprites\Megaman\jump\jump_right.png" />
+    <Image Include="Sprites\Megaman\Run\run_left.png" />
+    <Image Include="Sprites\Megaman\Run\run_right.png" />
+    <Image Include="Sprites\Megaman\stand\stand_left.png" />
+    <Image Include="Sprites\Megaman\stand\stand_right.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

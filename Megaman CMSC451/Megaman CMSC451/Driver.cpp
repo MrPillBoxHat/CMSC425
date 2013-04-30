@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(100, 100);
-	glutInitWindowSize(800, 800);
+	glutInitWindowSize(800, 500);
 	glutCreateWindow("Megaman CMSC425");
 
 	// register callbacks
@@ -36,9 +36,7 @@ int main(int argc, char **argv)
 	glutMouseFunc(mouseButton); // process mouse button push/release
 	glutKeyboardFunc(processNormalKeys); // process standard key clicks
 
-	world = new World(800, 800); // textures have to be loaded after init
-	// OpenGL init
-	glEnable(GL_DEPTH_TEST);
+	world = new World(800, 500); // textures have to be loaded after inits
 
 	// enter GLUT event processing cycle
 	glutMainLoop();
