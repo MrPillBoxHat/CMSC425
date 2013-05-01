@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 	glutMouseFunc(mouseButton); // process mouse button push/release
 	glutKeyboardFunc(processNormalKeys); // process standard key clicks
 
-	world = new World(800, 500); // textures have to be loaded after inits
+	world = new World(1024, 768); // textures have to be loaded after inits
 
 	// enter GLUT event processing cycle
 	glutMainLoop();

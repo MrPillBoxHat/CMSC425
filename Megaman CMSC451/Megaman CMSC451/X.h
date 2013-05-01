@@ -15,12 +15,14 @@ class X {
 		int health;
 		int state;
 		int direction;
-		float x_coord_frame;
-		float y_coord_frame;
-		GLuint textures[15];
+		int counter;
+		float x1_coord;
+		float y2_coord;
+		GLuint textures[16];
 
 		// Private helper functions
 		// Helper functions to load textures
+		void loadEntry();
 		void loadStand();
 		void loadMove();
 		void loadJump();
@@ -34,14 +36,12 @@ class X {
 	public:
 		// Contructor
 		X();
-		// Getters
-		int getState(){return state;}
-		int getDirection(){return direction;}
 		// setters
 		void setHealth(int number){health += number;}
 		// Draw X
 		void draw();
 		// Actions
+		void entry();
 		void stand();
 		void move();
 		void jump();

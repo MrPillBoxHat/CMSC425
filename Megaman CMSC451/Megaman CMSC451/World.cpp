@@ -53,7 +53,7 @@ void World::draw(void)
 	delta_time += current_time - start_time; // Gets change in time
 	start_time = current_time; // Resets start time
 	lapse_time += delta_time; // Increment total time
-
+	// Determines whether to draw or sleep
 	if(delta_time < ( 1000 / fps)) {
 		Sleep((1000 / fps) - delta_time);
 	} else {
@@ -61,8 +61,8 @@ void World::draw(void)
 		SET_BG_COLOR;
 		glClear(GL_COLOR_BUFFER_BIT);
 		x->draw(); //Draws X
-		/* stuff */
 		glutSwapBuffers();
+		// Updates timer information
 		frames++;
 		delta_time = 0;
 		if(lapse_time > 1000){

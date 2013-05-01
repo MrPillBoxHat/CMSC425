@@ -19,10 +19,10 @@
 *
 *********************************************************************************************/
 enum directions {LEFT, RIGHT};
-enum states {STAND, MOVE, JUMP, FIRE, CHARGE, DASH, DAMAGE, DIE};
+enum states {STAND, MOVE, JUMP, FIRE, CHARGE, DASH, DAMAGE, DIE, ENTRY};
 enum texture_states{STAND_RIGHT, STAND_LEFT, MOVE_LEFT, MOVE_RIGHT, JUMP_LEFT, JUMP_RIGHT,
 					FIRE_LEFT, FIRE_RIGHT, DASH_LEFT, DASH_RIGHT, DAMAGE_LEFT, DAMAGE_RIGHT,
-					DIE_LEFT, DIE_RIGHT, CHARGE_TEXTURE};
+					DIE_LEFT, DIE_RIGHT, CHARGE_TEXTURE, ENTRY_TEXUTRE};
 
 using namespace std;
 
@@ -32,109 +32,11 @@ X::X()
 	health = 50;
 	x_coordinate = 10.0;
 	y_coordinate = 10.0;
-	x_coord_frame = 0.0;
-	y_coord_frame = 0.0;
-	state = STAND;
+	x1_coord = 0.0;
+	y2_coord = 1.0;
+	state = ENTRY;
 	direction = RIGHT;
-}
-
-/***********************************************************************************************
-* loadTextures()
-*	Creates and loads all textures onto the video card
-*	Uses smaller helper functions to load all the images to make code more readable
-*	Each state has two images, one for facing left and one for facing right.
-*
-***********************************************************************************************/
-void X::loadTextures()
-{
-	loadStand();
-	loadMove();
-	loadJump();
-	loadFire();
-	loadCharge();
-	loadDash();
-	loadDamage();
-	loadDie();
-}
-
-/***************************************************************************************************
-* loadXXXX()
-*	loads specific images related to the function name
-*	These are helper functions used in order to make code more organized and readable
-*
-***************************************************************************************************/
-// Loads standing images
-void X::loadStand()
-{
-	/* load an image file directly as a new OpenGL texture */
-	GLuint textureID = SOIL_load_OGL_texture
-	(
-		"Sprites/Megaman/stand/stand_right.png",
-		SOIL_LOAD_AUTO,
-		SOIL_CREATE_NEW_ID,
-		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
-	);
-	
-	/* check for an error during the load process */
-	if( 0 == textureID )
-	{
-		cout << "SOIL loading error: " << SOIL_last_result() << endl;
-		exit(0);
-	}
-
-	cout << "textureID: " << textureID << endl;
-
-	textures[STAND_RIGHT] = textureID; // Assign it to the texture array
-	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	// repeat texture
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// reasonable filter choices
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-}
-
-// Loads running images
-void X::loadMove()
-{
-
-}
-
-// Loads jumping images
-void X::loadJump()
-{
-
-}
-
-// Loads firing images
-void X::loadFire()
-{
-
-}
-
-// Loads charging images
-void X::loadCharge()
-{
-
-}
-
-// Loads dashing images
-void X::loadDash()
-{
-
-}
-
-// Loads damage (getting hit) images
-void X::loadDamage()
-{
-
-}
-
-// Load death image
-void X::loadDie()
-{
-
+	counter = 0; // Counter is to keep track of FPS
 }
 
 /***************************************************************************************************
@@ -145,8 +47,11 @@ void X::loadDie()
 ****************************************************************************************************/
 void X::draw()
 {
-	switch(X::getState())
+	switch(state)
 	{
+		case ENTRY:
+			entry();
+			break; // Delete after testing
 		case STAND:
 			stand();
 			break;
@@ -178,6 +83,55 @@ void X::draw()
 *  All helper functions that draw X's actions based on his state
 *
 *************************************************************************************************/
+// Draws X entering the stage
+void X::entry()
+{
+	// How many frames to jump
+	float x_offset = 0.125;
+	float y_offset = .5;
+	// Draws the frame
+	glEnable(GL_TEXTURE_2D); // enable texturing
+	glBindTexture(GL_TEXTURE_2D, textures[ENTRY_TEXUTRE]); // select the active texture
+	glColor4f(1.0, 1.0, 1.0, 1.0);
+	glBegin(GL_POLYGON); // draw the object(s)
+		//real coord
+		glTexCoord2d(x1_coord, y2_coord - y_offset); glVertex2d(300.0,75.0);
+		glTexCoord2d(x1_coord + x_offset, y2_coord - y_offset); glVertex2d(525.0,75.0);
+		glTexCoord2d(x1_coord + x_offset, y2_coord); glVertex2d(525.0,300.0);
+		glTexCoord2d(x1_coord, y2_coord); glVertex2d(300.0,300.0);
+	glEnd();
+	glBegin(GL_POLYGON);
+		//test coord
+		glTexCoord2d(x1_coord, y2_coord - y_offset); glVertex2d(75.0,75.0);
+		glTexCoord2d(x1_coord + x_offset, y2_coord - y_offset); glVertex2d(150.0,75.0);
+		glTexCoord2d(x1_coord + x_offset, y2_coord); glVertex2d(150.0,150.0);
+		glTexCoord2d(x1_coord, y2_coord); glVertex2d(75.0,150.0);
+	glEnd();
+	// Update frame pointers
+	if(counter % 5 == 0){
+		// go to next frame
+		x1_coord += x_offset;
+		if(x1_coord >= 1.0){
+			// Reset x frame pointer
+			x1_coord = 0.0;
+			// Move down 1 row
+			y2_coord -= y_offset;
+			// When Finished, load stand
+			if(y2_coord <= 0.0){
+				y2_coord = 1.0;
+				//state = STAND;
+			}
+		}
+	}
+	counter++;
+	//resets counter
+	if(counter == 60){
+		counter = 0;
+	}
+	glDisable(GL_TEXTURE_2D); // disable texturing
+}
+
+// Draws X standing
 void X::stand()
 {
 	// How many frames to jump
@@ -185,26 +139,38 @@ void X::stand()
 	float y_offset = 0.2;
 	// Draws the frame
 	glEnable(GL_TEXTURE_2D); // enable texturing
-	glBindTexture(GL_TEXTURE_2D, textures[STAND_RIGHT]); // select the active texture
+	if(direction == RIGHT){
+		glBindTexture(GL_TEXTURE_2D, textures[STAND_RIGHT]); // select the active texture
+	} else {
+		glBindTexture(GL_TEXTURE_2D, textures[STAND_LEFT]); // select the active texture
+	}
 	glColor4f(1.0, 1.0, 1.0, 1.0);
 	glBegin(GL_POLYGON); // draw the object(s)
 		//test coord
-		glTexCoord2d(x_coord_frame, 0.0); glVertex2d(150.0,75.0);
-		glTexCoord2d(x_coord_frame + x_offset, 0.0); glVertex2d(375.0,75.0);
-		glTexCoord2d(x_coord_frame + x_offset, 1.0); glVertex2d(375.0,300.0);
-		glTexCoord2d(x_coord_frame, 1.0); glVertex2d(150.0,300.0);
+		glTexCoord2d(x1_coord, 0.0); glVertex2d(150.0,75.0);
+		glTexCoord2d(x1_coord + x_offset, 0.0); glVertex2d(375.0,75.0);
+		glTexCoord2d(x1_coord + x_offset, 1.0); glVertex2d(375.0,300.0);
+		glTexCoord2d(x1_coord, 1.0); glVertex2d(150.0,300.0);
 	glEnd();
 	glBegin(GL_POLYGON);
 		//real coord
-		glTexCoord2d(x_coord_frame, 0.0); glVertex2d(75.0,75.0);
-		glTexCoord2d(x_coord_frame + x_offset, 0.0); glVertex2d(150.0,75.0);
-		glTexCoord2d(x_coord_frame + x_offset, 1.0); glVertex2d(150.0,150.0);
-		glTexCoord2d(x_coord_frame, 1.0); glVertex2d(75.0,150.0);
+		glTexCoord2d(x1_coord, 0.0); glVertex2d(75.0,75.0);
+		glTexCoord2d(x1_coord + x_offset, 0.0); glVertex2d(150.0,75.0);
+		glTexCoord2d(x1_coord + x_offset, 1.0); glVertex2d(150.0,150.0);
+		glTexCoord2d(x1_coord, 1.0); glVertex2d(75.0,150.0);
 	glEnd();
-	//update next frame or reset if reached the end
-	x_coord_frame += x_offset;
-	if(x_coord_frame >= 1.0){
-		x_coord_frame = 0.0;
+	// Want to draw 5 frames per second
+	if(counter % 12 == 0){
+		//update next frame or reset if reached the end
+		x1_coord += x_offset;
+		if(x1_coord >= 1.0){
+			x1_coord = 0.0;
+		}
+	}
+	counter++;
+	//resets counter
+	if(counter == 60){
+		counter = 0;
 	}
 	glDisable(GL_TEXTURE_2D); // disable texturing
 }
@@ -237,6 +203,274 @@ void X::damage()
 
 }
 void X::die()
+{
+
+}
+
+/***********************************************************************************************
+* loadTextures()
+*	Creates and loads all textures onto the video card
+*	Uses smaller helper functions to load all the images to make code more readable
+*	Each state has two images, one for facing left and one for facing right.
+*
+***********************************************************************************************/
+void X::loadTextures()
+{
+	loadEntry();
+	loadStand();
+	loadMove();
+	loadJump();
+	loadFire();
+	loadCharge();
+	loadDash();
+	loadDamage();
+	loadDie();
+}
+
+/***************************************************************************************************
+* loadXXXX()
+*	loads specific images related to the function name
+*	These are helper functions used in order to make code more organized and readable
+*
+***************************************************************************************************/
+// Loads entry images
+void X::loadEntry()
+{
+	/* loads entry image directly as a new OpenGL texture */
+	GLuint textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/Entry/X_Entry.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "textureID: " << textureID << endl;
+
+	textures[ENTRY_TEXUTRE] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+}
+
+// Loads standing images
+void X::loadStand()
+{
+	/* loads stand right image directly as a new OpenGL texture */
+	GLuint textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/stand/stand_right.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "textureID: " << textureID << endl;
+
+	textures[STAND_RIGHT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads stand left image directly as a new OpenGL texture */
+	textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/stand/stand_left.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "textureID: " << textureID << endl;
+
+	textures[STAND_LEFT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+}
+
+// Loads running images
+void X::loadMove()
+{
+	/* loads move right image directly as a new OpenGL texture */
+	GLuint textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/Run/run_right.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "textureID: " << textureID << endl;
+
+	textures[MOVE_RIGHT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads stand left image directly as a new OpenGL texture */
+	textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/Run/run_left.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "textureID: " << textureID << endl;
+
+	textures[MOVE_LEFT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+}
+
+// Loads jumping images
+void X::loadJump()
+{
+	/* loads jump right image directly as a new OpenGL texture */
+	GLuint textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/jump/jump_right.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "textureID: " << textureID << endl;
+
+	textures[MOVE_RIGHT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads jump left image directly as a new OpenGL texture */
+	textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/jump/jump_left.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "textureID: " << textureID << endl;
+
+	textures[MOVE_LEFT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+}
+
+// Loads firing images
+void X::loadFire()
+{
+
+}
+
+// Loads charging images
+void X::loadCharge()
+{
+
+}
+
+// Loads dashing images
+void X::loadDash()
+{
+
+}
+
+// Loads damage (getting hit) images
+void X::loadDamage()
+{
+
+}
+
+// Load death image
+void X::loadDie()
 {
 
 }
