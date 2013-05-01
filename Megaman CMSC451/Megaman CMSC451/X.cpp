@@ -47,6 +47,11 @@ X::X()
 ****************************************************************************************************/
 void X::draw()
 {
+	// Enables texturess
+	glEnable(GL_TEXTURE_2D); // enable texturing
+	// Enable transparency
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	switch(state)
 	{
 		case ENTRY:
@@ -77,6 +82,8 @@ void X::draw()
 			die();
 			break;
 	}
+	glDisable(GL_BLEND);
+	glDisable(GL_TEXTURE_2D); // disable texturing
 }
 
 /*************************************************************************************************
@@ -90,7 +97,6 @@ void X::entry()
 	float x_offset = 0.125;
 	float y_offset = .5;
 	// Draws the frame
-	glEnable(GL_TEXTURE_2D); // enable texturing
 	glBindTexture(GL_TEXTURE_2D, textures[ENTRY_TEXUTRE]); // select the active texture
 	glColor4f(1.0, 1.0, 1.0, 1.0);
 	glBegin(GL_POLYGON); // draw the object(s)
@@ -120,7 +126,6 @@ void X::entry()
 	if(counter == 60){
 		counter = 0;
 	}
-	glDisable(GL_TEXTURE_2D); // disable texturing
 }
 
 // Draws X standing
@@ -130,7 +135,6 @@ void X::stand()
 	float x_offset = 0.2;
 	float y_offset = 0.2;
 	// Draws the frame
-	glEnable(GL_TEXTURE_2D); // enable texturing
 	if(direction == RIGHT){
 		glBindTexture(GL_TEXTURE_2D, textures[STAND_RIGHT]); // select the active texture
 	} else {
@@ -140,10 +144,10 @@ void X::stand()
 	// Draw objects
 	glBegin(GL_POLYGON);
 		//real coord
-		glTexCoord2d(x1_coord, 0.0); glVertex2d(350.0,100.0);
-		glTexCoord2d(x1_coord + x_offset, 0.0); glVertex2d(401.2,100.0);
-		glTexCoord2d(x1_coord + x_offset, 1.0); glVertex2d(401.2,164.0);
-		glTexCoord2d(x1_coord, 1.0); glVertex2d(350.0,164.0);
+		glTexCoord2d(x1_coord, 0.0); glVertex2d(348.0,100.0);
+		glTexCoord2d(x1_coord + x_offset, 0.0); glVertex2d(399.2,100.0);
+		glTexCoord2d(x1_coord + x_offset, 1.0); glVertex2d(399.2,164.0);
+		glTexCoord2d(x1_coord, 1.0); glVertex2d(348.0,164.0);
 	glEnd();
 	// Want to draw 5 frames per second
 	if(counter % 15 == 0){
@@ -158,7 +162,6 @@ void X::stand()
 	if(counter == 60){
 		counter = 0;
 	}
-	glDisable(GL_TEXTURE_2D); // disable texturing
 }
 
 void X::move()
