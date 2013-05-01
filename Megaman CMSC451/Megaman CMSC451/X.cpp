@@ -187,7 +187,7 @@ void X::stand()
 	cout << "Drawing standing" << endl;
 	glEnable(GL_TEXTURE_2D); // enable texturing
 	glBindTexture(GL_TEXTURE_2D, textures[STAND_RIGHT]); // select the active texture
-	glColor3f(1.0, 1.0, 1.0);
+	glColor4f(1.0, 1.0, 1.0, 1.0);
 	glBegin(GL_POLYGON); // draw the object(s)
 		glTexCoord2d(x_coord_frame, 0.0); glVertex2d(0.0,0.0);
 		glTexCoord2d(x_coord_frame + x_offset, 0.0); glVertex2d(75.0,0.0);

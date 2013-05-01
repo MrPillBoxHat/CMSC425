@@ -8,6 +8,7 @@ class World
 private:
 	int width;
 	int height;
+	// Hero object
 	X *x;
 
 public:

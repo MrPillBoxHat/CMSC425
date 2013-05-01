@@ -40,6 +40,7 @@ void World::update(void)
 
 void World::draw(void) 
 {
+	// Draw
 	SET_BG_COLOR;
 	glClear(GL_COLOR_BUFFER_BIT);
 	x->draw(); //Draws X
