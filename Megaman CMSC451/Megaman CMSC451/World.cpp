@@ -5,16 +5,18 @@
 *       Henry Ramos
 *********************************************************************************/
 
+#include <windows.h>				// Used for sleep function
 #include "World.h"
 #include "X.h"
-
-#include <GL/glut.h>                    // GLUT
+#include <iostream>					// Uses I/O
+#include <GL/glut.h>                // GLUT
 
 #define SET_BG_COLOR glClearColor(0.5, 0.1, 0.5, 1.0)
 
 void done(unsigned char key, int x, int y);
 void noDraw() {};
 
+using namespace std;
 
 // Constructor for the World class
 World::World(unsigned int w, unsigned int h) 
@@ -23,6 +25,12 @@ World::World(unsigned int w, unsigned int h)
 	height = height;
 	x = new X();
 	x->loadTextures();
+	delta_time = 0;
+	start_time = glutGet(GLUT_ELAPSED_TIME);
+	current_time = 0;
+	lapse_time = 0;
+	frames = 0;
+	fps = 60;
 }
 
 
@@ -40,12 +48,30 @@ void World::update(void)
 
 void World::draw(void) 
 {
-	// Draw
-	SET_BG_COLOR;
-	glClear(GL_COLOR_BUFFER_BIT);
-	x->draw(); //Draws X
-	/* stuff */
-	glutSwapBuffers();
+	// Controls Frames per Second of the game
+	current_time = glutGet(GLUT_ELAPSED_TIME); // Gets current time
+	delta_time += current_time - start_time; // Gets change in time
+	start_time = current_time; // Resets start time
+	lapse_time += delta_time; // Increment total time
+
+	if(delta_time < ( 1000 / fps)) {
+		Sleep((1000 / fps) - delta_time);
+	} else {
+		// Draw
+		SET_BG_COLOR;
+		glClear(GL_COLOR_BUFFER_BIT);
+		x->draw(); //Draws X
+		/* stuff */
+		glutSwapBuffers();
+		frames++;
+		delta_time = 0;
+		if(lapse_time > 1000){
+			cout << "FPS: " << frames << endl;
+			// reset timers
+			frames = 0;
+			lapse_time = 0;
+		}
+	}
 }
 
 void World::setSize(int w, int h) 

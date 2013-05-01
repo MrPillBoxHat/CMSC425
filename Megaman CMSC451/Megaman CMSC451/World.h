@@ -8,6 +8,13 @@ class World
 private:
 	int width;
 	int height;
+	// Variables to keep track of frames per second
+	int delta_time;
+	int start_time;
+	int current_time;
+	int lapse_time;
+	int frames;
+	int fps;
 	// Hero object
 	X *x;
 

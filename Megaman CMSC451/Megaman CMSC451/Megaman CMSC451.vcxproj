@@ -59,7 +59,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>"C:\Users\Henry\Documents\GitHub\CMSC425\Megaman CMSC451\Simple OpenGL Image Library\lib";C:\Users\Pissed off\Documents\GitHub\CMSC425\Megaman CMSC451\Simple OpenGL Image Library\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\CMSC425\lib\Simple OpenGL Image Library\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

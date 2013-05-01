@@ -184,15 +184,22 @@ void X::stand()
 	float x_offset = 0.2;
 	float y_offset = 0.2;
 	// Draws the frame
-	cout << "Drawing standing" << endl;
 	glEnable(GL_TEXTURE_2D); // enable texturing
 	glBindTexture(GL_TEXTURE_2D, textures[STAND_RIGHT]); // select the active texture
 	glColor4f(1.0, 1.0, 1.0, 1.0);
 	glBegin(GL_POLYGON); // draw the object(s)
-		glTexCoord2d(x_coord_frame, 0.0); glVertex2d(0.0,0.0);
-		glTexCoord2d(x_coord_frame + x_offset, 0.0); glVertex2d(75.0,0.0);
-		glTexCoord2d(x_coord_frame + x_offset, 1.0); glVertex2d(75.0,75.0);
-		glTexCoord2d(x_coord_frame, 1.0); glVertex2d(0.0,75.0);
+		//test coord
+		glTexCoord2d(x_coord_frame, 0.0); glVertex2d(150.0,75.0);
+		glTexCoord2d(x_coord_frame + x_offset, 0.0); glVertex2d(375.0,75.0);
+		glTexCoord2d(x_coord_frame + x_offset, 1.0); glVertex2d(375.0,300.0);
+		glTexCoord2d(x_coord_frame, 1.0); glVertex2d(150.0,300.0);
+	glEnd();
+	glBegin(GL_POLYGON);
+		//real coord
+		glTexCoord2d(x_coord_frame, 0.0); glVertex2d(75.0,75.0);
+		glTexCoord2d(x_coord_frame + x_offset, 0.0); glVertex2d(150.0,75.0);
+		glTexCoord2d(x_coord_frame + x_offset, 1.0); glVertex2d(150.0,150.0);
+		glTexCoord2d(x_coord_frame, 1.0); glVertex2d(75.0,150.0);
 	glEnd();
 	//update next frame or reset if reached the end
 	x_coord_frame += x_offset;
