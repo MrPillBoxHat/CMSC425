@@ -18,6 +18,10 @@ void noDraw() {};
 
 using namespace std;
 
+// Enumerations to make code readable
+enum directions {LEFT, RIGHT};
+enum states {STAND, MOVE, JUMP, FIRE, CHARGE, DASH, DAMAGE, DIE, ENTRY};
+
 // Constructor for the World class
 World::World(unsigned int w, unsigned int h) 
 {
@@ -86,9 +90,50 @@ void World::setSize(int w, int h)
 
     glutPostRedisplay();                        // request redisplay
 }
-void World::processKeys(unsigned char key, int x, int y) 
-{
 
+// Process Keyboard events
+void World::processKeys(unsigned char key, int x_coord, int y_coord) 
+{
+	int hero_state = x->getState();
+	if(hero_state != ENTRY){
+		switch(key)
+		{
+			// Jump
+			case 'w':
+				// If not already in the air
+				if(hero_state != JUMP){
+					x->setState(JUMP);
+				} // else do nothing
+				break;
+			// Kneel
+			case 's':
+				break;
+			// Move Left
+			case 'a':
+				// If not in jump animation
+				if(hero_state != JUMP){
+					x->setState(MOVE);
+				}
+				// Change direction
+				x->setDirection(LEFT);
+				break;
+			// Move Right
+			case 'd':
+				// If not in jump animation
+				if(hero_state != JUMP){
+					x->setState(MOVE);
+				}
+				// Change direction
+				x->setDirection(RIGHT);
+				break;
+			// Fire
+			case 'h':
+				break;
+			// Dash
+			case 'j':
+				break;
+		}
+	}
 	glutPostRedisplay();
 }
 

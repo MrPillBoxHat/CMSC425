@@ -35,6 +35,8 @@ class X {
 	public:
 		// Contructor
 		X();
+		// getters
+		int getState(){return state;}
 		// setters
 		void setHealth(int number){health += number;}
 		void setState(int inState){state = inState;}
