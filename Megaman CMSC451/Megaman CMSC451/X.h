@@ -10,8 +10,7 @@
 class X {
 	// Contains X's health and location
 	private:
-		float x_coordinate;
-		float y_coordinate;
+		float x1,x2,y1,y2;
 		int health;
 		int state;
 		int direction;

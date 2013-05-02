@@ -14,8 +14,6 @@ Bugs:
 ______________________________________________________________
 Animation:
 	- Stand Animation is not smoove
-	- Need to implement proper entry animation 
-	  (animation does not move in the XY plane)
 	- Run animation has some kind of white line on top
 	- Need to fix animation timings (some frames should
 	  be displayed longer than other frames).

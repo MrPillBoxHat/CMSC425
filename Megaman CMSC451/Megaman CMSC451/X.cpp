@@ -30,11 +30,14 @@ using namespace std;
 X::X()
 {
 	health = 50;
-	x_coordinate = 10.0;
-	y_coordinate = 10.0;
+	// Coordinates of entry
+	x1 = 305.0;
+	x2 = 433.0;
+	y1 = 500.0;
+	y2 = 628.0;
 	x1_tcoord = 0.0;
 	y2_tcoord = 1.0;
-	state = JUMP;
+	state = ENTRY;
 	direction = RIGHT;
 	counter = 0; // Counter is to keep track of FPS
 }
@@ -101,23 +104,35 @@ void X::entry()
 	glColor4f(1.0, 1.0, 1.0, 1.0);
 	glBegin(GL_POLYGON); // draw the object(s)
 		//real coord
-		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset); glVertex2d(305.0,65.0);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(433.0, 65.0);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(433.0, 193.0);
-		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(305.0,193.0);
+		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset); glVertex2d(x1, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
+		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
 	glEnd();
 	// Update frame pointers
-	if(counter % 5 == 0){
-		// go to next frame
-		x1_tcoord += x_offset;
-		if(x1_tcoord >= 1.0){
-			// Reset x frame pointer
-			x1_tcoord = 0.0;
-			// Move down 1 row
-			y2_tcoord -= y_offset;
-			// When Finished, load stand
-			if(y2_tcoord <= 0.0){
-				state = STAND;
+	// If X has not landed
+	if(y1 != 65.0){
+		y1 -= 5.0;
+		y2 -= 5.0;
+	} else {
+		if(counter % 5 == 0){
+			// go to next frame
+			x1_tcoord += x_offset;
+			if(x1_tcoord >= 1.0){
+				// Reset x frame pointer
+				x1_tcoord = 0.0;
+				// Move down 1 row
+				y2_tcoord -= y_offset;
+				// When Finished, load stand
+				if(y2_tcoord <= 0.0){
+					// Go into standing state
+					state = STAND;
+					// Resets coordinates
+					x1 = 348.0;
+					x2 = 399.2;
+					y1 = 100.0;
+					y2 = 164.0;
+				}
 			}
 		}
 	}
@@ -144,10 +159,10 @@ void X::stand()
 	// Draw objects
 	glBegin(GL_POLYGON);
 		//real coord
-		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(348.0,100.0);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(399.2,100.0);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(399.2,164.0);
-		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(348.0,164.0);
+		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
+		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
 	glEnd();
 	// Want to draw 5 frames per second
 	if(counter % 15 == 0){
@@ -179,10 +194,10 @@ void X::move()
 	// Draw objects
 	glBegin(GL_POLYGON);
 		//real coord
-		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(348.0,100.0);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(399.2,100.0);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(399.2,164.0);
-		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(348.0,164.0);
+		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
+		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
 	glEnd();
 	// Update frame pointers
 	if(counter % 5 == 0){
@@ -223,10 +238,10 @@ void X::jump()
 	// Draw objects
 	glBegin(GL_POLYGON);
 		//real coord
-		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(348.0,100.0);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(399.2,100.0);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(399.2,164.0);
-		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(348.0,164.0);
+		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
+		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
 	glEnd();
 	// Update frame pointers
 	if(counter % 5 == 0){
