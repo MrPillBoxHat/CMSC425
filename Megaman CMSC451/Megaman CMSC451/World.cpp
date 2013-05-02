@@ -102,6 +102,7 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 			case 'w':
 				// If not already in the air
 				if(hero_state != JUMP){
+					x->resetTexture();
 					x->setState(JUMP);
 				} // else do nothing
 				break;
@@ -112,6 +113,7 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 			case 'a':
 				// If not in jump animation
 				if(hero_state != JUMP){
+					x->resetTexture();
 					x->setState(MOVE);
 				}
 				// Change direction
@@ -121,6 +123,7 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 			case 'd':
 				// If not in jump animation
 				if(hero_state != JUMP){
+					x->resetTexture();
 					x->setState(MOVE);
 				}
 				// Change direction

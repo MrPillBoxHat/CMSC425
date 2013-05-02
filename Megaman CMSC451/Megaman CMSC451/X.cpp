@@ -55,6 +55,7 @@ void X::draw()
 	// Enable transparency
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glColor4f(1.0, 1.0, 1.0, 1.0);
 	switch(state)
 	{
 		case ENTRY:
@@ -101,7 +102,6 @@ void X::entry()
 	float y_offset = 0.5;
 	// Draws the frame
 	glBindTexture(GL_TEXTURE_2D, textures[ENTRY_TEXUTRE]); // select the active texture
-	glColor4f(1.0, 1.0, 1.0, 1.0);
 	glBegin(GL_POLYGON); // draw the object(s)
 		//real coord
 		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset); glVertex2d(x1, y1);
@@ -132,6 +132,7 @@ void X::entry()
 					x2 = 399.2;
 					y1 = 100.0;
 					y2 = 164.0;
+					resetTexture();
 				}
 			}
 		}
@@ -155,7 +156,6 @@ void X::stand()
 	} else {
 		glBindTexture(GL_TEXTURE_2D, textures[STAND_LEFT]); // select the active texture
 	}
-	glColor4f(1.0, 1.0, 1.0, 1.0);
 	// Draw objects
 	glBegin(GL_POLYGON);
 		//real coord
@@ -190,7 +190,6 @@ void X::move()
 	} else {
 		glBindTexture(GL_TEXTURE_2D, textures[MOVE_LEFT]); // select the active texture
 	}
-	glColor4f(1.0, 1.0, 1.0, 1.0);
 	// Draw objects
 	glBegin(GL_POLYGON);
 		//real coord
@@ -226,7 +225,7 @@ void X::move()
 void X::jump()
 {
 	// How many frames to jump
-	float x_offset = 0.090909;
+	float x_offset = 0.09090909090909090909;
 	float y_offset = 1.0;
 	// Draws the frame
 	if(direction == RIGHT){
@@ -234,7 +233,6 @@ void X::jump()
 	} else {
 		glBindTexture(GL_TEXTURE_2D, textures[JUMP_LEFT]); // select the active texture
 	}
-	glColor4f(1.0, 1.0, 1.0, 1.0);
 	// Draw objects
 	glBegin(GL_POLYGON);
 		//real coord
@@ -247,9 +245,11 @@ void X::jump()
 	if(counter % 5 == 0){
 		// go to next frame
 		x1_tcoord += x_offset;
+		// When finished playing
 		if(x1_tcoord >= 1.0){
-			// Reset x frame pointer
+			// Reset state
 			x1_tcoord = 0.0;
+			state = STAND;
 		}
 	}
 	counter++;
