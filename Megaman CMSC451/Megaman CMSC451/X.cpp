@@ -32,9 +32,9 @@ X::X()
 	health = 50;
 	x_coordinate = 10.0;
 	y_coordinate = 10.0;
-	x1_coord = 0.0;
-	y2_coord = 1.0;
-	state = ENTRY;
+	x1_tcoord = 0.0;
+	y2_tcoord = 1.0;
+	state = JUMP;
 	direction = RIGHT;
 	counter = 0; // Counter is to keep track of FPS
 }
@@ -95,28 +95,28 @@ void X::entry()
 {
 	// How many frames to jump
 	float x_offset = 0.125;
-	float y_offset = .5;
+	float y_offset = 0.5;
 	// Draws the frame
 	glBindTexture(GL_TEXTURE_2D, textures[ENTRY_TEXUTRE]); // select the active texture
 	glColor4f(1.0, 1.0, 1.0, 1.0);
 	glBegin(GL_POLYGON); // draw the object(s)
 		//real coord
-		glTexCoord2d(x1_coord, y2_coord - y_offset); glVertex2d(305.0,65.0);
-		glTexCoord2d(x1_coord + x_offset, y2_coord - y_offset); glVertex2d(433.0, 65.0);
-		glTexCoord2d(x1_coord + x_offset, y2_coord); glVertex2d(433.0, 193.0);
-		glTexCoord2d(x1_coord, y2_coord); glVertex2d(305.0,193.0);
+		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset); glVertex2d(305.0,65.0);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(433.0, 65.0);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(433.0, 193.0);
+		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(305.0,193.0);
 	glEnd();
 	// Update frame pointers
 	if(counter % 5 == 0){
 		// go to next frame
-		x1_coord += x_offset;
-		if(x1_coord >= 1.0){
+		x1_tcoord += x_offset;
+		if(x1_tcoord >= 1.0){
 			// Reset x frame pointer
-			x1_coord = 0.0;
+			x1_tcoord = 0.0;
 			// Move down 1 row
-			y2_coord -= y_offset;
+			y2_tcoord -= y_offset;
 			// When Finished, load stand
-			if(y2_coord <= 0.0){
+			if(y2_tcoord <= 0.0){
 				state = STAND;
 			}
 		}
@@ -133,7 +133,7 @@ void X::stand()
 {
 	// How many frames to jump
 	float x_offset = 0.2;
-	float y_offset = 0.2;
+	float y_offset = 1.0;
 	// Draws the frame
 	if(direction == RIGHT){
 		glBindTexture(GL_TEXTURE_2D, textures[STAND_RIGHT]); // select the active texture
@@ -144,17 +144,17 @@ void X::stand()
 	// Draw objects
 	glBegin(GL_POLYGON);
 		//real coord
-		glTexCoord2d(x1_coord, 0.0); glVertex2d(348.0,100.0);
-		glTexCoord2d(x1_coord + x_offset, 0.0); glVertex2d(399.2,100.0);
-		glTexCoord2d(x1_coord + x_offset, 1.0); glVertex2d(399.2,164.0);
-		glTexCoord2d(x1_coord, 1.0); glVertex2d(348.0,164.0);
+		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(348.0,100.0);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(399.2,100.0);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(399.2,164.0);
+		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(348.0,164.0);
 	glEnd();
 	// Want to draw 5 frames per second
 	if(counter % 15 == 0){
 		//update next frame or reset if reached the end
-		x1_coord += x_offset;
-		if(x1_coord >= 1.0){
-			x1_coord = 0.0;
+		x1_tcoord += x_offset;
+		if(x1_tcoord >= 1.0){
+			x1_tcoord = 0.0;
 		}
 	}
 	counter++;
@@ -166,12 +166,82 @@ void X::stand()
 
 void X::move()
 {
-
+	// How many frames to jump
+	float x_offset = 0.125;
+	float y_offset = 0.5;
+	// Draws the frame
+	if(direction == RIGHT){
+		glBindTexture(GL_TEXTURE_2D, textures[MOVE_RIGHT]); // select the active texture
+	} else {
+		glBindTexture(GL_TEXTURE_2D, textures[MOVE_LEFT]); // select the active texture
+	}
+	glColor4f(1.0, 1.0, 1.0, 1.0);
+	// Draw objects
+	glBegin(GL_POLYGON);
+		//real coord
+		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(348.0,100.0);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(399.2,100.0);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(399.2,164.0);
+		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(348.0,164.0);
+	glEnd();
+	// Update frame pointers
+	if(counter % 5 == 0){
+		// go to next frame
+		x1_tcoord += x_offset;
+		if(x1_tcoord >= 1.0){
+			// Reset x frame pointer
+			x1_tcoord = 0.0;
+			// Move down 1 row
+			y2_tcoord -= y_offset;
+			// When animation reaches end
+			// Start on 3rd frame of beginning
+			if(y2_tcoord <= 0.0){
+				y2_tcoord = 1.0;
+				x1_tcoord = 0.25;
+			}
+		}
+	}
+	counter++;
+	//resets counter
+	if(counter == 60){
+		counter = 0;
+	}
 }
 
 void X::jump()
 {
-
+	// How many frames to jump
+	float x_offset = 0.090909;
+	float y_offset = 1.0;
+	// Draws the frame
+	if(direction == RIGHT){
+		glBindTexture(GL_TEXTURE_2D, textures[JUMP_RIGHT]); // select the active texture
+	} else {
+		glBindTexture(GL_TEXTURE_2D, textures[JUMP_LEFT]); // select the active texture
+	}
+	glColor4f(1.0, 1.0, 1.0, 1.0);
+	// Draw objects
+	glBegin(GL_POLYGON);
+		//real coord
+		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(348.0,100.0);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(399.2,100.0);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(399.2,164.0);
+		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(348.0,164.0);
+	glEnd();
+	// Update frame pointers
+	if(counter % 5 == 0){
+		// go to next frame
+		x1_tcoord += x_offset;
+		if(x1_tcoord >= 1.0){
+			// Reset x frame pointer
+			x1_tcoord = 0.0;
+		}
+	}
+	counter++;
+	//resets counter
+	if(counter == 60){
+		counter = 0;
+	}
 }
 
 void X::fire()
@@ -395,7 +465,7 @@ void X::loadJump()
 
 	cout << "textureID: " << textureID << endl;
 
-	textures[MOVE_RIGHT] = textureID; // Assign it to the texture array
+	textures[JUMP_RIGHT] = textureID; // Assign it to the texture array
 	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	// repeat texture
@@ -423,7 +493,7 @@ void X::loadJump()
 
 	cout << "textureID: " << textureID << endl;
 
-	textures[MOVE_LEFT] = textureID; // Assign it to the texture array
+	textures[JUMP_LEFT] = textureID; // Assign it to the texture array
 	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	// repeat texture

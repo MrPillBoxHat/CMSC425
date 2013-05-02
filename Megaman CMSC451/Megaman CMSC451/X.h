@@ -16,8 +16,8 @@ class X {
 		int state;
 		int direction;
 		int counter;
-		float x1_coord;
-		float y2_coord;
+		float x1_tcoord;
+		float y2_tcoord;
 		GLuint textures[16];
 
 		// Private helper functions
@@ -38,6 +38,8 @@ class X {
 		X();
 		// setters
 		void setHealth(int number){health += number;}
+		void setState(int inState){state = inState;}
+		void setDirection(int inDirection){direction = inDirection;}
 		// Draw X
 		void draw();
 		// Actions
