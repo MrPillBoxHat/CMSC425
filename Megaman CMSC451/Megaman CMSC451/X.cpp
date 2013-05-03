@@ -196,6 +196,9 @@ void X::move()
 	}
 	x1 += move_amount;
 	x2 += move_amount;
+	cout << "x1_tcoord: " << x1_tcoord << endl;
+	cout << "y2_tcoord: " << y2_tcoord << endl;
+	cout << "drawing frame..." << endl;
 	// Draw objects
 	glBegin(GL_POLYGON);
 		//real coord
@@ -206,21 +209,27 @@ void X::move()
 	glEnd();
 	// Update frame pointers
 	if(counter % 5 == 0){
+		cout << "beginning to update frame pointer" << endl;
 		// go to next frame
-		cout << "x1_tcoord: " << x1_tcoord << endl;
-		cout << "y2_tcoord: " << y2_tcoord << endl << endl;
 		x1_tcoord += x_offset;
+		cout << "updated x1_tcoord...\nx1_tcoord: " << x1_tcoord << endl;
 		if(x1_tcoord >= 1.0){
+			cout << "reached end of row" << endl;
 			// Reset x frame pointer
 			x1_tcoord = 0.0;
+			cout << "reset x1_tcoord" << endl;
 			// Move down 1 row
 			y2_tcoord -= y_offset;
+			cout << "moved down 1 row, decrementing y2_tcoord\ny2_tcoord: " << endl;
 			// When animation reaches end
 			// Start on 3rd frame of beginning
 			if(y2_tcoord <= 0.0){
-				cout << "In here" << endl;
+				cout << "animation has reached the end" << endl;
 				y2_tcoord = 1.0;
 				x1_tcoord = 0.25;
+				cout << "reset x1_tcoord: " << x1_tcoord << endl;
+				cout << "reset y2_tcoord: " << y2_tcoord << endl;
+				cout << "reset frame pointer to 3rd frame..." << endl << endl << endl;
 			}
 		}
 	}

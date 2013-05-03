@@ -76,7 +76,7 @@ void World::draw(void)
 		frames++;
 		delta_time = 0;
 		if(lapse_time > 1000){
-			cout << "FPS: " << frames << endl;
+			// cout << "FPS: " << frames << endl;
 			// reset timers
 			frames = 0;
 			lapse_time = 0;
