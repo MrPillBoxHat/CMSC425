@@ -24,8 +24,9 @@ private:
 	// lower left coordinate of the camera
 	int cmX;
 	// controlls
-	static const unsigned char LEFT = 'a',
-						       RIGHT = 'd';
+	static const unsigned char MOVE_LEFT = 'a',
+						       MOVE_RIGHT = 'd',
+							   MOVE_JUMP = 'w';
 	// how much left and right move
 	static const int CM_DIFF = 4;
 

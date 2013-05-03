@@ -106,7 +106,7 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 		switch(key)
 		{
 			// Jump
-			case 'w':
+			case MOVE_JUMP:
 				// If not already in the air
 				if(hero_state != JUMP){
 					x->resetTexture();
@@ -117,7 +117,7 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 			case 's':
 				break;
 			// Move Left
-			case LEFT:
+			case MOVE_LEFT:
 				// If not in jump animation
 				if(hero_state != JUMP){
 					x->resetTexture();
@@ -129,7 +129,7 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 				cmX = max(0, cmX - CM_DIFF);
 				break;
 			// Move Right
-			case RIGHT:
+			case MOVE_RIGHT:
 				// If not in jump animation
 				if(hero_state != JUMP){
 					x->resetTexture();
@@ -164,9 +164,9 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 			// Kneel
 			case 's':
 			// Move Left
-			case 'a':
+			case MOVE_LEFT:
 			// Move Right
-			case 'd':
+			case MOVE_RIGHT:
 				x->setState(STAND);
 				x->resetTexture();
 				break;
