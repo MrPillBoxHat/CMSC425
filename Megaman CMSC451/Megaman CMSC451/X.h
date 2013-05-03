@@ -37,18 +37,20 @@ class X {
 		X();
 		// getters
 		int getState(){return state;}
+		int getDirection(){return direction;}
 		// setters
 		void setHealth(int number){health += number;}
 		void setState(int inState){state = inState;}
 		void setDirection(int inDirection){direction = inDirection;}
+		void setXPosition(float inx1, float inx2){x1 += inx1; x2 += inx2;}
 		void resetTexture(){x1_tcoord = 0.0; y2_tcoord = 1.0;}
 		// Draw X
-		void draw();
+		void draw(float move_amount);
 		// Actions
 		void entry();
 		void stand();
 		void move();
-		void jump();
+		void jump(float move_amount);
 		void fire();
 		void charge();
 		void dash();

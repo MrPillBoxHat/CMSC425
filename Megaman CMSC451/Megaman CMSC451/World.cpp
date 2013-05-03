@@ -22,6 +22,9 @@ using namespace std;
 enum directions {LEFT, RIGHT};
 enum states {STAND, MOVE, JUMP, FIRE, CHARGE, DASH, DAMAGE, DIE, ENTRY};
 
+// Temporary global variables
+float move_amount = 0.0;
+
 // Constructor for the World class
 World::World(unsigned int w, unsigned int h) 
 {
@@ -35,7 +38,6 @@ World::World(unsigned int w, unsigned int h)
 	lapse_time = 0;
 	frames = 0;
 	fps = 60;
-
 	cmX = 0;
 }
 
@@ -54,7 +56,6 @@ void World::update(void)
 
 void World::draw(void) 
 {
-	
 	// Controls Frames per Second of the game
 	current_time = glutGet(GLUT_ELAPSED_TIME); // Gets current time
 	delta_time += current_time - start_time; // Gets change in time
@@ -69,8 +70,7 @@ void World::draw(void)
 		glClear(GL_COLOR_BUFFER_BIT);
 		// background
 		bg.draw();
-
-		x->draw(); //Draws X
+		x->draw(move_amount); //Draws X
 		glutSwapBuffers();
 		// Updates timer information
 		frames++;
@@ -113,68 +113,77 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 					x->setState(JUMP);
 				} // else do nothing
 				break;
+
 			// Kneel
 			case 's':
 				break;
+
 			// Move Left
 			case MOVE_LEFT:
 				// If not in jump animation
 				if(hero_state != JUMP){
 					x->resetTexture();
 					x->setState(MOVE);
+				} else {
+					move_amount = -1.0;
 				}
 				// Change direction
 				x->setDirection(LEFT);
 				// camera movement
-				cmX = max(0, cmX - CM_DIFF);
+		//		cmX = max(0, cmX - CM_DIFF);
 				break;
+
 			// Move Right
 			case MOVE_RIGHT:
 				// If not in jump animation
 				if(hero_state != JUMP){
 					x->resetTexture();
 					x->setState(MOVE);
+				} else {
+					move_amount = 1.0;
 				}
 				// Change direction
 				x->setDirection(RIGHT);
 				// Camera movement
-				cmX = min(width-1, cmX + CM_DIFF);
+			//	cmX = min(width-1, cmX + CM_DIFF);
 				break;
+
 			// Fire
 			case 'h':
 				break;
+
 			// Dash
 			case 'j':
 				break;
 		}
 	}
 
-	cout << "cmX = " << cmX << endl;
-	if(old != cmX)
-		setSize(width, height);
-	else
+	//cout << "cmX = " << cmX << endl;
+	//if(old != cmX)
+	//	setSize(width, height);
+	//else
 		glutPostRedisplay();
 }
 
 void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 {
-	if(x->getState() != JUMP){
-		switch(key)
-		{
-			// Kneel
-			case 's':
-			// Move Left
-			case MOVE_LEFT:
-			// Move Right
-			case MOVE_RIGHT:
+	switch(key)
+	{		
+		case 's': // Kneel
+		case MOVE_LEFT: // Move Left
+		case MOVE_RIGHT: // Move Right
+			if(x->getState() != JUMP && x->getState() != ENTRY){
+				// Reset state
 				x->setState(STAND);
 				x->resetTexture();
-				break;
-			// Fire
-			case 'h':
-				// Fire charged shot
-				break;
-		}
+			} else {
+				move_amount = 0;
+			}
+			break;
+		// Fire
+		case 'h':
+			// Fire charged shot
+			break;
 	}
 }
 

@@ -48,7 +48,7 @@ X::X()
 *	Uses helper functions to draw each state
 *
 ****************************************************************************************************/
-void X::draw()
+void X::draw(float move_amount)
 {
 	// Enables texturess
 	glEnable(GL_TEXTURE_2D); // enable texturing
@@ -68,7 +68,7 @@ void X::draw()
 			move();
 			break;
 		case JUMP:
-			jump();
+			jump(move_amount);
 			break;
 		case FIRE:
 			fire();
@@ -187,8 +187,14 @@ void X::move()
 	// Draws the frame
 	if(direction == RIGHT){
 		glBindTexture(GL_TEXTURE_2D, textures[MOVE_RIGHT]); // select the active texture
+		// Move X
+		x1 += 1.0;
+		x2 += 1.0;
 	} else {
 		glBindTexture(GL_TEXTURE_2D, textures[MOVE_LEFT]); // select the active texture
+		// Move X
+		x1 -= 1.0;
+		x2 -= 1.0;
 	}
 	// Draw objects
 	glBegin(GL_POLYGON);
@@ -222,11 +228,13 @@ void X::move()
 	}
 }
 
-void X::jump()
+void X::jump(float move_amount)
 {
 	// How many frames to jump
 	float x_offset = 0.09090909090909090909;
 	float y_offset = 1.0;
+	x1 += move_amount;
+	x2 += move_amount;
 	// Draws the frame
 	if(direction == RIGHT){
 		glBindTexture(GL_TEXTURE_2D, textures[JUMP_RIGHT]); // select the active texture
@@ -243,6 +251,19 @@ void X::jump()
 	glEnd();
 	// Update frame pointers
 	if(counter % 5 == 0){
+		// Move X
+		if(x1_tcoord >= 0.72){
+		// no change in position
+		} else if(x1_tcoord >= 0.36 && x1_tcoord < 0.72){
+		// X is falling back down
+			y1 -= 10.0;
+			y2 -= 10.0;
+		} else {
+			// Move X up
+			y1 += 10.0;
+			y2 += 10.0;
+		}
+		// if max height frame is reached
 		// go to next frame
 		x1_tcoord += x_offset;
 		// When finished playing
