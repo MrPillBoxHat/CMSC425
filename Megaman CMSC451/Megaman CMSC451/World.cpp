@@ -11,7 +11,7 @@
 #include <iostream>					// Uses I/O
 #include <GL/glut.h>                // GLUT
 
-#define SET_BG_COLOR glClearColor(0.5, 0.1, 0.5, 1.0)
+#define SET_BG_COLOR glClearColor(0.0, 0.0, 0.0, 1.0)
 
 void done(unsigned char key, int x, int y);
 void noDraw() {};
@@ -138,6 +138,28 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 		}
 	}
 	glutPostRedisplay();
+}
+
+void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
+{
+	if(x->getState() != JUMP){
+		switch(key)
+		{
+			// Kneel
+			case 's':
+			// Move Left
+			case 'a':
+			// Move Right
+			case 'd':
+				x->setState(STAND);
+				x->resetTexture();
+				break;
+			// Fire
+			case 'h':
+				// Fire charged shot
+				break;
+		}
+	}
 }
 
 void World::mouseButton(int button, int state, int x, int y) 

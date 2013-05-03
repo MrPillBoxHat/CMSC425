@@ -28,5 +28,5 @@ public:
 	void draw(void);
 	void processKeys(unsigned char key, int x, int y);
 	void mouseButton(int button, int state, int x, int y);
-
+	void processKeyUp(unsigned char key, int x, int y);
 };
