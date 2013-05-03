@@ -37,5 +37,5 @@ Animation:
 	- Run animation has some kind of white line on top
 	- Need to fix animation timings (some frames should
 	  be displayed longer than other frames).
-	- Run animation gets stuck on a certain frame.  Debug
-	  text in the outer debug folder
+	- Need to implement run and jump.  Right now it stops
+	  after a new key is pressed

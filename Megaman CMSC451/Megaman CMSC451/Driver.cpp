@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 	glutReshapeFunc(changeSize); // window reshape callback
 	glutDisplayFunc(drawWorld); // (re)display callback
 	glutIdleFunc(update); // incremental update 
-	//glutIgnoreKeyRepeat(); // ignore key repeat when holding key down
+	glutIgnoreKeyRepeat(1); // ignore key repeat when holding key down
 	glutMouseFunc(mouseButton); // process mouse button push/release
 	glutKeyboardFunc(processNormalKeys); // process standard key clicks
 	glutKeyboardUpFunc(processKeyUp);
