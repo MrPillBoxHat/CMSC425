@@ -1,3 +1,23 @@
+
+Controls:
+______________________________________________________________
+w: jump
+a: move left
+d: move right
+h: fire
+
+How to play:
+______________________________________________________________
+1) Navigate through the level and find the boss room
+2) You have a health bar on the left of the screen.
+	- If it completely depletes, you die.
+	- You have 3 lives.
+	- You take damage if enemy fire hits you
+	- You take damage if you make contact with an enemy
+3) Main Weapon: X buster.
+	- You fire a plasma blast from your arm
+
+
 Implementations:
 ______________________________________________________________
 Animation/Sprites: 
