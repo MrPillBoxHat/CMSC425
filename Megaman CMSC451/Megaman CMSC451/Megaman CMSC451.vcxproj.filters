@@ -46,6 +46,9 @@
     <Filter Include="Source Files\SOIL">
       <UniqueIdentifier>{e0b4bf5c-682f-48b3-b9bc-330f364df2d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Megaman X Sprites\Fire">
+      <UniqueIdentifier>{3c5c2de6-ee41-4757-8e6c-e0c5ab855552}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sigma.h">
@@ -135,6 +138,12 @@
     </Image>
     <Image Include="Sprites\Megaman\Run\run_right.png">
       <Filter>Resource Files\Megaman X Sprites\Run</Filter>
+    </Image>
+    <Image Include="Sprites\Megaman\fire\fire_left.png">
+      <Filter>Resource Files\Megaman X Sprites\Fire</Filter>
+    </Image>
+    <Image Include="Sprites\Megaman\fire\fire_right.png">
+      <Filter>Resource Files\Megaman X Sprites\Fire</Filter>
     </Image>
   </ItemGroup>
 </Project>

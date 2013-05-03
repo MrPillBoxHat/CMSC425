@@ -37,5 +37,6 @@ Animation:
 	- Run animation has some kind of white line on top
 	- Need to fix animation timings (some frames should
 	  be displayed longer than other frames).
-	- Need to implement run and jump.  Right now it stops
-	  after a new key is pressed
+	- Need to implement continuous run after jump.  Right 
+	  now it stops after a new key is pressed
+	- Fire needs to continue until finished firing

@@ -150,6 +150,10 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 
 			// Fire
 			case 'h':
+				if(hero_state != JUMP){
+					x->resetTexture();
+					x->setState(FIRE);
+				}
 				break;
 
 			// Dash
@@ -182,6 +186,8 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 			break;
 		// Fire
 		case 'h':
+			x->setState(STAND);
+			x->resetTexture();
 			// Fire charged shot
 			break;
 	}
