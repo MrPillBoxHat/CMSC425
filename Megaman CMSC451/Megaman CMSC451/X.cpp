@@ -184,18 +184,18 @@ void X::move()
 	// How many frames to jump
 	float x_offset = 0.125;
 	float y_offset = 0.5;
+	float move_amount;
 	// Draws the frame
 	if(direction == RIGHT){
 		glBindTexture(GL_TEXTURE_2D, textures[MOVE_RIGHT]); // select the active texture
 		// Move X
-		x1 += 1.0;
-		x2 += 1.0;
+		move_amount = 1.0;
 	} else {
 		glBindTexture(GL_TEXTURE_2D, textures[MOVE_LEFT]); // select the active texture
-		// Move X
-		x1 -= 1.0;
-		x2 -= 1.0;
+		move_amount = -1.0;
 	}
+	x1 += move_amount;
+	x2 += move_amount;
 	// Draw objects
 	glBegin(GL_POLYGON);
 		//real coord
@@ -207,6 +207,8 @@ void X::move()
 	// Update frame pointers
 	if(counter % 5 == 0){
 		// go to next frame
+		cout << "x1_tcoord: " << x1_tcoord << endl;
+		cout << "y2_tcoord: " << y2_tcoord << endl << endl;
 		x1_tcoord += x_offset;
 		if(x1_tcoord >= 1.0){
 			// Reset x frame pointer
@@ -216,6 +218,7 @@ void X::move()
 			// When animation reaches end
 			// Start on 3rd frame of beginning
 			if(y2_tcoord <= 0.0){
+				cout << "In here" << endl;
 				y2_tcoord = 1.0;
 				x1_tcoord = 0.25;
 			}
