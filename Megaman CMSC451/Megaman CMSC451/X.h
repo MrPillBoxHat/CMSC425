@@ -35,10 +35,13 @@ class X {
 	public:
 		// Contructor
 		X();
+		// getters
+		int getState(){return state;}
 		// setters
 		void setHealth(int number){health += number;}
 		void setState(int inState){state = inState;}
 		void setDirection(int inDirection){direction = inDirection;}
+		void resetTexture(){x1_tcoord = 0.0; y2_tcoord = 1.0;}
 		// Draw X
 		void draw();
 		// Actions

@@ -18,6 +18,10 @@ void noDraw() {};
 
 using namespace std;
 
+// Enumerations to make code readable
+enum directions {LEFT, RIGHT};
+enum states {STAND, MOVE, JUMP, FIRE, CHARGE, DASH, DAMAGE, DIE, ENTRY};
+
 // Constructor for the World class
 World::World(unsigned int w, unsigned int h) 
 {
@@ -92,27 +96,86 @@ void World::setSize(int w, int h)
 
     glutPostRedisplay();                        // request redisplay
 }
-void World::processKeys(unsigned char key, int x, int y) 
+
+// Process Keyboard events
+void World::processKeys(unsigned char key, int x_coord, int y_coord) 
 {
 	const int old = cmX;
-	switch (key)
-	{
-	case LEFT:
-		cmX = max(0, cmX - CM_DIFF);
-		break;
-	case RIGHT:
-		cmX = min(width-1, cmX + CM_DIFF);
-		break;
-
-	default:
-		break;
+	int hero_state = x->getState();
+	if(hero_state != ENTRY){
+		switch(key)
+		{
+			// Jump
+			case 'w':
+				// If not already in the air
+				if(hero_state != JUMP){
+					x->resetTexture();
+					x->setState(JUMP);
+				} // else do nothing
+				break;
+			// Kneel
+			case 's':
+				break;
+			// Move Left
+			case LEFT:
+				// If not in jump animation
+				if(hero_state != JUMP){
+					x->resetTexture();
+					x->setState(MOVE);
+				}
+				// Change direction
+				x->setDirection(LEFT);
+				// camera movement
+				cmX = max(0, cmX - CM_DIFF);
+				break;
+			// Move Right
+			case RIGHT:
+				// If not in jump animation
+				if(hero_state != JUMP){
+					x->resetTexture();
+					x->setState(MOVE);
+				}
+				// Change direction
+				x->setDirection(RIGHT);
+				// Camera movement
+				cmX = min(width-1, cmX + CM_DIFF);
+				break;
+			// Fire
+			case 'h':
+				break;
+			// Dash
+			case 'j':
+				break;
+		}
 	}
-	cout << "cmX = " << cmX << endl;
 
+	cout << "cmX = " << cmX << endl;
 	if(old != cmX)
 		setSize(width, height);
 	else
 		glutPostRedisplay();
+}
+
+void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
+{
+	if(x->getState() != JUMP){
+		switch(key)
+		{
+			// Kneel
+			case 's':
+			// Move Left
+			case 'a':
+			// Move Right
+			case 'd':
+				x->setState(STAND);
+				x->resetTexture();
+				break;
+			// Fire
+			case 'h':
+				// Fire charged shot
+				break;
+		}
+	}
 }
 
 void World::mouseButton(int button, int state, int x, int y) 
