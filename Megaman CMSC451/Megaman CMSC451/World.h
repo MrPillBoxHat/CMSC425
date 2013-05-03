@@ -1,6 +1,8 @@
 #pragma once
 
 #include "X.h"
+#include "BackGround.h"
+
 //#include <SOIL.h>
 
 class World
@@ -17,6 +19,15 @@ private:
 	int fps;
 	// Hero object
 	X *x;
+	BackGround bg;	
+
+	// lower left coordinate of the camera
+	int cmX;
+	// controlls
+	static const unsigned char LEFT = 'a',
+						       RIGHT = 'd';
+	// how much left and right move
+	static const int CM_DIFF = 4;
 
 public:
 	World(unsigned int w, unsigned int h);

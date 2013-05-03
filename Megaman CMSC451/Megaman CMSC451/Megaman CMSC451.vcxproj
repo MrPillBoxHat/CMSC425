@@ -90,6 +90,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\stbi_DDS_aug.h" />
     <ClInclude Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\stbi_DDS_aug_c.h" />
     <ClInclude Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\stb_image_aug.h" />
+    <ClInclude Include="BackGround.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Sigma.h" />
     <ClInclude Include="World.h" />
@@ -101,6 +102,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\image_helper.c" />
     <ClCompile Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\SOIL.c" />
     <ClCompile Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\stb_image_aug.c" />
+    <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="Sigma.cpp" />
     <ClCompile Include="World.cpp" />

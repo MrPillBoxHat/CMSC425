@@ -81,6 +81,9 @@
     <ClInclude Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\stbi_DDS_aug_c.h">
       <Filter>Header Files\SOIL</Filter>
     </ClInclude>
+    <ClInclude Include="BackGround.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="X.cpp">
@@ -106,6 +109,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\stb_image_aug.c">
       <Filter>Source Files\SOIL</Filter>
+    </ClCompile>
+    <ClCompile Include="BackGround.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

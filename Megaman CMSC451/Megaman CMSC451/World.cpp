@@ -11,7 +11,7 @@
 #include <iostream>					// Uses I/O
 #include <GL/glut.h>                // GLUT
 
-#define SET_BG_COLOR glClearColor(0.5, 0.1, 0.5, 1.0)
+#define SET_BG_COLOR glClearColor(0.0, 0.0, 0.0, 1.0)
 
 void done(unsigned char key, int x, int y);
 void noDraw() {};
@@ -31,6 +31,8 @@ World::World(unsigned int w, unsigned int h)
 	lapse_time = 0;
 	frames = 0;
 	fps = 60;
+
+	cmX = 0;
 }
 
 
@@ -48,6 +50,7 @@ void World::update(void)
 
 void World::draw(void) 
 {
+	
 	// Controls Frames per Second of the game
 	current_time = glutGet(GLUT_ELAPSED_TIME); // Gets current time
 	delta_time += current_time - start_time; // Gets change in time
@@ -60,6 +63,9 @@ void World::draw(void)
 		// Draw
 		SET_BG_COLOR;
 		glClear(GL_COLOR_BUFFER_BIT);
+		// background
+		bg.draw();
+
 		x->draw(); //Draws X
 		glutSwapBuffers();
 		// Updates timer information
@@ -81,15 +87,32 @@ void World::setSize(int w, int h)
 	glViewport(0, 0, w, h);
 	glMatrixMode(GL_PROJECTION);                // update projection
     glLoadIdentity();
-    gluOrtho2D(0, w, 0, h);          // one to one
+    gluOrtho2D(cmX, w, 0, h);          // one to one
     glMatrixMode(GL_MODELVIEW);
 
     glutPostRedisplay();                        // request redisplay
 }
 void World::processKeys(unsigned char key, int x, int y) 
 {
+	const int old = cmX;
+	switch (key)
+	{
+	case LEFT:
+		cmX = max(0, cmX - CM_DIFF);
+		break;
+	case RIGHT:
+		cmX = min(width-1, cmX + CM_DIFF);
+		break;
 
-	glutPostRedisplay();
+	default:
+		break;
+	}
+	cout << "cmX = " << cmX << endl;
+
+	if(old != cmX)
+		setSize(width, height);
+	else
+		glutPostRedisplay();
 }
 
 void World::mouseButton(int button, int state, int x, int y) 
