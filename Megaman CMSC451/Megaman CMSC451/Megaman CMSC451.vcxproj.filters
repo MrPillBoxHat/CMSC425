@@ -49,6 +49,9 @@
     <Filter Include="Resource Files\Megaman X Sprites\Fire">
       <UniqueIdentifier>{3c5c2de6-ee41-4757-8e6c-e0c5ab855552}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Megaman X Sprites\dash">
+      <UniqueIdentifier>{a197e3d6-5732-4128-aeac-8fbb8d836898}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sigma.h">
@@ -144,6 +147,12 @@
     </Image>
     <Image Include="Sprites\Megaman\fire\fire_right.png">
       <Filter>Resource Files\Megaman X Sprites\Fire</Filter>
+    </Image>
+    <Image Include="Sprites\Megaman\dash\dash_right.png">
+      <Filter>Resource Files\Megaman X Sprites\dash</Filter>
+    </Image>
+    <Image Include="Sprites\Megaman\dash\dash_left.png">
+      <Filter>Resource Files\Megaman X Sprites\dash</Filter>
     </Image>
   </ItemGroup>
 </Project>

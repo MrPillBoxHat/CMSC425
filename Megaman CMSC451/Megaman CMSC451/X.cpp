@@ -319,7 +319,40 @@ void X::charge()
 }
 void X::dash()
 {
-
+	// How many frames to jump
+	float x_offset = 0.125;
+	float y_offset = 1.0;
+	// Draws the frame
+	if(direction == RIGHT){
+		glBindTexture(GL_TEXTURE_2D, textures[DASH_RIGHT]); // select the active texture
+		x1 += 5.0;
+		x2 += 5.0;
+	} else {
+		glBindTexture(GL_TEXTURE_2D, textures[DASH_LEFT]); // select the active texture
+		x1 -= 5.0;
+		x2 -= 5.0;
+	}
+	// Draw objects
+	glBegin(GL_POLYGON);
+		//real coord
+		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
+		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+	glEnd();
+	// Want to draw 5 frames per second
+	if(counter % 3 == 0){
+		//update next frame or reset if reached the end
+		x1_tcoord += x_offset;
+		if(x1_tcoord >= 1.0){
+			x1_tcoord = 0.0;
+		}
+	}
+	counter++;
+	//resets counter
+	if(counter == 60){
+		counter = 0;
+	}
 }
 // Responses
 void X::damage()
@@ -638,7 +671,61 @@ void X::loadCharge()
 // Loads dashing images
 void X::loadDash()
 {
+	/* loads jump right image directly as a new OpenGL texture */
+	GLuint textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/dash/dash_right.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
 
+	cout << "textureID: " << textureID << endl;
+
+	textures[DASH_RIGHT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads jump left image directly as a new OpenGL texture */
+	textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/dash/dash_left.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "textureID: " << textureID << endl;
+
+	textures[DASH_LEFT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 }
 
 // Loads damage (getting hit) images
