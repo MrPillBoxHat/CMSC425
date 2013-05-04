@@ -65,6 +65,12 @@ void World::draw(void)
 		// background
 		bg.draw();
 		x->draw(); //Draws X
+		glBegin(GL_POLYGON);
+			glVertex2f(394.2, 150.0);
+			glVertex2f(399.2, 150.0);
+			glVertex2f(399.2, 155.0);
+			glVertex2f(394.2, 155.0);
+		glEnd();
 		glutSwapBuffers();
 		// Updates timer information
 		frames++;
@@ -145,7 +151,7 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 			// Fire
 			case MOVE_FIRE:
 				// Can only fire max 3 times
-				if(bullets.size < 3){
+				if(bullets.size() < 3){
 					// Fire while on ground
 					if(hero_state == x->STAND){
 						// Create bullet from cannon position

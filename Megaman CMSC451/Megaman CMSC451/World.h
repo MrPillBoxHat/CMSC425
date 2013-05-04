@@ -22,7 +22,7 @@ private:
 	// Hero object
 	X *x;
 	list<X_Bullet> bullets;
-	BackGround bg;	
+	BackGround bg;
 
 	// lower left coordinate of the camera
 	int cmX;

@@ -215,7 +215,6 @@ void X::move()
 	// How many frames to jump
 	float x_offset = 0.125;
 	float y_offset = 0.5;
-	float move_amount;
 	// Draws the frame
 	if(direction == RIGHT){
 		glBindTexture(GL_TEXTURE_2D, textures[MOVE_RIGHT]); // select the active texture
