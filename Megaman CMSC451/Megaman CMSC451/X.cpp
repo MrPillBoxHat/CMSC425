@@ -12,18 +12,6 @@
 #include "SOIL.h" 						// Library for loading images
 #include "X.h" 							// X header file
 
-/*********************************************************************************************
-* Enumerations
-*	Keeps track of the state of X and also creates symbols to make code easier to read 
-*	and program
-*
-*********************************************************************************************/
-enum directions {LEFT, RIGHT};
-enum states {STAND, MOVE, JUMP, FIRE, CHARGE, DASH, DAMAGE, DIE, ENTRY};
-enum texture_states{STAND_RIGHT, STAND_LEFT, MOVE_LEFT, MOVE_RIGHT, JUMP_LEFT, JUMP_RIGHT,
-					FIRE_LEFT, FIRE_RIGHT, DASH_LEFT, DASH_RIGHT, DAMAGE_LEFT, DAMAGE_RIGHT,
-					DIE_LEFT, DIE_RIGHT, CHARGE_TEXTURE, ENTRY_TEXUTRE};
-
 using namespace std;
 
 // Contructor
@@ -35,11 +23,14 @@ X::X()
 	x2 = 433.0;
 	y1 = 500.0;
 	y2 = 628.0;
+	state = ENTRY;
 	x1_tcoord = 0.0;
 	y2_tcoord = 1.0;
-	state = ENTRY;
 	direction = RIGHT;
 	counter = 0; // Counter is to keep track of FPS
+	for(int i = 0; i < 9; i++){
+		buttons[i] = false;
+	}
 }
 
 /***************************************************************************************************
@@ -48,14 +39,53 @@ X::X()
 *	Uses helper functions to draw each state
 *
 ****************************************************************************************************/
-void X::draw(float move_amount)
+void X::draw()
 {
 	// Enables texturess
 	glEnable(GL_TEXTURE_2D); // enable texturing
 	// Enable transparency
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glColor4f(1.0, 1.0, 1.0, 1.0);
+	glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
+	// Dash movement (faster movement)
+	if(buttons[DASH]){
+		if(direction == LEFT){
+			x1 -= 5.0;
+			x2 -= 5.0;
+		} else {
+			x1 += 5.0;
+			x2 += 5.0;
+		}
+	// Normal movements
+	} else {
+		// Move X horizontally
+		if(buttons[MOVE]){
+			if(direction == LEFT){
+				x1 -= 1.0;
+				x2 -= 1.0;
+			} else {
+				x1 += 1.0;
+				x2 += 1.0;
+			}
+		}
+	}
+	// Move X vertically
+	if(buttons[JUMP]){
+		// FPS control
+		if(counter %5 == 0){
+			if(x1_tcoord >= 0.72){
+			// no change in position
+			} else if(x1_tcoord >= 0.36 && x1_tcoord < 0.72){
+			// X is falling back down
+				y1 -= 10.0;
+				y2 -= 10.0;
+			} else {
+				// Move X up
+				y1 += 10.0;
+				y2 += 10.0;
+			}
+		}
+	}
 	switch(state)
 	{
 		case ENTRY:
@@ -68,7 +98,7 @@ void X::draw(float move_amount)
 			move();
 			break;
 		case JUMP:
-			jump(move_amount);
+			jump();
 			break;
 		case FIRE:
 			fire();
@@ -179,6 +209,7 @@ void X::stand()
 	}
 }
 
+// Draws X running
 void X::move()
 {
 	// How many frames to jump
@@ -188,14 +219,9 @@ void X::move()
 	// Draws the frame
 	if(direction == RIGHT){
 		glBindTexture(GL_TEXTURE_2D, textures[MOVE_RIGHT]); // select the active texture
-		// Move X
-		move_amount = 1.0;
 	} else {
 		glBindTexture(GL_TEXTURE_2D, textures[MOVE_LEFT]); // select the active texture
-		move_amount = -1.0;
 	}
-	x1 += move_amount;
-	x2 += move_amount;
 	// Draw objects
 	glBegin(GL_POLYGON);
 		//real coord
@@ -228,13 +254,12 @@ void X::move()
 	}
 }
 
-void X::jump(float move_amount)
+// Draws X jumping
+void X::jump()
 {
 	// How many frames to jump
 	float x_offset = 0.09090909090909090909;
 	float y_offset = 1.0;
-	x1 += move_amount;
-	x2 += move_amount;
 	// Draws the frame
 	if(direction == RIGHT){
 		glBindTexture(GL_TEXTURE_2D, textures[JUMP_RIGHT]); // select the active texture
@@ -251,18 +276,6 @@ void X::jump(float move_amount)
 	glEnd();
 	// Update frame pointers
 	if(counter % 5 == 0){
-		// Move X
-		if(x1_tcoord >= 0.72){
-		// no change in position
-		} else if(x1_tcoord >= 0.36 && x1_tcoord < 0.72){
-		// X is falling back down
-			y1 -= 10.0;
-			y2 -= 10.0;
-		} else {
-			// Move X up
-			y1 += 10.0;
-			y2 += 10.0;
-		}
 		// if max height frame is reached
 		// go to next frame
 		x1_tcoord += x_offset;
@@ -270,7 +283,14 @@ void X::jump(float move_amount)
 		if(x1_tcoord >= 1.0){
 			// Reset state
 			x1_tcoord = 0.0;
-			state = STAND;
+			if(buttons[MOVE]){
+				state = MOVE;
+				x1_tcoord = 0.0;
+				y2_tcoord = 0.5;
+			} else {
+				state = STAND;
+			}
+			buttons[JUMP] = false;
 		}
 	}
 	counter++;
@@ -280,6 +300,7 @@ void X::jump(float move_amount)
 	}
 }
 
+// Draws X Firing
 void X::fire()
 {
 	// How many frames to jump
@@ -313,10 +334,13 @@ void X::fire()
 		counter = 0;
 	}
 }
+
 void X::charge()
 {
 
 }
+
+// Draws and makes X perform a dash
 void X::dash()
 {
 	// How many frames to jump
@@ -325,12 +349,8 @@ void X::dash()
 	// Draws the frame
 	if(direction == RIGHT){
 		glBindTexture(GL_TEXTURE_2D, textures[DASH_RIGHT]); // select the active texture
-		x1 += 5.0;
-		x2 += 5.0;
 	} else {
 		glBindTexture(GL_TEXTURE_2D, textures[DASH_LEFT]); // select the active texture
-		x1 -= 5.0;
-		x2 -= 5.0;
 	}
 	// Draw objects
 	glBegin(GL_POLYGON);
@@ -354,6 +374,7 @@ void X::dash()
 		counter = 0;
 	}
 }
+
 // Responses
 void X::damage()
 {

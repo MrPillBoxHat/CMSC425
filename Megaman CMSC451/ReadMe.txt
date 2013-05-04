@@ -5,6 +5,7 @@ w: jump
 a: move left
 d: move right
 h: fire
+j: dash
 
 How to play:
 ______________________________________________________________
@@ -33,10 +34,11 @@ Animation/Sprites:
 Bugs:
 ______________________________________________________________
 Animation:
-	- Stand Animation is not smoove
+	- Stand Animation is not smooth
 	- Run animation has some kind of white line on top
 	- Need to fix animation timings (some frames should
 	  be displayed longer than other frames).
-	- Need to implement continuous run after jump.  Right 
-	  now it stops after a new key is pressed
 	- Fire needs to continue until finished firing
+	- Dash needs to be one dash then over
+	- Jump -> run needs frame timing fixes.  Doesn't look natural
+	- Dash jump needs fixing.  Screws up flags (keeps jump after dash)

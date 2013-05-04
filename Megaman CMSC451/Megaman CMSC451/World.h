@@ -23,10 +23,13 @@ private:
 
 	// lower left coordinate of the camera
 	int cmX;
-	// controlls
+	// controls
 	static const unsigned char MOVE_LEFT = 'a',
 						       MOVE_RIGHT = 'd',
-							   MOVE_JUMP = 'w';
+							   MOVE_JUMP = 'w',
+							   MOVE_DASH = 'j',
+							   MOVE_FIRE = 'h';
+
 	// how much left and right move
 	static const int CM_DIFF = 4;
 
@@ -39,6 +42,5 @@ public:
 	void update(void);
 	void draw(void);
 	void processKeys(unsigned char key, int x, int y);
-	void mouseButton(int button, int state, int x, int y);
 	void processKeyUp(unsigned char key, int x, int y);
 };

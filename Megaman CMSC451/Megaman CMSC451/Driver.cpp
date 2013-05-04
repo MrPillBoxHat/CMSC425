@@ -34,7 +34,6 @@ int main(int argc, char **argv)
 	glutDisplayFunc(drawWorld); // (re)display callback
 	glutIdleFunc(update); // incremental update 
 	glutIgnoreKeyRepeat(1); // ignore key repeat when holding key down
-	glutMouseFunc(mouseButton); // process mouse button push/release
 	glutKeyboardFunc(processNormalKeys); // process standard key clicks
 	glutKeyboardUpFunc(processKeyUp);
 
@@ -58,11 +57,6 @@ void update()
 void drawWorld() 
 {
 	 world->draw();
-}
-
-void mouseButton(int button, int state, int x, int y) 
-{
-	 world->mouseButton(button, state, x, y);
 }
 
 void processNormalKeys(unsigned char key, int xx, int yy) 
