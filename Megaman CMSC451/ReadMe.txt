@@ -7,6 +7,8 @@ d: move right
 h: fire
 j: dash
 
+
+
 How to play:
 ______________________________________________________________
 1) Navigate through the level and find the boss room
@@ -17,6 +19,7 @@ ______________________________________________________________
 	- You take damage if you make contact with an enemy
 3) Main Weapon: X buster.
 	- You fire a plasma blast from your arm
+
 
 
 Implementations:
@@ -30,6 +33,8 @@ Animation/Sprites:
 	- Had to position each sprite in the correct position
 	  in the frame
 	- Animated using openGL texture mapping on GL_POLYGON
+
+
 
 Bugs:
 ______________________________________________________________

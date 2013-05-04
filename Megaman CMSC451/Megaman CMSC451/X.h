@@ -21,7 +21,7 @@ class X {
 		bool buttons[9]; // keeps track of state (buttons pressed)
 
 		// Private helper functions
-		// Helper functions to load textures
+		// helper functions to load textures
 		void loadEntry();
 		void loadStand();
 		void loadMove();
@@ -31,6 +31,17 @@ class X {
 		void loadDash();
 		void loadDamage();
 		void loadDie();
+		// Actions
+		void entry();
+		void stand();
+		void move();
+		void jump();
+		void fire();
+		void charge();
+		void dash();
+		// Responses
+		void damage();
+		void die();
 
 	// Contains public functions
 	public:
@@ -59,17 +70,6 @@ class X {
 		void resetTexture(){x1_tcoord = 0.0; y2_tcoord = 1.0;}
 		// Draw X
 		void draw();
-		// Actions
-		void entry();
-		void stand();
-		void move();
-		void jump();
-		void fire();
-		void charge();
-		void dash();
-		// Responses
-		void damage();
-		void die();
-		// Loads textures
+		// Loads all textures
 		void loadTextures();
 };

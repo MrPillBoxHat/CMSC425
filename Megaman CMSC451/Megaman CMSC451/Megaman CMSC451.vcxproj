@@ -105,6 +105,7 @@
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="Sigma.cpp" />
+    <ClCompile Include="X_Bullet.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="X.cpp" />
   </ItemGroup>

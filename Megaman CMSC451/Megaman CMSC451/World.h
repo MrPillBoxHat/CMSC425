@@ -1,9 +1,11 @@
 #pragma once
 
+#include <list>
 #include "X.h"
 #include "BackGround.h"
+#include "X_Bullet.h"
 
-//#include <SOIL.h>
+using namespace std;
 
 class World
 {
@@ -19,6 +21,7 @@ private:
 	int fps;
 	// Hero object
 	X *x;
+	list<X_Bullet> bullets;
 	BackGround bg;	
 
 	// lower left coordinate of the camera

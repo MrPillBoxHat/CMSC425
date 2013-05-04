@@ -10,6 +10,7 @@
 #include "X.h"
 #include <iostream>					// Uses I/O
 #include <GL/glut.h>                // GLUT
+#include <list>
 
 #define SET_BG_COLOR glClearColor(0.0, 0.0, 0.0, 1.0)
 
@@ -143,9 +144,15 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 
 			// Fire
 			case MOVE_FIRE:
-				if(hero_state != x->JUMP){
-					x->resetTexture();
-					x->setState(x->FIRE);
+				// Can only fire max 3 times
+				if(bullets.size < 3){
+					// Fire while on ground
+					if(hero_state == x->STAND){
+						// Create bullet from cannon position
+
+						x->resetTexture();
+						x->setState(x->FIRE);
+					}
 				}
 				break;
 
