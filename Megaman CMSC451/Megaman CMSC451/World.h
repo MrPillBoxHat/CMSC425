@@ -21,8 +21,9 @@ private:
 	int fps;
 	// Hero object
 	X *x;
-	list<X_Bullet> bullets;
+	list<X_Bullet > bullets;
 	BackGround bg;
+	GLuint bullet_texture;
 
 	// lower left coordinate of the camera
 	int cmX;
@@ -35,6 +36,9 @@ private:
 
 	// how much left and right move
 	static const int CM_DIFF = 4;
+	void loadTexture();
+	void bullet_draw();
+	void draw_helper();
 
 public:
 	World(unsigned int w, unsigned int h);

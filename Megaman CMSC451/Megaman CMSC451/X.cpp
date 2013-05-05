@@ -23,6 +23,11 @@ X::X()
 	x2 = 433.0;
 	y1 = 500.0;
 	y2 = 628.0;
+	// Cannon position after entry animation
+	position[0] = 377.4;
+	position[1] = 408.0;
+	position[2] = 114.0;
+	position[3] = 151.0;
 	state = ENTRY;
 	x1_tcoord = 0.0;
 	y2_tcoord = 1.0;
@@ -41,20 +46,18 @@ X::X()
 ****************************************************************************************************/
 void X::draw()
 {
-	// Enables texturess
-	glEnable(GL_TEXTURE_2D); // enable texturing
-	// Enable transparency
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
 	// Dash movement (faster movement)
 	if(buttons[DASH]){
 		if(direction == LEFT){
 			x1 -= 5.0;
 			x2 -= 5.0;
+			position[0] -= 5.0;
+			position[1] -= 5.0;
 		} else {
 			x1 += 5.0;
 			x2 += 5.0;
+			position[0] += 5.0;
+			position[1] += 5.0;
 		}
 	// Normal movements
 	} else {
@@ -63,9 +66,13 @@ void X::draw()
 			if(direction == LEFT){
 				x1 -= 1.0;
 				x2 -= 1.0;
+				position[0] -= 1.0;
+				position[1] -= 1.0;
 			} else {
 				x1 += 1.0;
 				x2 += 1.0;
+				position[0] += 1.0;
+				position[1] += 1.0;
 			}
 		}
 	}
@@ -79,10 +86,14 @@ void X::draw()
 			// X is falling back down
 				y1 -= 10.0;
 				y2 -= 10.0;
+				position[2] -= 10.0;
+				position[3] -= 10.0;
 			} else {
 				// Move X up
 				y1 += 10.0;
 				y2 += 10.0;
+				position[2] += 10.0;
+				position[3] += 10.0;
 			}
 		}
 	}
@@ -116,8 +127,6 @@ void X::draw()
 			die();
 			break;
 	}
-	glDisable(GL_BLEND);
-	glDisable(GL_TEXTURE_2D); // disable texturing
 }
 
 /*************************************************************************************************
@@ -218,8 +227,14 @@ void X::move()
 	// Draws the frame
 	if(direction == RIGHT){
 		glBindTexture(GL_TEXTURE_2D, textures[MOVE_RIGHT]); // select the active texture
+		// Readjust cannon position
+		position[0] = x2 - 21.8;
+		position[1] = x2 + 8.8;
 	} else {
 		glBindTexture(GL_TEXTURE_2D, textures[MOVE_LEFT]); // select the active texture
+		// Readjust cannon position
+		position[0] = x1 - 8.8;
+		position[1] = x1 + 21.8;
 	}
 	// Draw objects
 	glBegin(GL_POLYGON);

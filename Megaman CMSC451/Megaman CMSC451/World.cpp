@@ -33,8 +33,9 @@ World::World(unsigned int w, unsigned int h)
 	frames = 0;
 	fps = 60;
 	cmX = 0;
+	// Initialize bullet texture
+	loadTexture();
 }
-
 
 World::~World(void) 
 {
@@ -63,14 +64,7 @@ void World::draw(void)
 		SET_BG_COLOR;
 		glClear(GL_COLOR_BUFFER_BIT);
 		// background
-		bg.draw();
-		x->draw(); //Draws X
-		glBegin(GL_POLYGON);
-			glVertex2f(394.2, 150.0);
-			glVertex2f(399.2, 150.0);
-			glVertex2f(399.2, 155.0);
-			glVertex2f(394.2, 155.0);
-		glEnd();
+		draw_helper();
 		glutSwapBuffers();
 		// Updates timer information
 		frames++;
@@ -82,6 +76,21 @@ void World::draw(void)
 			lapse_time = 0;
 		}
 	}
+}
+
+void World::draw_helper()
+{
+	bg.draw();
+	// Enables texturess
+	glEnable(GL_TEXTURE_2D); // enable texturing
+	// Enable transparency
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
+	bullet_draw(); // Draws all bullets on map
+	x->draw(); //Draws X
+	glDisable(GL_BLEND);
+	glDisable(GL_TEXTURE_2D); // disable texturing
 }
 
 void World::setSize(int w, int h) 
@@ -154,8 +163,9 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 				if(bullets.size() < 3){
 					// Fire while on ground
 					if(hero_state == x->STAND){
+						X_Bullet *temp = new X_Bullet(x->getCannon(), x->getDirection());
 						// Create bullet from cannon position
-
+						bullets.push_front(*temp);
 						x->resetTexture();
 						x->setState(x->FIRE);
 					}
@@ -209,6 +219,50 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 	}
 }
 
+void World::loadTexture()
+{
+	/* loads entry image directly as a new OpenGL texture */
+	bullet_texture = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/Bullet/X_Bullet_right.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == bullet_texture )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "textureID2: " << bullet_texture << endl;
+
+	glBindTexture(GL_TEXTURE_2D, bullet_texture); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+}
+
+void World::bullet_draw()
+{
+	// Go through each bullet in the world and draw them
+	list<X_Bullet>::iterator it = bullets.begin();
+	while(it != bullets.end()){
+		it->draw(bullet_texture);
+		// If bullet reaches end of map, delete it
+		if(it->getX2() >= 800.0){
+			it = bullets.erase(it);
+		} else {
+			it++;
+		}
+	}
+}
 
 void done(unsigned char key, int x, int y) {
 	

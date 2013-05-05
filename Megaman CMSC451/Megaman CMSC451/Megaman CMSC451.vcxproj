@@ -110,6 +110,9 @@
     <ClCompile Include="X.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Sprites\Megaman\Bullet\splat.png" />
+    <Image Include="Sprites\Megaman\Bullet\X_Bullet_left.png" />
+    <Image Include="Sprites\Megaman\Bullet\X_Bullet_right.png" />
     <Image Include="Sprites\Megaman\dash\dash_left.png" />
     <Image Include="Sprites\Megaman\dash\dash_right.png" />
     <Image Include="Sprites\Megaman\Entry\X_Entry.png" />

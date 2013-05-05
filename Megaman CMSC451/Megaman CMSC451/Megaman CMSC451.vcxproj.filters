@@ -55,6 +55,9 @@
     <Filter Include="Source Files\Objects">
       <UniqueIdentifier>{b87940e9-a976-4e64-ad6f-2a4341b98ed7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Megaman X Sprites\Bullet">
+      <UniqueIdentifier>{74902c28-c077-4120-a045-e984abf2347a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sigma.h">
@@ -159,6 +162,15 @@
     </Image>
     <Image Include="Sprites\Megaman\dash\dash_left.png">
       <Filter>Resource Files\Megaman X Sprites\dash</Filter>
+    </Image>
+    <Image Include="Sprites\Megaman\Bullet\X_Bullet_right.png">
+      <Filter>Resource Files\Megaman X Sprites\Bullet</Filter>
+    </Image>
+    <Image Include="Sprites\Megaman\Bullet\X_Bullet_left.png">
+      <Filter>Resource Files\Megaman X Sprites\Bullet</Filter>
+    </Image>
+    <Image Include="Sprites\Megaman\Bullet\splat.png">
+      <Filter>Resource Files\Megaman X Sprites\Bullet</Filter>
     </Image>
   </ItemGroup>
 </Project>
