@@ -18,6 +18,10 @@ void processKeyUp(unsigned char key, int x, int y);
 
 using namespace std;
 
+//world dimensions
+const static GLdouble WIDTH = 4000;
+const static GLdouble HEIGHT = WIDTH * (4.0/3.0);
+
 int main(int argc, char **argv) 
 {
 	cout << "Starting.." << endl;
@@ -37,7 +41,7 @@ int main(int argc, char **argv)
 	glutKeyboardFunc(processNormalKeys); // process standard key clicks
 	glutKeyboardUpFunc(processKeyUp);
 
-	world = new World(1024, 768); // textures have to be loaded after inits
+	world = new World(WIDTH, HEIGHT); // textures have to be loaded after inits
 
 	// enter GLUT event processing cycle
 	glutMainLoop();

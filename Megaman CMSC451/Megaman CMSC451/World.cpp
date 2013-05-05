@@ -19,10 +19,10 @@ void noDraw() {};
 using namespace std;
 
 // Constructor for the World class
-World::World(unsigned int w, unsigned int h) 
+World::World(GLdouble w, GLdouble h) 
 {
-	width = width;
-	height = height;
+	width = w;
+	height = h;
 	x = new X();
 	x->loadTextures();
 	delta_time = 0;
@@ -43,7 +43,16 @@ World::~World(void)
 
 void World::update(void) 
 {
-	glutPostRedisplay();
+	// check if we need to update the camera
+	if(x->getState() == x->MOVE) {
+		if(x->getDirection() == x->RIGHT)
+			cmX = min(width-1, cmX + CM_DIFF);
+		else
+			cmX = max(0, cmX - CM_DIFF);
+
+		updateView();
+	} else
+		glutPostRedisplay();
 }
 
 
@@ -79,17 +88,19 @@ void World::draw(void)
 
 void World::setSize(int w, int h) 
 {
-	width = w; height = h;
-
 	glViewport(0, 0, w, h);
+	updateView();
+}
+
+void World::updateView()
+{
 	glMatrixMode(GL_PROJECTION);                // update projection
     glLoadIdentity();
-    gluOrtho2D(cmX, w, 0, h);          // one to one
+	gluOrtho2D(cmX, cmX + 800, 0, 400);          // one to one
     glMatrixMode(GL_MODELVIEW);
 
     glutPostRedisplay();                        // request redisplay
 }
-
 // Process Keyboard events
 void World::processKeys(unsigned char key, int x_coord, int y_coord) 
 {
@@ -123,7 +134,7 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 				// Change direction
 				x->setDirection(x->LEFT);
 				// camera movement
-		//		cmX = max(0, cmX - CM_DIFF);
+				cmX = max(0, cmX - CM_DIFF);
 				break;
 
 			// Move Right
@@ -138,7 +149,7 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 				// Change direction
 				x->setDirection(x->RIGHT);
 				// Camera movement
-			//	cmX = min(width-1, cmX + CM_DIFF);
+				cmX = min(width-1, cmX + CM_DIFF);
 				break;
 
 			// Fire
@@ -160,9 +171,9 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 	}
 
 	//cout << "cmX = " << cmX << endl;
-	//if(old != cmX)
-	//	setSize(width, height);
-	//else
+	if(old != cmX)
+		updateView();
+	else
 		glutPostRedisplay();
 }
 

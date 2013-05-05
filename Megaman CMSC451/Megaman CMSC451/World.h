@@ -8,8 +8,9 @@
 class World
 {
 private:
-	int width;
-	int height;
+	//dimensions of the world
+	GLdouble width;
+	GLdouble height;
 	// Variables to keep track of frames per second
 	int delta_time;
 	int start_time;
@@ -33,8 +34,9 @@ private:
 	// how much left and right move
 	static const int CM_DIFF = 4;
 
+	void updateView();
 public:
-	World(unsigned int w, unsigned int h);
+	World(GLdouble w, GLdouble h);
 	World() {}
 	~World(void);
 
