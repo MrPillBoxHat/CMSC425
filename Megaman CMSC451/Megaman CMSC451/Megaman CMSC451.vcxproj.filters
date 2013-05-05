@@ -52,6 +52,12 @@
     <Filter Include="Resource Files\Megaman X Sprites\dash">
       <UniqueIdentifier>{a197e3d6-5732-4128-aeac-8fbb8d836898}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Objects">
+      <UniqueIdentifier>{b87940e9-a976-4e64-ad6f-2a4341b98ed7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Megaman X Sprites\Bullet">
+      <UniqueIdentifier>{74902c28-c077-4120-a045-e984abf2347a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sigma.h">
@@ -65,9 +71,6 @@
     </ClInclude>
     <ClInclude Include="World.h">
       <Filter>Header Files\World</Filter>
-    </ClInclude>
-    <ClInclude Include="X_Bullet.h">
-      <Filter>Header Files\Characters\Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\image_DXT.h">
       <Filter>Header Files\SOIL</Filter>
@@ -89,6 +92,9 @@
     </ClInclude>
     <ClInclude Include="BackGround.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="X_Bullet.h">
+      <Filter>Header Files\Characters\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +124,9 @@
     </ClCompile>
     <ClCompile Include="BackGround.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="X_Bullet.cpp">
+      <Filter>Source Files\Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -153,6 +162,15 @@
     </Image>
     <Image Include="Sprites\Megaman\dash\dash_left.png">
       <Filter>Resource Files\Megaman X Sprites\dash</Filter>
+    </Image>
+    <Image Include="Sprites\Megaman\Bullet\X_Bullet_right.png">
+      <Filter>Resource Files\Megaman X Sprites\Bullet</Filter>
+    </Image>
+    <Image Include="Sprites\Megaman\Bullet\X_Bullet_left.png">
+      <Filter>Resource Files\Megaman X Sprites\Bullet</Filter>
+    </Image>
+    <Image Include="Sprites\Megaman\Bullet\splat.png">
+      <Filter>Resource Files\Megaman X Sprites\Bullet</Filter>
     </Image>
   </ItemGroup>
 </Project>

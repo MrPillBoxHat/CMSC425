@@ -1,9 +1,11 @@
 #pragma once
 
+#include <list>
 #include "X.h"
 #include "BackGround.h"
+#include "X_Bullet.h"
 
-//#include <SOIL.h>
+using namespace std;
 
 class World
 {
@@ -20,7 +22,9 @@ private:
 	int fps;
 	// Hero object
 	X *x;
-	BackGround bg;	
+	list<X_Bullet > bullets;
+	BackGround bg;
+	GLuint bullet_texture;
 
 	// lower left coordinate of the camera
 	int cmX;
@@ -33,6 +37,9 @@ private:
 
 	// how much left and right move
 	static const int CM_DIFF = 4;
+	void loadTexture();
+	void bullet_draw();
+	void draw_helper();
 
 	void updateView();
 public:

@@ -10,7 +10,8 @@
 class X {
 	// Contains X's health and location
 	private:
-		float x1,x2,y1,y2; // location
+		float x1,x2,y1,y2; // location of X
+		float position[4]; // location of cannon
 		int health;
 		int state;
 		int direction; // X facing direction
@@ -21,7 +22,7 @@ class X {
 		bool buttons[9]; // keeps track of state (buttons pressed)
 
 		// Private helper functions
-		// Helper functions to load textures
+		// helper functions to load textures
 		void loadEntry();
 		void loadStand();
 		void loadMove();
@@ -31,6 +32,17 @@ class X {
 		void loadDash();
 		void loadDamage();
 		void loadDie();
+		// Actions
+		void entry();
+		void stand();
+		void move();
+		void jump();
+		void fire();
+		void charge();
+		void dash();
+		// Responses
+		void damage();
+		void die();
 
 	// Contains public functions
 	public:
@@ -50,6 +62,7 @@ class X {
 		// getters
 		int getState(){return state;}
 		int getDirection(){return direction;}
+		float *getCannon(){return position;}
 		// setters
 		void setHealth(int number){health += number;}
 		void setState(int inState){state = inState; buttons[inState] = true;}
@@ -59,17 +72,6 @@ class X {
 		void resetTexture(){x1_tcoord = 0.0; y2_tcoord = 1.0;}
 		// Draw X
 		void draw();
-		// Actions
-		void entry();
-		void stand();
-		void move();
-		void jump();
-		void fire();
-		void charge();
-		void dash();
-		// Responses
-		void damage();
-		void die();
-		// Loads textures
+		// Loads all textures
 		void loadTextures();
 };
