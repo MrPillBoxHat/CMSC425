@@ -5,8 +5,6 @@
 #include "BackGround.h"
 #include "X_Bullet.h"
 
-using namespace std;
-
 class World
 {
 private:
@@ -22,12 +20,12 @@ private:
 	int fps;
 	// Hero object
 	X *x;
-	list<X_Bullet > bullets;
+	std::list<X_Bullet > bullets;
 	BackGround bg;
 	GLuint bullet_texture;
 
 	// lower left coordinate of the camera
-	int cmX;
+	GLdouble cmX;
 	// controls
 	static const unsigned char MOVE_LEFT = 'a',
 						       MOVE_RIGHT = 'd',
@@ -36,7 +34,8 @@ private:
 							   MOVE_FIRE = 'h';
 
 	// how much left and right move
-	static const int CM_DIFF = 4;
+	static const GLdouble CM_WALK, CM_DASH;
+
 	void loadTexture();
 	void bullet_draw();
 	void draw_helper();

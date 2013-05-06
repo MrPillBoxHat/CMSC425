@@ -7,7 +7,7 @@
 
 #include "World.h"
 
-World * world;
+World * world = nullptr;
 
 void changeSize(int x, int y);
 void update();
@@ -20,7 +20,7 @@ using namespace std;
 
 //world dimensions
 const static GLdouble WIDTH = 4000;
-const static GLdouble HEIGHT = WIDTH * (4.0/3.0);
+const static GLdouble HEIGHT = 1000;
 
 int main(int argc, char **argv) 
 {

@@ -17,6 +17,10 @@
 void done(unsigned char key, int x, int y);
 void noDraw() {};
 
+//movement of camera TODO sync this up with X
+const GLdouble World::CM_WALK = 1.0;
+const GLdouble World::CM_DASH = 5.0;
+
 using namespace std;
 
 // Constructor for the World class
@@ -45,46 +49,58 @@ World::~World(void)
 
 void World::update(void) 
 {
-	// check if we need to update the camera
-	if(x->getState() == x->MOVE) {
-		if(x->getDirection() == x->RIGHT)
-			cmX = min(width-1, cmX + CM_DIFF);
-		else
-			cmX = max(0, cmX - CM_DIFF);
-
-		updateView();
-	} else
-		glutPostRedisplay();
-}
-
-
-void World::draw(void) 
-{
 	// Controls Frames per Second of the game
 	current_time = glutGet(GLUT_ELAPSED_TIME); // Gets current time
 	delta_time += current_time - start_time; // Gets change in time
 	start_time = current_time; // Resets start time
 	lapse_time += delta_time; // Increment total time
-	// Determines whether to draw or sleep
-	if(delta_time < ( 1000 / fps)) {
-		Sleep((1000 / fps) - delta_time);
-	} else {
-		// Draw
-		SET_BG_COLOR;
-		glClear(GL_COLOR_BUFFER_BIT);
-		// background
-		draw_helper();
-		glutSwapBuffers();
-		// Updates timer information
-		frames++;
-		delta_time = 0;
-		if(lapse_time > 1000){
-			cout << "FPS: " << frames << endl;
-			// reset timers
-			frames = 0;
-			lapse_time = 0;
-		}
+
+	if(delta_time < ( 1000.0 / fps))
+		return;  // don't do anything
+
+	// Updates timer information
+	frames++;
+	delta_time = 0;
+	if(lapse_time > 1000){
+		cout << "FPS: " << frames << endl;
+		// reset timers
+		frames = 0;
+		lapse_time = 0;
 	}
+
+
+	// check if we need to update the camera
+	int state = x->getState();
+	switch(state) {
+	case X::MOVE:
+	case X::DASH: // move camera
+		{
+			// check how fast to move
+			const GLdouble diff = (X::MOVE == state) ? CM_WALK : CM_DASH;
+
+			if(x->getDirection() == X::RIGHT)
+				cmX = min(width-1, cmX + diff);
+			else
+				cmX = max(0, cmX - diff);
+
+			updateView();
+			break;
+		}
+	default:
+		glutPostRedisplay();
+		break;
+	}
+}
+
+
+void World::draw(void) 
+{
+	// Draw
+	SET_BG_COLOR;
+	glClear(GL_COLOR_BUFFER_BIT);
+	// background
+	draw_helper();
+	glutSwapBuffers();
 }
 
 void World::draw_helper()
@@ -150,7 +166,7 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 				// Change direction
 				x->setDirection(x->LEFT);
 				// camera movement
-				cmX = max(0, cmX - CM_DIFF);
+				cmX = max(0, cmX - CM_WALK);
 				break;
 
 			// Move Right
@@ -165,7 +181,7 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 				// Change direction
 				x->setDirection(x->RIGHT);
 				// Camera movement
-				cmX = min(width-1, cmX + CM_DIFF);
+				cmX = min(width-1, cmX + CM_WALK);
 				break;
 
 			// Fire
@@ -194,10 +210,11 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 	}
 
 	//cout << "cmX = " << cmX << endl;
-	if(old != cmX)
+	/*if(old != cmX)
 		updateView();
 	else
-		glutPostRedisplay();
+		glutPostRedisplay();*/
+	update();
 }
 
 void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
@@ -278,3 +295,56 @@ void World::bullet_draw()
 void done(unsigned char key, int x, int y) {
 	
 }
+
+/*
+void World::update(void) 
+{
+	// check if we need to update the camera
+	switch(x->getState()) {
+	case x->MOVE:
+		if(x->getDirection() == x->RIGHT)
+			cmX = min(width-1, cmX + CM_DIFF);
+		else
+			cmX = max(0, cmX - CM_DIFF);
+
+		updateView();
+		break;
+	case X::DASH: // move camera at faster pace
+		cout << "in update(), dashing!" << endl;
+		updateView();
+		break;
+	default:
+		glutPostRedisplay();
+		break;
+	}
+}
+*/
+
+/*void World::draw(void) 
+{
+	// Controls Frames per Second of the game
+	current_time = glutGet(GLUT_ELAPSED_TIME); // Gets current time
+	delta_time += current_time - start_time; // Gets change in time
+	start_time = current_time; // Resets start time
+	lapse_time += delta_time; // Increment total time
+	// Determines whether to draw or sleep
+	if(delta_time < ( 1000 / fps)) {
+		Sleep((1000 / fps) - delta_time);
+	} else {
+		// Draw
+		SET_BG_COLOR;
+		glClear(GL_COLOR_BUFFER_BIT);
+		// background
+		draw_helper();
+		glutSwapBuffers();
+		// Updates timer information
+		frames++;
+		delta_time = 0;
+		if(lapse_time > 1000){
+			cout << "FPS: " << frames << endl;
+			// reset timers
+			frames = 0;
+			lapse_time = 0;
+		}
+	}
+}*/
