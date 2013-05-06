@@ -382,9 +382,16 @@ void X::dash()
 		//update next frame or reset if reached the end
 		x1_tcoord += x_offset;
 		if(x1_tcoord >= 1.0){
-			x1_tcoord = 0.0;
-			state = STAND;
-			buttons[DASH] = false;
+			// If player is holding move change to run
+			if(buttons[MOVE]){
+				x1_tcoord = 0.375;
+				state = MOVE;
+			// If player is not holding move, change to stand
+			} else {
+				x1_tcoord = 0.0;
+				state = STAND;
+				buttons[DASH] = false;
+			}
 		}
 	}
 	counter++;

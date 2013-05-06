@@ -155,31 +155,31 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 			// Move Left
 			case MOVE_LEFT:
 				// If not in jump animation
-				if(hero_state != x->JUMP){
+				if(hero_state != x->JUMP && hero_state != x->DASH){
 					x->resetTexture();
 					x->setState(x->MOVE);
+					// camera movement
+					cmX = max(0, cmX - CM_WALK);
 				}
 				// Register button pressed
 				x->setButtons(x->MOVE, true);
 				// Change direction
 				x->setDirection(x->LEFT);
-				// camera movement
-				cmX = max(0, cmX - CM_WALK);
 				break;
 
 			// Move Right
 			case MOVE_RIGHT:
 				// If not in jump animation
-				if(hero_state != x->JUMP){
+				if(hero_state != x->JUMP && hero_state != x->DASH){
 					x->resetTexture();
 					x->setState(x->MOVE);
+					// Camera movement
+					cmX = min(width-1, cmX + CM_WALK);
 				}
 				// Register button pressed
 				x->setButtons(x->MOVE, true);
 				// Change direction
 				x->setDirection(x->RIGHT);
-				// Camera movement
-				cmX = min(width-1, cmX + CM_WALK);
 				break;
 
 			// Fire
@@ -196,7 +196,8 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 
 			// Dash
 			case MOVE_DASH:
-				if(hero_state != x->JUMP){
+				// if X not in the air and not already dashing
+				if(hero_state != x->JUMP && hero_state != x->DASH){
 					x->resetTexture();
 					x->setState(x->DASH);
 				}
@@ -226,6 +227,7 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 			}
 			x->setButtons(x->MOVE, false);
 			break;
+		
 		// Fire
 		case MOVE_FIRE:
 			// Fire charged shot

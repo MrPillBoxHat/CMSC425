@@ -41,11 +41,11 @@ void X_Bullet::draw(GLuint texture)
 	glEnd();
 	if(direction == 0){
 		// Move bullet
-		x1 -= 3.0;
-		x2 -= 3.0;
+		x1 -= 7.0;
+		x2 -= 7.0;
 	} else {
-		x1 += 3.0;
-		x2 += 3.0;
+		x1 += 7.0;
+		x2 += 7.0;
 	}
 	//update next frame or reset if reached the end
 	x1_tcoord += x_offset;
