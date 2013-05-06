@@ -70,11 +70,11 @@ void World::update(void)
 	// check if we need to update the camera
 	int state = x->getState();
 	switch(state) {
-	case X::MOVE:
+	case X::RUN:
 	case X::DASH: // move camera
 		{
 			// check how fast to move
-			const GLdouble diff = (X::MOVE == state) ? CM_WALK : CM_DASH;
+			const GLdouble diff = (X::RUN == state) ? CM_WALK : CM_DASH;
 
 			if(x->getDirection() == X::RIGHT)
 				cmX = min(width-1, cmX + diff);
@@ -157,12 +157,12 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 				// If not in jump animation
 				if(hero_state != x->JUMP && hero_state != x->DASH){
 					x->resetTexture();
-					x->setState(x->MOVE);
+					x->setState(x->RUN);
 					// camera movement
 					cmX = max(0, cmX - CM_WALK);
 				}
 				// Register button pressed
-				x->setButtons(x->MOVE, true);
+				x->setButtons(x->RUN, true);
 				// Change direction
 				x->setDirection(x->LEFT);
 				break;
@@ -172,12 +172,12 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 				// If not in jump animation
 				if(hero_state != x->JUMP && hero_state != x->DASH){
 					x->resetTexture();
-					x->setState(x->MOVE);
+					x->setState(x->RUN);
 					// Camera movement
 					cmX = min(width-1, cmX + CM_WALK);
 				}
 				// Register button pressed
-				x->setButtons(x->MOVE, true);
+				x->setButtons(x->RUN, true);
 				// Change direction
 				x->setDirection(x->RIGHT);
 				break;
@@ -225,7 +225,7 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 				x->setState(x->STAND);
 				x->resetTexture();
 			}
-			x->setButtons(x->MOVE, false);
+			x->setButtons(x->RUN, false);
 			break;
 		
 		// Fire

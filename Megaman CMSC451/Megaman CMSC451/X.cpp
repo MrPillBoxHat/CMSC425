@@ -46,6 +46,44 @@ X::X()
 ****************************************************************************************************/
 void X::draw()
 {
+	// Move X in the world
+	move();
+	// Determines which action to draw
+	switch(state)
+	{
+		case ENTRY:
+			entry();
+			break; // Delete after testing
+		case STAND:
+			stand();
+			break;
+		case RUN:
+			run();
+			break;
+		case JUMP:
+			jump();
+			break;
+		case FIRE:
+			fire();
+			break;
+		case CHARGE:
+			charge();
+			break;
+		case DASH:
+			dash();
+			break;
+		case DAMAGE:
+			damage();
+			break;
+		case DIE:
+			die();
+			break;
+	}
+}
+
+// Moves X in the world
+void X::move()
+{
 	// Dash movement (faster movement)
 	if(buttons[DASH]){
 		if(direction == LEFT){
@@ -62,7 +100,7 @@ void X::draw()
 	// Normal movements
 	} else {
 		// Move X horizontally
-		if(buttons[MOVE]){
+		if(buttons[RUN]){
 			if(direction == LEFT){
 				x1 -= 1.0;
 				x2 -= 1.0;
@@ -96,36 +134,6 @@ void X::draw()
 				position[3] += 22.0;
 			}
 		}
-	}
-	switch(state)
-	{
-		case ENTRY:
-			entry();
-			break; // Delete after testing
-		case STAND:
-			stand();
-			break;
-		case MOVE:
-			move();
-			break;
-		case JUMP:
-			jump();
-			break;
-		case FIRE:
-			fire();
-			break;
-		case CHARGE:
-			charge();
-			break;
-		case DASH:
-			dash();
-			break;
-		case DAMAGE:
-			damage();
-			break;
-		case DIE:
-			die();
-			break;
 	}
 }
 
@@ -219,19 +227,19 @@ void X::stand()
 }
 
 // Draws X running
-void X::move()
+void X::run()
 {
 	// How many frames to jump
 	float x_offset = 0.125;
 	float y_offset = 0.5;
 	// Draws the frame
 	if(direction == RIGHT){
-		glBindTexture(GL_TEXTURE_2D, textures[MOVE_RIGHT]); // select the active texture
+		glBindTexture(GL_TEXTURE_2D, textures[RUN_RIGHT]); // select the active texture
 		// Readjust cannon position
 		position[0] = x2 - 21.8;
 		position[1] = x2 + 8.8;
 	} else {
-		glBindTexture(GL_TEXTURE_2D, textures[MOVE_LEFT]); // select the active texture
+		glBindTexture(GL_TEXTURE_2D, textures[RUN_LEFT]); // select the active texture
 		// Readjust cannon position
 		position[0] = x1 - 8.8;
 		position[1] = x1 + 21.8;
@@ -297,8 +305,8 @@ void X::jump()
 		if(x1_tcoord >= 1.0){
 			// Reset state
 			x1_tcoord = 0.0;
-			if(buttons[MOVE]){
-				state = MOVE;
+			if(buttons[RUN]){
+				state = RUN;
 				x1_tcoord = 0.0;
 				y2_tcoord = 0.5;
 			} else {
@@ -383,9 +391,9 @@ void X::dash()
 		x1_tcoord += x_offset;
 		if(x1_tcoord >= 1.0){
 			// If player is holding move change to run
-			if(buttons[MOVE]){
+			if(buttons[RUN]){
 				x1_tcoord = 0.375;
-				state = MOVE;
+				state = RUN;
 			// If player is not holding move, change to stand
 			} else {
 				x1_tcoord = 0.0;
@@ -550,7 +558,7 @@ void X::loadMove()
 
 	cout << "textureID: " << textureID << endl;
 
-	textures[MOVE_RIGHT] = textureID; // Assign it to the texture array
+	textures[RUN_RIGHT] = textureID; // Assign it to the texture array
 	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	// repeat texture
@@ -578,7 +586,7 @@ void X::loadMove()
 
 	cout << "textureID: " << textureID << endl;
 
-	textures[MOVE_LEFT] = textureID; // Assign it to the texture array
+	textures[RUN_LEFT] = textureID; // Assign it to the texture array
 	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	// repeat texture

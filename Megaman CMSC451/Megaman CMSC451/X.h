@@ -35,7 +35,7 @@ class X {
 		// Actions
 		void entry();
 		void stand();
-		void move();
+		void run();
 		void jump();
 		void fire();
 		void charge();
@@ -43,6 +43,8 @@ class X {
 		// Responses
 		void damage();
 		void die();
+		// Move X's coordinates
+		void move();
 
 	// Contains public functions
 	public:
@@ -53,8 +55,8 @@ class X {
 		*
 		*********************************************************************************************/
 		static const enum directions {LEFT, RIGHT};
-		static const enum states {STAND, MOVE, JUMP, FIRE, CHARGE, DASH, DAMAGE, DIE, ENTRY};
-		static const enum texture_states{STAND_RIGHT, STAND_LEFT, MOVE_LEFT, MOVE_RIGHT, JUMP_LEFT, JUMP_RIGHT,
+		static const enum states {STAND, RUN, JUMP, FIRE, CHARGE, DASH, DAMAGE, DIE, ENTRY};
+		static const enum texture_states{STAND_RIGHT, STAND_LEFT, RUN_LEFT, RUN_RIGHT, JUMP_LEFT, JUMP_RIGHT,
 					FIRE_LEFT, FIRE_RIGHT, DASH_LEFT, DASH_RIGHT, DAMAGE_LEFT, DAMAGE_RIGHT,
 					DIE_LEFT, DIE_RIGHT, CHARGE_TEXTURE, ENTRY_TEXUTRE};
 		// Contructor
