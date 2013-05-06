@@ -44,9 +44,8 @@ Animation:
 	- Need to fix animation timings (some frames should
 	  be displayed longer than other frames).
 	- Fire needs to continue until finished firing
-	- Dash needs to be one dash then over
 	- Jump -> run needs frame timing fixes.  Doesn't look natural
-	- Dash jump needs fixing.  Screws up flags (keeps jump after dash)
+	- combination of keys + jump causes flags to screw up
 	- Bullet animation needs to be fixed according to hitting wall
 	- After 3 bullets fire, additional pressing of fire buttong causes
 	  X to stagger.

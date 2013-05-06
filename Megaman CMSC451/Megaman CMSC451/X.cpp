@@ -84,16 +84,16 @@ void X::draw()
 			// no change in position
 			} else if(x1_tcoord >= 0.36 && x1_tcoord < 0.72){
 			// X is falling back down
-				y1 -= 10.0;
-				y2 -= 10.0;
-				position[2] -= 10.0;
-				position[3] -= 10.0;
+				y1 -= 22.0;
+				y2 -= 22.0;
+				position[2] -= 22.0;
+				position[3] -= 22.0;
 			} else {
 				// Move X up
-				y1 += 10.0;
-				y2 += 10.0;
-				position[2] += 10.0;
-				position[3] += 10.0;
+				y1 += 22.0;
+				y2 += 22.0;
+				position[2] += 22.0;
+				position[3] += 22.0;
 			}
 		}
 	}
