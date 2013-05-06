@@ -341,6 +341,8 @@ void X::fire()
 		x1_tcoord += x_offset;
 		if(x1_tcoord >= 1.0){
 			x1_tcoord = 0.0;
+			state = STAND;
+			buttons[FIRE] = false;
 		}
 	}
 	counter++;

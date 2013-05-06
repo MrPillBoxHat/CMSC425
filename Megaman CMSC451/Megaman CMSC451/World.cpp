@@ -186,14 +186,11 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 			case MOVE_FIRE:
 				// Can only fire max 3 times
 				if(bullets.size() < 3){
-					// Fire while on ground
-					if(hero_state == x->STAND){
-						X_Bullet *temp = new X_Bullet(x->getCannon(), x->getDirection());
-						// Create bullet from cannon position
-						bullets.push_front(*temp);
-						x->resetTexture();
-						x->setState(x->FIRE);
-					}
+					X_Bullet *temp = new X_Bullet(x->getCannon(), x->getDirection());
+					// Create bullet from cannon position
+					bullets.push_front(*temp);
+					x->resetTexture();
+					x->setState(x->FIRE);
 				}
 				break;
 
@@ -231,9 +228,6 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 			break;
 		// Fire
 		case MOVE_FIRE:
-			x->setState(x->STAND);
-			x->resetTexture();
-			x->setButtons(x->FIRE, false);
 			// Fire charged shot
 			break;
 	}
