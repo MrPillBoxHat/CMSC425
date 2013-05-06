@@ -46,7 +46,6 @@ World::~World(void)
 	delete x;
 }
 
-
 void World::update(void) 
 {
 	// Controls Frames per Second of the game
@@ -67,7 +66,6 @@ void World::update(void)
 		frames = 0;
 		lapse_time = 0;
 	}
-
 
 	// check if we need to update the camera
 	int state = x->getState();
@@ -236,12 +234,6 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 			x->setState(x->STAND);
 			x->resetTexture();
 			x->setButtons(x->FIRE, false);
-			// Fire charged shot
-			break;
-		case MOVE_DASH:
-			x->setState(x->STAND);
-			x->setButtons(x->DASH, false);
-			x->resetTexture();
 			// Fire charged shot
 			break;
 	}

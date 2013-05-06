@@ -305,6 +305,7 @@ void X::jump()
 				state = STAND;
 			}
 			buttons[JUMP] = false;
+			buttons[DASH] = false;
 		}
 	}
 	counter++;
@@ -380,6 +381,8 @@ void X::dash()
 		x1_tcoord += x_offset;
 		if(x1_tcoord >= 1.0){
 			x1_tcoord = 0.0;
+			state = STAND;
+			buttons[DASH] = false;
 		}
 	}
 	counter++;
