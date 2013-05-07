@@ -91,7 +91,6 @@
     <ClInclude Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\stbi_DDS_aug_c.h" />
     <ClInclude Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\stb_image_aug.h" />
     <ClInclude Include="BackGround.h" />
-    <ClInclude Include="Character.h" />
     <ClInclude Include="Sigma.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="X.h" />

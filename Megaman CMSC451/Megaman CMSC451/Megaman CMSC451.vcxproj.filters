@@ -63,9 +63,6 @@
     <ClInclude Include="Sigma.h">
       <Filter>Header Files\Characters</Filter>
     </ClInclude>
-    <ClInclude Include="Character.h">
-      <Filter>Header Files\Characters</Filter>
-    </ClInclude>
     <ClInclude Include="X.h">
       <Filter>Header Files\Characters</Filter>
     </ClInclude>
