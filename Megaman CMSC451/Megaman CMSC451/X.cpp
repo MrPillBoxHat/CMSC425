@@ -36,6 +36,8 @@ X::X()
 	for(int i = 0; i < 9; i++){
 		buttons[i] = false;
 	}
+	bool play_3frame = false;
+	int frame_count = 1;
 }
 
 /***************************************************************************************************
@@ -53,7 +55,7 @@ void X::draw()
 	{
 		case ENTRY:
 			entry();
-			break; // Delete after testing
+			break;
 		case STAND:
 			stand();
 			break;
@@ -64,7 +66,22 @@ void X::draw()
 			jump();
 			break;
 		case FIRE:
-			fire();
+			// if in the air
+			if(buttons[JUMP]){
+				buttons[FIRE] = false;
+				state = JUMP;
+				jump();
+				/*// Match jump frame with jump fire frame
+				x1_tcoord *= 2;
+				// If texture pointer is past 0.5, subtract 0.5
+				if(x1_tcoord >= 0.5){
+					x1_tcoord -= 0.5;
+					y2_tcoord = 0.5;
+				}
+				air_fire();*/
+			} else {
+				ground_fire();
+			}
 			break;
 		case CHARGE:
 			charge();
@@ -102,15 +119,15 @@ void X::move()
 		// Move X horizontally
 		if(buttons[RUN]){
 			if(direction == LEFT){
-				x1 -= 1.0;
-				x2 -= 1.0;
-				position[0] -= 1.0;
-				position[1] -= 1.0;
+				x1 -= 2.0;
+				x2 -= 2.0;
+				position[0] -= 2.0;
+				position[1] -= 2.0;
 			} else {
-				x1 += 1.0;
-				x2 += 1.0;
-				position[0] += 1.0;
-				position[1] += 1.0;
+				x1 += 2.0;
+				x2 += 2.0;
+				position[0] += 2.0;
+				position[1] += 2.0;
 			}
 		}
 	}
@@ -118,20 +135,41 @@ void X::move()
 	if(buttons[JUMP]){
 		// FPS control
 		if(counter %5 == 0){
-			if(x1_tcoord >= 0.72){
-			// no change in position
-			} else if(x1_tcoord >= 0.36 && x1_tcoord < 0.72){
-			// X is falling back down
-				y1 -= 22.0;
-				y2 -= 22.0;
-				position[2] -= 22.0;
-				position[3] -= 22.0;
-			} else {
+			// If firing in the air
+			if(buttons[FIRE] && buttons[JUMP]){
+				if(x1_tcoord >= .27 && y2_tcoord == 0.5){
+					// no change in position
+				} else if ((y2_tcoord == 0.5 && x1_tcoord < .27) || 
+						   (y2_tcoord == 1.0 && x1_tcoord >= .27)){
+					// X is falling back down
+					y1 -= 22.0;
+					y2 -= 22.0;
+					position[2] -= 22.0;
+					position[3] -= 22.0;
+				} else {
 				// Move X up
-				y1 += 22.0;
-				y2 += 22.0;
-				position[2] += 22.0;
-				position[3] += 22.0;
+					y1 += 22.0;
+					y2 += 22.0;
+					position[2] += 22.0;
+					position[3] += 22.0;
+				}
+			// If normal jump
+			} else {
+				if(x1_tcoord >= 0.72){
+				// no change in position
+				} else if(x1_tcoord >= 0.36 && x1_tcoord < 0.72){
+				// X is falling back down
+					y1 -= 22.0;
+					y2 -= 22.0;
+					position[2] -= 22.0;
+					position[3] -= 22.0;
+				} else {
+					// Move X up
+					y1 += 22.0;
+					y2 += 22.0;
+					position[2] += 22.0;
+					position[3] += 22.0;
+				}
 			}
 		}
 	}
@@ -323,8 +361,59 @@ void X::jump()
 	}
 }
 
-// Draws X Firing
-void X::fire()
+// Draws X firing in the air
+void X::air_fire()
+{
+	// How many frames to jump
+	float x_offset;
+	float y_offset = 0.5;
+	// Move up one frame
+	if(frame_count <= 3){
+		x_offset = 0.04545454545454545454545;
+		frame_count++;
+	// Jump two frames
+	} else {
+		play_3frame = false;
+		x_offset = 0.09090909090909090909090;
+	}
+	// Draws the frame
+	if(direction == RIGHT){
+		glBindTexture(GL_TEXTURE_2D, textures[JUMP_FIRE_RIGHT]); // select the active texture
+	} else {
+		glBindTexture(GL_TEXTURE_2D, textures[JUMP_FIRE_LEFT]); // select the active texture
+	}
+	// Draw objects
+	glBegin(GL_POLYGON);
+		//real coord
+		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
+		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+	glEnd();
+	// Want to draw 5 frames per second
+	if(counter % 3 == 0){
+		//update next frame or reset if reached the end
+		x1_tcoord += x_offset;
+		if(x1_tcoord >= 0.5){
+			x1_tcoord -= 0.5;
+			y2_tcoord -= y_offset;
+			if(y2_tcoord < 0){
+				state = STAND;
+				buttons[FIRE] = false;
+				buttons[JUMP] = false;
+				play_3frame = false;
+			}
+		}
+	}
+	counter++;
+	//resets counter
+	if(counter == 60){
+		counter = 0;
+	}
+}
+
+// Draws X firing on the ground
+void X::ground_fire()
 {
 	// How many frames to jump
 	float x_offset = 0.111111111111111111111111;
@@ -398,8 +487,8 @@ void X::dash()
 			} else {
 				x1_tcoord = 0.0;
 				state = STAND;
-				buttons[DASH] = false;
 			}
+			buttons[DASH] = false;
 		}
 	}
 	counter++;
@@ -663,7 +752,7 @@ void X::loadFire()
 	/* loads jump right image directly as a new OpenGL texture */
 	GLuint textureID = SOIL_load_OGL_texture
 	(
-		"Sprites/Megaman/fire/fire_right.png",
+		"Sprites/Megaman/fire/ground/fire_right.png",
 		SOIL_LOAD_AUTO,
 		SOIL_CREATE_NEW_ID,
 		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
@@ -691,7 +780,7 @@ void X::loadFire()
 	/* loads jump left image directly as a new OpenGL texture */
 	textureID = SOIL_load_OGL_texture
 	(
-		"Sprites/Megaman/fire/fire_left.png",
+		"Sprites/Megaman/fire/ground/fire_left.png",
 		SOIL_LOAD_AUTO,
 		SOIL_CREATE_NEW_ID,
 		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
@@ -707,6 +796,62 @@ void X::loadFire()
 	cout << "textureID: " << textureID << endl;
 
 	textures[FIRE_LEFT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads jump left image directly as a new OpenGL texture */
+	textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/fire/air/fire_right.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "textureID: " << textureID << endl;
+
+	textures[JUMP_FIRE_LEFT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads jump left image directly as a new OpenGL texture */
+	textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/fire/air/fire_right.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "textureID: " << textureID << endl;
+
+	textures[JUMP_FIRE_RIGHT] = textureID; // Assign it to the texture array
 	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	// repeat texture

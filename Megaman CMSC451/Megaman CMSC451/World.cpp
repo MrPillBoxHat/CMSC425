@@ -18,7 +18,7 @@ void done(unsigned char key, int x, int y);
 void noDraw() {};
 
 //movement of camera TODO sync this up with X
-const GLdouble World::CM_WALK = 1.0;
+const GLdouble World::CM_WALK = 2.0;
 const GLdouble World::CM_DASH = 5.0;
 
 using namespace std;
@@ -189,8 +189,12 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 					X_Bullet *temp = new X_Bullet(x->getCannon(), x->getDirection());
 					// Create bullet from cannon position
 					bullets.push_front(*temp);
-					x->resetTexture();
+					x->setFrameOn();
 					x->setState(x->FIRE);
+					// If not in the air, reset texture frame
+					if(hero_state != x->JUMP){
+						x->resetTexture();
+					}
 				}
 				break;
 
@@ -215,12 +219,13 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 
 void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 {
+	int hero_state = x->getState();
 	switch(key)
-	{		
+	{	
 		case 's': // Kneel
 		case MOVE_LEFT: // Move Left
 		case MOVE_RIGHT: // Move Right
-			if(x->getState() != x->JUMP && x->getState() != x->ENTRY){
+			if(hero_state != x->JUMP && hero_state != x->ENTRY && hero_state != x->DASH){
 				// Reset state
 				x->setState(x->STAND);
 				x->resetTexture();

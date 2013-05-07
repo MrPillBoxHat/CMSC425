@@ -47,5 +47,4 @@ Animation:
 	- Jump -> run needs frame timing fixes.  Doesn't look natural
 	- combination of keys + jump causes flags to screw up
 	- Bullet animation needs to be fixed according to hitting wall
-	- After 3 bullets fire, additional pressing of fire buttong causes
-	  X to stagger.
+	- Jump fire animation is bugged, not working at all.
