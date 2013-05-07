@@ -22,8 +22,8 @@ Zero::Zero()
 	x2 = 533.0;
 	y1 = 500.0;
 	y2 = 628.0;*/
-	x1 = 443.0;
-					x2 = 494.2;
+	x1 = 393.0;
+					x2 = 524.2;
 					y1 = 99.0;
 					y2 = 163.0;
 	// Cannon position after entry animation
@@ -31,7 +31,7 @@ Zero::Zero()
 	position[1] = 508.0;
 	position[2] = 114.0;
 	position[3] = 151.0;
-	state = STAND;
+	state = FIRE;
 	x1_tcoord = 0.0;
 	y2_tcoord = 1.0;
 	direction = RIGHT;
@@ -301,6 +301,7 @@ void Zero::jump()
 			}
 			buttons[JUMP] = false;
 			buttons[DASH] = false;
+			y2 -= 64.0;
 		}
 	}
 	counter++;
@@ -330,13 +331,13 @@ void Zero::fire()
 		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
 	glEnd();
 	// Want to draw 5 frames per second
-	if(counter % 3 == 0){
+	if(counter % 8 == 0){
 		//update next frame or reset if reached the end
 		x1_tcoord += x_offset;
 		if(x1_tcoord >= 1.0){
 			x1_tcoord = 0.0;
 			y2_tcoord -= y_offset;
-			if(y2_tcoord < 0){
+			if(y2_tcoord <= 0){
 				resetTexture();
 				state = STAND;
 				buttons[FIRE] = false;
@@ -376,17 +377,18 @@ void Zero::dash()
 		if(x1_tcoord >= 1.0){
 			x1_tcoord = 0.0;
 			y2_tcoord -= y_offset;
-			if(y2_tcoord < 0){
+			if(y2_tcoord <= 0){
 				// If player is holding move change to run
 				if(buttons[RUN]){
 					x1_tcoord = 0.375;
 					state = RUN;
 				// If player is not holding move, change to stand
 				} else {
-					x1_tcoord = 0.0;
+					y2_tcoord = 1.0;
 					state = STAND;
 				}
 				buttons[DASH] = false;
+				y2_tcoord = 1.0;
 			}
 		}
 	}
@@ -538,7 +540,7 @@ void Zero::loadJump()
 
 	cout << "ZeroTextureID: " << textureID << endl;
 
-	textures[RUN_RIGHT] = textureID; // Assign it to the texture array
+	textures[JUMP_RIGHT] = textureID; // Assign it to the texture array
 	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	// repeat texture

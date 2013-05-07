@@ -38,7 +38,7 @@ World::World(GLdouble w, GLdouble h)
 	current_time = 0;
 	lapse_time = 0;
 	frames = 0;
-	fps = 30;
+	fps = 60;
 	cmX = 0;
 	// Initialize bullet texture
 	loadTexture();
