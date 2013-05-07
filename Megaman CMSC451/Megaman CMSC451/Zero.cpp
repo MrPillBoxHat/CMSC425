@@ -17,17 +17,21 @@ using namespace std;
 Zero::Zero()
 {
 	health = 50;
-	// Coordinates of entry
+	/*/ Coordinates of entry
 	x1 = 405.0;
 	x2 = 533.0;
 	y1 = 500.0;
-	y2 = 628.0;
+	y2 = 628.0;*/
+	x1 = 443.0;
+					x2 = 494.2;
+					y1 = 99.0;
+					y2 = 163.0;
 	// Cannon position after entry animation
 	position[0] = 477.4;
 	position[1] = 508.0;
 	position[2] = 114.0;
 	position[3] = 151.0;
-	state = ENTRY;
+	state = STAND;
 	x1_tcoord = 0.0;
 	y2_tcoord = 1.0;
 	direction = RIGHT;
@@ -162,10 +166,10 @@ void Zero::entry()
 					// Go into standing state
 					state = STAND;
 					// Resets coordinates
-					x1 = 448.0;
-					x2 = 499.2;
-					y1 = 100.0;
-					y2 = 164.0;
+					x1 = 443.0;
+					x2 = 494.2;
+					y1 = 99.0;
+					y2 = 163.0;
 					resetTexture();
 				}
 			}

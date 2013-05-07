@@ -38,7 +38,7 @@ World::World(GLdouble w, GLdouble h)
 	current_time = 0;
 	lapse_time = 0;
 	frames = 0;
-	fps = 60;
+	fps = 30;
 	cmX = 0;
 	// Initialize bullet texture
 	loadTexture();
@@ -116,7 +116,7 @@ void World::draw_helper()
 	glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
 	bullet_draw(); // Draws all bullets on map
 	zero->draw(); // Draws zero
-	x->draw(); // Draws X
+	//x->draw(); // Draws X
 	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D); // disable texturing
 }
