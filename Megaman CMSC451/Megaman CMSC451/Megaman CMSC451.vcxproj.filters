@@ -58,6 +58,15 @@
     <Filter Include="Resource Files\Megaman X Sprites\Bullet">
       <UniqueIdentifier>{74902c28-c077-4120-a045-e984abf2347a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Zero Sprites">
+      <UniqueIdentifier>{5a8b12f0-c505-4da8-8da3-a5e73fa64f37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Zero Sprites\Stand">
+      <UniqueIdentifier>{f6bc386d-fd71-449f-9d02-2b1018b9fc9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Zero Sprites\Entry">
+      <UniqueIdentifier>{912b5a79-584d-4a27-8620-da147e6e162e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="X.h">
@@ -168,6 +177,12 @@
     </Image>
     <Image Include="Sprites\Megaman\Bullet\splat.png">
       <Filter>Resource Files\Megaman X Sprites\Bullet</Filter>
+    </Image>
+    <Image Include="Sprites\Zero\stand\stand_right.png">
+      <Filter>Resource Files\Zero Sprites\Stand</Filter>
+    </Image>
+    <Image Include="Sprites\Zero\Entry\Zero_Entry.png">
+      <Filter>Resource Files\Zero Sprites\Entry</Filter>
     </Image>
   </ItemGroup>
 </Project>

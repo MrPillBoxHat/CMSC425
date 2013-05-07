@@ -123,6 +123,8 @@
     <Image Include="Sprites\Megaman\Run\run_right.png" />
     <Image Include="Sprites\Megaman\stand\stand_left.png" />
     <Image Include="Sprites\Megaman\stand\stand_right.png" />
+    <Image Include="Sprites\Zero\Entry\Zero_Entry.png" />
+    <Image Include="Sprites\Zero\stand\stand_right.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

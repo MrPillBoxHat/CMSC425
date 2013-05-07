@@ -407,14 +407,14 @@ void Zero::die()
 // Loads all textures
 void Zero::loadTextures()
 {
-	void loadEntry();
-	void loadStand();
-	void loadMove();
-	void loadJump();
-	void loadFire();
-	void loadDash();
-	void loadDamage();
-	void loadDie();
+	loadEntry();
+	loadStand();
+	loadMove();
+	loadJump();
+	loadFire();
+	loadDash();
+	loadDamage();
+	loadDie();
 }
 
 // Load Zero's Entry texture
@@ -436,7 +436,7 @@ void Zero::loadEntry()
 		exit(0);
 	}
 
-	cout << "textureID: " << textureID << endl;
+	cout << "ZeroTextureID: " << textureID << endl;
 
 	textures[ENTRY_TEXUTRE] = textureID; // Assign it to the texture array
 	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
@@ -468,7 +468,7 @@ void Zero::loadStand()
 		exit(0);
 	}
 
-	cout << "textureID: " << textureID << endl;
+	cout << "ZeroTextureID: " << textureID << endl;
 
 	textures[STAND_RIGHT] = textureID; // Assign it to the texture array
 	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
@@ -500,7 +500,7 @@ void Zero::loadMove()
 		exit(0);
 	}
 
-	cout << "textureID: " << textureID << endl;
+	cout << "ZeroTextureID: " << textureID << endl;
 
 	textures[RUN_RIGHT] = textureID; // Assign it to the texture array
 	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
@@ -532,7 +532,7 @@ void Zero::loadJump()
 		exit(0);
 	}
 
-	cout << "textureID: " << textureID << endl;
+	cout << "ZeroTextureID: " << textureID << endl;
 
 	textures[RUN_RIGHT] = textureID; // Assign it to the texture array
 	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
@@ -564,7 +564,7 @@ void Zero::loadFire()
 		exit(0);
 	}
 
-	cout << "textureID: " << textureID << endl;
+	cout << "ZeroTextureID: " << textureID << endl;
 
 	textures[FIRE_RIGHT] = textureID; // Assign it to the texture array
 	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
@@ -596,7 +596,7 @@ void Zero::loadDash()
 		exit(0);
 	}
 
-	cout << "textureID: " << textureID << endl;
+	cout << "ZeroTextureID: " << textureID << endl;
 
 	textures[DASH_RIGHT] = textureID; // Assign it to the texture array
 	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
@@ -610,13 +610,13 @@ void Zero::loadDash()
 }
 
 // Load Zero's Damage texture
-void loadDamage()
+void Zero::loadDamage()
 {
 
 }
 
 // Load Zero's Death texture
-void loadDie()
+void Zero::loadDie()
 {
 
 }

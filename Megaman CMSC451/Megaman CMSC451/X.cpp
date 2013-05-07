@@ -213,10 +213,10 @@ void X::entry()
 					// Go into standing state
 					state = STAND;
 					// Resets coordinates
-					x1 = 348.0;
-					x2 = 399.2;
-					y1 = 100.0;
-					y2 = 164.0;
+					x1 = 338.0;
+					x2 = 389.2;
+					y1 = 99.0;
+					y2 = 163.0;
 					resetTexture();
 				}
 			}
