@@ -91,10 +91,10 @@
     <ClInclude Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\stbi_DDS_aug_c.h" />
     <ClInclude Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\stb_image_aug.h" />
     <ClInclude Include="BackGround.h" />
-    <ClInclude Include="Sigma.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="X.h" />
     <ClInclude Include="X_Bullet.h" />
+    <ClInclude Include="Zero.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\image_DXT.c" />
@@ -103,10 +103,10 @@
     <ClCompile Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\stb_image_aug.c" />
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Driver.cpp" />
-    <ClCompile Include="Sigma.cpp" />
     <ClCompile Include="X_Bullet.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="X.cpp" />
+    <ClCompile Include="Zero.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Sprites\Megaman\Bullet\splat.png" />

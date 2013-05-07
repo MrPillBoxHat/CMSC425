@@ -39,6 +39,8 @@ Animation/Sprites:
 Bugs:
 ______________________________________________________________
 Animation:
+
+	(X)
 	- Stand Animation is not smooth
 	- Run animation has some kind of white line on top
 	- Need to fix animation timings (some frames should
@@ -48,3 +50,6 @@ Animation:
 	- combination of keys + jump causes flags to screw up
 	- Bullet animation needs to be fixed according to hitting wall
 	- Jump fire animation is bugged, not working at all.
+
+	(Zero)
+	- Animations not working.

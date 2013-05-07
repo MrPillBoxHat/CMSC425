@@ -8,6 +8,7 @@
 #include <windows.h>				// Used for sleep function
 #include "World.h"
 #include "X.h"
+#include "Zero.h"
 #include <iostream>					// Uses I/O
 #include <GL/glut.h>                // GLUT
 #include <list>
@@ -30,6 +31,8 @@ World::World(GLdouble w, GLdouble h)
 	height = h;
 	x = new X();
 	x->loadTextures();
+	zero = new Zero();
+	zero->loadTextures();
 	delta_time = 0;
 	start_time = glutGet(GLUT_ELAPSED_TIME);
 	current_time = 0;
@@ -44,6 +47,7 @@ World::World(GLdouble w, GLdouble h)
 World::~World(void) 
 {
 	delete x;
+	delete zero;
 }
 
 void World::update(void) 
@@ -111,7 +115,8 @@ void World::draw_helper()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
 	bullet_draw(); // Draws all bullets on map
-	x->draw(); //Draws X
+	zero->draw(); // Draws zero
+	x->draw(); // Draws X
 	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D); // disable texturing
 }

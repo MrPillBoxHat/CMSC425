@@ -60,9 +60,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Sigma.h">
-      <Filter>Header Files\Characters</Filter>
-    </ClInclude>
     <ClInclude Include="X.h">
       <Filter>Header Files\Characters</Filter>
     </ClInclude>
@@ -93,12 +90,12 @@
     <ClInclude Include="X_Bullet.h">
       <Filter>Header Files\Characters\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="Zero.h">
+      <Filter>Header Files\Characters</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="X.cpp">
-      <Filter>Source Files\Characters</Filter>
-    </ClCompile>
-    <ClCompile Include="Sigma.cpp">
       <Filter>Source Files\Characters</Filter>
     </ClCompile>
     <ClCompile Include="Driver.cpp">
@@ -124,6 +121,9 @@
     </ClCompile>
     <ClCompile Include="X_Bullet.cpp">
       <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Zero.cpp">
+      <Filter>Source Files\Characters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

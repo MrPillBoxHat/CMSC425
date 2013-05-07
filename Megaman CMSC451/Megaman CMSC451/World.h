@@ -2,6 +2,7 @@
 
 #include <list>
 #include "X.h"
+#include "Zero.h"
 #include "BackGround.h"
 #include "X_Bullet.h"
 
@@ -20,6 +21,7 @@ private:
 	int fps;
 	// Hero object
 	X *x;
+	Zero *zero;
 	std::list<X_Bullet > bullets;
 	BackGround bg;
 	GLuint bullet_texture;
