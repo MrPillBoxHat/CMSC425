@@ -28,6 +28,7 @@ World::World(GLdouble w, GLdouble h)
 {
 	width = w;
 	height = h;
+	bg.setBoundary(width, height);
 	x = new X();
 	x->loadTextures();
 	delta_time = 0;
@@ -77,7 +78,7 @@ void World::update(void)
 			const GLdouble diff = (X::MOVE == state) ? CM_WALK : CM_DASH;
 
 			if(x->getDirection() == X::RIGHT)
-				cmX = min(width-1, cmX + diff);
+				cmX = min(width-bg.viewWidth, cmX + diff);
 			else
 				cmX = max(0, cmX - diff);
 
@@ -126,7 +127,7 @@ void World::updateView()
 {
 	glMatrixMode(GL_PROJECTION);                // update projection
     glLoadIdentity();
-	gluOrtho2D(cmX, cmX + 800, 0, 400);          // one to one
+	gluOrtho2D(cmX, cmX + bg.viewWidth, 0, bg.viewHeight);     // one to one
     glMatrixMode(GL_MODELVIEW);
 
     glutPostRedisplay();                        // request redisplay
@@ -158,8 +159,6 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 				if(hero_state != x->JUMP && hero_state != x->DASH){
 					x->resetTexture();
 					x->setState(x->MOVE);
-					// camera movement
-					cmX = max(0, cmX - CM_WALK);
 				}
 				// Register button pressed
 				x->setButtons(x->MOVE, true);
@@ -173,8 +172,6 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 				if(hero_state != x->JUMP && hero_state != x->DASH){
 					x->resetTexture();
 					x->setState(x->MOVE);
-					// Camera movement
-					cmX = min(width-1, cmX + CM_WALK);
 				}
 				// Register button pressed
 				x->setButtons(x->MOVE, true);
