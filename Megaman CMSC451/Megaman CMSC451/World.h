@@ -5,6 +5,7 @@
 #include "Zero.h"
 #include "BackGround.h"
 #include "X_Bullet.h"
+#include "Main_Menu.h"
 
 class World
 {
@@ -22,34 +23,31 @@ private:
 	// Hero object
 	X *x;
 	Zero *zero;
+	Main_Menu *menu;
 	// Variables to keep track of objects and textures
 	// in the world class
 	std::list<X_Bullet > bullets;
 	BackGround bg;
-	GLuint bullet_texture;
-	int game_state;
+	GLuint textures[2];
+	bool main_menu;
 
 	// lower left coordinate of the camera
 	GLdouble cmX;
 	// controls
 	static const unsigned char MOVE_LEFT = 'a', MOVE_RIGHT = 'd', MOVE_JUMP = 'w', MOVE_DASH = 'j', MOVE_FIRE = 'h';
-	enum states {INTRO, NEWGAME, CONTINUE, OPTION, TRAINING, INGAME};
+	enum bullet {XBULLET, ZEROBULLET};
 
 	// how much left and right move
 	static const GLdouble CM_WALK, CM_DASH;
 
-	void loadTextures();
-	void loadXBullet();
-	void loadIntro();
-	void loadNewGame();
-	void loadContinue();
-	void loadOption();
-	void loadTraining();
 	void bullet_draw();
 	void draw_helper();
-	void draw_game();
-	void draw_intro();
+	void loadTextures();
+	void loadXBullet();
 	void updateView();
+	void processKeysMenu(unsigned char key);
+	void processKeysGame(unsigned char key);
+
 public:
 	World(GLdouble w, GLdouble h);
 	World() {}

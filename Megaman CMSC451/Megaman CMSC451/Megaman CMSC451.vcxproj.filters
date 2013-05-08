@@ -117,6 +117,9 @@
     <ClInclude Include="Zero.h">
       <Filter>Header Files\Characters</Filter>
     </ClInclude>
+    <ClInclude Include="Main_Menu.h">
+      <Filter>Header Files\World</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="X.cpp">
@@ -148,6 +151,9 @@
     </ClCompile>
     <ClCompile Include="Zero.cpp">
       <Filter>Source Files\Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="Main_Menu.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

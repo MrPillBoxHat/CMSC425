@@ -33,12 +33,15 @@ World::World(GLdouble w, GLdouble h)
 	x->loadTextures();
 	zero = new Zero();
 	zero->loadTextures();
+	menu = new Main_Menu();
+	menu->loadTextures();
 	delta_time = 0;
 	start_time = glutGet(GLUT_ELAPSED_TIME);
 	current_time = 0;
 	lapse_time = 0;
 	frames = 0;
 	fps = 60;
+	main_menu = true;
 	cmX = 0;
 	// Initialize textures for intro and bullet
 	loadTextures();
@@ -65,7 +68,7 @@ void World::update(void)
 	frames++;
 	delta_time = 0;
 	if(lapse_time > 1000){
-	//	cout << "FPS: " << frames << endl;
+	cout << "FPS: " << frames << endl;
 		// reset timers
 		frames = 0;
 		lapse_time = 0;
@@ -94,7 +97,6 @@ void World::update(void)
 	}
 }
 
-
 void World::draw(void) 
 {
 	// Draw
@@ -113,46 +115,18 @@ void World::draw_helper()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	// Draw whats on the screen depending on state of the game
-	if(game_state == INGAME){
-		draw_game();
+	if(main_menu){
+		menu->draw();
 	} else {
-		draw_intro();
+		bg.draw();
+		glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
+		bullet_draw(); // Draws all bullets on map
+		zero->draw(); // Draws zero
+		x->draw(); // Draws X
 	}
 	// disable texturings
 	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D); 
-}
-
-// Draw intro screens
-void World::draw_intro()
-{
-	// load intro game screen
-	if(game_state == INTRO){
-		
-	// load selection screen with cursor on newgame
-	} else if(game_state == NEWGAME) {
-
-	// load selection screen with cursor on continue
-	} else if(game_state == CONTINUE) {
-	
-	// load selection screen with cursor on option
-	} else if(game_state == OPTION) {
-	
-	// load selection screen with cursor on Training
-	} else {
-	
-	}
-	// Draw a rectangle taking up the whole screen
-}
-
-// Draw game world
-void World::draw_game()
-{
-	bg.draw();
-	glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
-	bullet_draw(); // Draws all bullets on map
-	zero->draw(); // Draws zero
-	x->draw(); // Draws X
 }
 
 void World::setSize(int w, int h) 
@@ -170,8 +144,82 @@ void World::updateView()
 
     glutPostRedisplay();                        // request redisplay
 }
+
 // Process Keyboard events
 void World::processKeys(unsigned char key, int x_coord, int y_coord) 
+{
+	if(main_menu){
+		processKeysMenu(key);
+	} else {
+		processKeysGame(key);
+	}
+}
+
+// Process Keys when in menu
+void World::processKeysMenu(unsigned char key)
+{
+	int state = menu->getMenuState();
+	if(state == menu->INTRO || state == menu->INTRO_PRESS){
+		if(key == 13){
+			menu->setMenuState(menu->TRAINING);
+		}
+	} else {
+		switch(key)
+		{
+			// Move cursor up
+			case 'w':
+				// if cursor is on continue
+				if(state == menu->CONTINUE){
+					menu->setMenuState(menu->NEWGAME);
+				// if cursor is on option
+				} else if(state == menu->OPTION){
+					menu->setMenuState(menu->CONTINUE);
+				// if cursor is on Training
+				} else if(state == menu->TRAINING){
+					menu->setMenuState(menu->OPTION);
+				}
+				break;
+			
+			// Move cursor down
+			case 's':
+				// if cursor is on continue
+				if(state == menu->CONTINUE){
+					menu->setMenuState(menu->OPTION);
+				// if cursor is on option
+				} else if(state == menu->OPTION){
+					menu->setMenuState(menu->TRAINING);
+				// if cursor is on new game
+				} else if(state == menu->NEWGAME){
+					menu->setMenuState(menu->CONTINUE);
+				}
+				break;
+			
+			// Select cursor
+			case 13:
+				// if cursor is on continue
+				if(state == menu->CONTINUE){
+					// load save state
+
+				// if cursor is on Training
+				} else if(state == menu->OPTION){
+					// Open option screen
+
+				// if cursor is on option
+				} else if(state == menu->TRAINING){
+					// Start game in training mode
+					main_menu = false;
+
+				// if cursor is on new game
+				} else {
+					// Start game
+					break;
+				}
+		}
+	}
+}
+
+// Process Keys when in game
+void World::processKeysGame(unsigned char key)
 {
 	const int old = cmX;
 	int hero_state = x->getState();
@@ -256,46 +304,46 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 	update();
 }
 
+// Process up key
 void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 {
-	int hero_state = x->getState();
-	switch(key)
-	{	
-		case 's': // Kneel
-		case MOVE_LEFT: // Move Left
-		case MOVE_RIGHT: // Move Right
-			if(hero_state != x->JUMP && hero_state != x->ENTRY && hero_state != x->DASH){
-				// Reset state
-				x->setState(x->STAND);
-				x->resetTexture();
-			}
-			x->setButtons(x->RUN, false);
-			break;
-		
-		// Fire
-		case MOVE_FIRE:
-			// Fire charged shot
-			break;
+	// Register key-up only if not in main menu
+	if(!main_menu){
+		int hero_state = x->getState();
+		switch(key)
+		{	
+			case 's': // Kneel
+			case MOVE_LEFT: // Move Left
+			case MOVE_RIGHT: // Move Right
+				if(hero_state != x->JUMP && hero_state != x->ENTRY && hero_state != x->DASH){
+					// Reset state
+					x->setState(x->STAND);
+					x->resetTexture();
+				}
+				x->setButtons(x->RUN, false);
+					break;
+			
+			// Fire
+			case MOVE_FIRE:
+				// Fire charged shot
+				break;
+		}
 	}
 }
 
+// Loads all textures for bullets
 void World::loadTextures()
 {
-	loadTextures();
 	loadXBullet();
-	loadIntro();
-	loadNewGame();
-	loadContinue();
-	loadOption();
-	loadTraining();
 }
 
+// Draw X_bullet
 void World::bullet_draw()
 {
 	// Go through each bullet in the world and draw them
 	list<X_Bullet>::iterator it = bullets.begin();
 	while(it != bullets.end()){
-		it->draw(bullet_texture);
+		it->draw(textures[XBULLET]);
 		// If bullet reaches end of map, delete it
 		if(it->getX2() >= 800.0){
 			it = bullets.erase(it);
@@ -305,10 +353,11 @@ void World::bullet_draw()
 	}
 }
 
+// Load XBullet texture
 void World::loadXBullet()
 {
 	/* loads entry image directly as a new OpenGL texture */
-	bullet_texture = SOIL_load_OGL_texture
+	textures[XBULLET] = SOIL_load_OGL_texture
 	(
 		"Sprites/Megaman/Bullet/X_Bullet_right.png",
 		SOIL_LOAD_AUTO,
@@ -317,15 +366,15 @@ void World::loadXBullet()
 	);
 	
 	/* check for an error during the load process */
-	if( 0 == bullet_texture )
+	if( 0 == textures[XBULLET] )
 	{
 		cout << "SOIL loading error: " << SOIL_last_result() << endl;
 		exit(0);
 	}
 
-	cout << "textureID2: " << bullet_texture << endl;
+	cout << "WorldtextureID: " << textures[XBULLET] << endl;
 
-	glBindTexture(GL_TEXTURE_2D, bullet_texture); // select the active texture
+	glBindTexture(GL_TEXTURE_2D, textures[XBULLET]); // select the active texture
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	// repeat texture
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -333,56 +382,6 @@ void World::loadXBullet()
 	// reasonable filter choices
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-}
-
-void World::loadIntro()
-{
-	/* loads entry image directly as a new OpenGL texture */
-	bullet_texture = SOIL_load_OGL_texture
-	(
-		"Main_Screen/Main_Screen.png",
-		SOIL_LOAD_AUTO,
-		SOIL_CREATE_NEW_ID,
-		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
-	);
-	
-	/* check for an error during the load process */
-	if( 0 == bullet_texture )
-	{
-		cout << "SOIL loading error: " << SOIL_last_result() << endl;
-		exit(0);
-	}
-
-	cout << "WorldtextureID: " << bullet_texture << endl;
-
-	glBindTexture(GL_TEXTURE_2D, bullet_texture); // select the active texture
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	// repeat texture
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// reasonable filter choices
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-}
-
-void World::loadNewGame()
-{
-
-}
-
-void World::loadContinue()
-{
-
-}
-
-void World::loadOption()
-{
-
-}
-
-void World::loadTraining()
-{
-
 }
 
 void done(unsigned char key, int x, int y) {
