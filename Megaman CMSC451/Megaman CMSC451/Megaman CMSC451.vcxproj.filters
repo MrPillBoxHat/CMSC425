@@ -79,6 +79,9 @@
     <Filter Include="Resource Files\Zero Sprites\Fire">
       <UniqueIdentifier>{d61dc922-d1d3-4769-ac23-7be5e1cf2026}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\IntroScreens">
+      <UniqueIdentifier>{a5274c42-ec08-4605-a0bb-14c39f7a205c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="X.h">
@@ -207,6 +210,9 @@
     </Image>
     <Image Include="Sprites\Zero\Fire\Fire_right.png">
       <Filter>Resource Files\Zero Sprites\Fire</Filter>
+    </Image>
+    <Image Include="Main Screen\Main_Screen_Blank.png">
+      <Filter>Resource Files\IntroScreens</Filter>
     </Image>
   </ItemGroup>
 </Project>

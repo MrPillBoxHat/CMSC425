@@ -40,8 +40,8 @@ World::World(GLdouble w, GLdouble h)
 	frames = 0;
 	fps = 60;
 	cmX = 0;
-	// Initialize bullet texture
-	loadTexture();
+	// Initialize textures for intro and bullet
+	loadTextures();
 }
 
 World::~World(void) 
@@ -281,6 +281,32 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 
 void World::loadTextures()
 {
+	loadTextures();
+	loadXBullet();
+	loadIntro();
+	loadNewGame();
+	loadContinue();
+	loadOption();
+	loadTraining();
+}
+
+void World::bullet_draw()
+{
+	// Go through each bullet in the world and draw them
+	list<X_Bullet>::iterator it = bullets.begin();
+	while(it != bullets.end()){
+		it->draw(bullet_texture);
+		// If bullet reaches end of map, delete it
+		if(it->getX2() >= 800.0){
+			it = bullets.erase(it);
+		} else {
+			it++;
+		}
+	}
+}
+
+void World::loadXBullet()
+{
 	/* loads entry image directly as a new OpenGL texture */
 	bullet_texture = SOIL_load_OGL_texture
 	(
@@ -309,32 +335,34 @@ void World::loadTextures()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 }
 
-void World::bullet_draw()
-{
-	// Go through each bullet in the world and draw them
-	list<X_Bullet>::iterator it = bullets.begin();
-	while(it != bullets.end()){
-		it->draw(bullet_texture);
-		// If bullet reaches end of map, delete it
-		if(it->getX2() >= 800.0){
-			it = bullets.erase(it);
-		} else {
-			it++;
-		}
-	}
-}
-
-void loadTextures(){
-	loadIntro();
-	loadNewGame();
-	loadContinue();
-	loadOption();
-	loadTraining();
-}
-
 void World::loadIntro()
 {
+	/* loads entry image directly as a new OpenGL texture */
+	bullet_texture = SOIL_load_OGL_texture
+	(
+		"Main_Screen/Main_Screen.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == bullet_texture )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
 
+	cout << "WorldtextureID: " << bullet_texture << endl;
+
+	glBindTexture(GL_TEXTURE_2D, bullet_texture); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 }
 
 void World::loadNewGame()

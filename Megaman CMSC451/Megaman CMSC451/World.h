@@ -39,6 +39,7 @@ private:
 	static const GLdouble CM_WALK, CM_DASH;
 
 	void loadTextures();
+	void loadXBullet();
 	void loadIntro();
 	void loadNewGame();
 	void loadContinue();

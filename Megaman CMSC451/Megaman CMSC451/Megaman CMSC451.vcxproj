@@ -109,6 +109,7 @@
     <ClCompile Include="Zero.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Main Screen\Main_Screen_Blank.png" />
     <Image Include="Sprites\Megaman\Bullet\splat.png" />
     <Image Include="Sprites\Megaman\Bullet\X_Bullet_left.png" />
     <Image Include="Sprites\Megaman\Bullet\X_Bullet_right.png" />
