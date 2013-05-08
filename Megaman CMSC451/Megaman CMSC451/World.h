@@ -47,6 +47,7 @@ private:
 	void updateView();
 	void processKeysMenu(unsigned char key);
 	void processKeysGame(unsigned char key);
+	void enableTextures();
 
 public:
 	World(GLdouble w, GLdouble h);

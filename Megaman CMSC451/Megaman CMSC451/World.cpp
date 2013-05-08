@@ -110,16 +110,14 @@ void World::draw(void)
 
 void World::draw_helper()
 {
-	// Enables texturess
-	glEnable(GL_TEXTURE_2D); // enable texturing
-	// Enable transparency
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	// Draw whats on the screen depending on state of the game
 	if(main_menu){
+		enableTextures();
 		menu->draw();
 	} else {
 		bg.draw();
+
+		enableTextures();
 		glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
 		bullet_draw(); // Draws all bullets on map
 		zero->draw(); // Draws zero
@@ -381,6 +379,15 @@ void World::loadXBullet()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 }
 
+// set the common options for textures
+void World::enableTextures()
+{
+	// Enables texturess
+	glEnable(GL_TEXTURE_2D); // enable texturing
+	// Enable transparency
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
 void done(unsigned char key, int x, int y) {
 	
 }
