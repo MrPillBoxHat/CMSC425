@@ -58,14 +58,32 @@
     <Filter Include="Resource Files\Megaman X Sprites\Bullet">
       <UniqueIdentifier>{74902c28-c077-4120-a045-e984abf2347a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Zero Sprites">
+      <UniqueIdentifier>{5a8b12f0-c505-4da8-8da3-a5e73fa64f37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Zero Sprites\Stand">
+      <UniqueIdentifier>{f6bc386d-fd71-449f-9d02-2b1018b9fc9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Zero Sprites\Entry">
+      <UniqueIdentifier>{912b5a79-584d-4a27-8620-da147e6e162e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Zero Sprites\Run">
+      <UniqueIdentifier>{a296f033-4a66-4b87-916b-5b8a258f97e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Zero Sprites\Jump">
+      <UniqueIdentifier>{034596a4-5a7a-4458-b054-4d684296b2e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Zero Sprites\Dash">
+      <UniqueIdentifier>{adb4ef21-679a-41fe-b35e-61f4bf7762b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Zero Sprites\Fire">
+      <UniqueIdentifier>{d61dc922-d1d3-4769-ac23-7be5e1cf2026}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\IntroScreens">
+      <UniqueIdentifier>{a5274c42-ec08-4605-a0bb-14c39f7a205c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Sigma.h">
-      <Filter>Header Files\Characters</Filter>
-    </ClInclude>
-    <ClInclude Include="Character.h">
-      <Filter>Header Files\Characters</Filter>
-    </ClInclude>
     <ClInclude Include="X.h">
       <Filter>Header Files\Characters</Filter>
     </ClInclude>
@@ -96,12 +114,15 @@
     <ClInclude Include="X_Bullet.h">
       <Filter>Header Files\Characters\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="Zero.h">
+      <Filter>Header Files\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="Main_Menu.h">
+      <Filter>Header Files\World</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="X.cpp">
-      <Filter>Source Files\Characters</Filter>
-    </ClCompile>
-    <ClCompile Include="Sigma.cpp">
       <Filter>Source Files\Characters</Filter>
     </ClCompile>
     <ClCompile Include="Driver.cpp">
@@ -127,6 +148,12 @@
     </ClCompile>
     <ClCompile Include="X_Bullet.cpp">
       <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Zero.cpp">
+      <Filter>Source Files\Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="Main_Menu.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -171,6 +198,27 @@
     </Image>
     <Image Include="Sprites\Megaman\Bullet\splat.png">
       <Filter>Resource Files\Megaman X Sprites\Bullet</Filter>
+    </Image>
+    <Image Include="Sprites\Zero\stand\stand_right.png">
+      <Filter>Resource Files\Zero Sprites\Stand</Filter>
+    </Image>
+    <Image Include="Sprites\Zero\Entry\Zero_Entry.png">
+      <Filter>Resource Files\Zero Sprites\Entry</Filter>
+    </Image>
+    <Image Include="Sprites\Zero\Run\run_right.png">
+      <Filter>Resource Files\Zero Sprites\Run</Filter>
+    </Image>
+    <Image Include="Sprites\Zero\jump\jump_right.png">
+      <Filter>Resource Files\Zero Sprites\Jump</Filter>
+    </Image>
+    <Image Include="Sprites\Zero\dash\dash_right.png">
+      <Filter>Resource Files\Zero Sprites\Dash</Filter>
+    </Image>
+    <Image Include="Sprites\Zero\Fire\Fire_right.png">
+      <Filter>Resource Files\Zero Sprites\Fire</Filter>
+    </Image>
+    <Image Include="Main Screen\Main_Screen_Blank.png">
+      <Filter>Resource Files\IntroScreens</Filter>
     </Image>
   </ItemGroup>
 </Project>

@@ -18,8 +18,10 @@ class X {
 		int counter; // FPS controller
 		float x1_tcoord; // texture x1 coord
 		float y2_tcoord; // texture y2 coord
-		GLuint textures[16]; // stores texture
+		GLuint textures[18]; // stores texture
 		bool buttons[9]; // keeps track of state (buttons pressed)
+		int frame_count;
+		bool play_3frame;
 
 		// Private helper functions
 		// helper functions to load textures
@@ -35,14 +37,17 @@ class X {
 		// Actions
 		void entry();
 		void stand();
-		void move();
+		void run();
 		void jump();
-		void fire();
+		void air_fire();
+		void ground_fire();
 		void charge();
 		void dash();
 		// Responses
 		void damage();
 		void die();
+		// Move X's coordinates
+		void move();
 
 	// Contains public functions
 	public:
@@ -53,10 +58,10 @@ class X {
 		*
 		*********************************************************************************************/
 		static const enum directions {LEFT, RIGHT};
-		static const enum states {STAND, MOVE, JUMP, FIRE, CHARGE, DASH, DAMAGE, DIE, ENTRY};
-		static const enum texture_states{STAND_RIGHT, STAND_LEFT, MOVE_LEFT, MOVE_RIGHT, JUMP_LEFT, JUMP_RIGHT,
+		static const enum states {STAND, RUN, JUMP, FIRE, CHARGE, DASH, DAMAGE, DIE, ENTRY};
+		static const enum texture_states{STAND_RIGHT, STAND_LEFT, RUN_LEFT, RUN_RIGHT, JUMP_LEFT, JUMP_RIGHT,
 					FIRE_LEFT, FIRE_RIGHT, DASH_LEFT, DASH_RIGHT, DAMAGE_LEFT, DAMAGE_RIGHT,
-					DIE_LEFT, DIE_RIGHT, CHARGE_TEXTURE, ENTRY_TEXUTRE};
+					DIE_LEFT, DIE_RIGHT, CHARGE_TEXTURE, ENTRY_TEXUTRE, JUMP_FIRE_RIGHT, JUMP_FIRE_LEFT};
 		// Contructor
 		X();
 		// getters
@@ -70,6 +75,7 @@ class X {
 		void setXPosition(float inx1, float inx2){x1 += inx1; x2 += inx2;}
 		void setButtons(int button, bool boolean){buttons[button] = boolean;}
 		void resetTexture(){x1_tcoord = 0.0; y2_tcoord = 1.0;}
+		void setFrameOn(){play_3frame = true; frame_count = 1;}
 		// Draw X
 		void draw();
 		// Loads all textures

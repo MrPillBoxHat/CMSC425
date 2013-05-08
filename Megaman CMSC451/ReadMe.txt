@@ -39,6 +39,8 @@ Animation/Sprites:
 Bugs:
 ______________________________________________________________
 Animation:
+
+	(X)
 	- Stand Animation is not smooth
 	- Run animation has some kind of white line on top
 	- Need to fix animation timings (some frames should
@@ -47,5 +49,10 @@ Animation:
 	- Jump -> run needs frame timing fixes.  Doesn't look natural
 	- combination of keys + jump causes flags to screw up
 	- Bullet animation needs to be fixed according to hitting wall
-	- After 3 bullets fire, additional pressing of fire buttong causes
-	  X to stagger.
+	- Jump fire animation is bugged, not working at all.
+
+	(Zero)
+	- Stand Animation is not straight.
+	- Jump require height to be increased by 64 pixels since 
+	  the sprite is bigger than 64 pixels high (default).
+	- There may be something wrong with dash sprite size
