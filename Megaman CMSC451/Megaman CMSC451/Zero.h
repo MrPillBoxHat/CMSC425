@@ -26,6 +26,7 @@ class Zero {
 		void loadStand();
 		void loadMove();
 		void loadJump();
+		void loadSaber();
 		void loadFire();
 		void loadDash();
 		void loadDamage();
@@ -35,6 +36,7 @@ class Zero {
 		void stand();
 		void run();
 		void jump();
+		void saber();
 		void fire();
 		void dash();
 		// Responses

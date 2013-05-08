@@ -107,18 +107,52 @@ void World::draw(void)
 
 void World::draw_helper()
 {
-	bg.draw();
 	// Enables texturess
 	glEnable(GL_TEXTURE_2D); // enable texturing
 	// Enable transparency
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	// Draw whats on the screen depending on state of the game
+	if(game_state == INGAME){
+		draw_game();
+	} else {
+		draw_intro();
+	}
+	// disable texturings
+	glDisable(GL_BLEND);
+	glDisable(GL_TEXTURE_2D); 
+}
+
+// Draw intro screens
+void World::draw_intro()
+{
+	// load intro game screen
+	if(game_state == INTRO){
+		
+	// load selection screen with cursor on newgame
+	} else if(game_state == NEWGAME) {
+
+	// load selection screen with cursor on continue
+	} else if(game_state == CONTINUE) {
+	
+	// load selection screen with cursor on option
+	} else if(game_state == OPTION) {
+	
+	// load selection screen with cursor on Training
+	} else {
+	
+	}
+	// Draw a rectangle taking up the whole screen
+}
+
+// Draw game world
+void World::draw_game()
+{
+	bg.draw();
 	glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
 	bullet_draw(); // Draws all bullets on map
 	zero->draw(); // Draws zero
-	//x->draw(); // Draws X
-	glDisable(GL_BLEND);
-	glDisable(GL_TEXTURE_2D); // disable texturing
+	x->draw(); // Draws X
 }
 
 void World::setSize(int w, int h) 
@@ -245,7 +279,7 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 	}
 }
 
-void World::loadTexture()
+void World::loadTextures()
 {
 	/* loads entry image directly as a new OpenGL texture */
 	bullet_texture = SOIL_load_OGL_texture
@@ -288,6 +322,39 @@ void World::bullet_draw()
 			it++;
 		}
 	}
+}
+
+void loadTextures(){
+	loadIntro();
+	loadNewGame();
+	loadContinue();
+	loadOption();
+	loadTraining();
+}
+
+void World::loadIntro()
+{
+
+}
+
+void World::loadNewGame()
+{
+
+}
+
+void World::loadContinue()
+{
+
+}
+
+void World::loadOption()
+{
+
+}
+
+void World::loadTraining()
+{
+
 }
 
 void done(unsigned char key, int x, int y) {

@@ -14,6 +14,7 @@
 
 using namespace std;
 
+// Constructor
 Zero::Zero()
 {
 	health = 50;
@@ -133,6 +134,7 @@ void Zero::move()
 }
 
 // Actions
+// Zero Entry Animation
 void Zero::entry()
 {
 	// How many frames to jump
@@ -182,6 +184,7 @@ void Zero::entry()
 	}
 }
 
+// Zero standing Animation
 void Zero::stand()
 {
 	// How many frames to jump
@@ -216,6 +219,13 @@ void Zero::stand()
 	}
 }
 
+// Zero saber attack Animation
+void Zero::saber()
+{
+
+}
+
+// Zero running Animation
 void Zero::run(){
 	// How many frames to jump
 	float x_offset = 0.125;
@@ -264,6 +274,7 @@ void Zero::run(){
 	}
 }
 
+// Zero jumping animation
 void Zero::jump()
 {
 	// How many frames to jump
@@ -311,6 +322,7 @@ void Zero::jump()
 	}
 }
 
+// Zero Fire Animation
 void Zero::fire()
 {
 	// How many frames to jump
@@ -351,6 +363,7 @@ void Zero::fire()
 	}
 }
 
+// Zero Dash animation
 void Zero::dash()
 {
 	// How many frames to jump
@@ -400,11 +413,13 @@ void Zero::dash()
 }
 
 // Responses
+// Zero damage animation
 void Zero::damage()
 {
 
 }
 
+// Zero death animation
 void Zero::die()
 {
 
@@ -549,6 +564,12 @@ void Zero::loadJump()
 	// reasonable filter choices
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+}
+
+// Load Zero's Saber slash texture
+void Zero::loadSaber()
+{
+
 }
 
 // Load Zero's Fire texture
