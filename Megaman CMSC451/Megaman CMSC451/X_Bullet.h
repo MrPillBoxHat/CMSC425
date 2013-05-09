@@ -19,6 +19,8 @@ class X_Bullet
 		// getters
 		int getDamage(){return damage;}
 		float getX2(){return x2;}
+		float getX1(){return x1;}
+		int getDirection(){return direction;}
 		// public functions
 		void detec_collision();
 		void draw(GLuint texture);

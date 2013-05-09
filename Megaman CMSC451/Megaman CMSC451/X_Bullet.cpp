@@ -1,5 +1,6 @@
 #include "X_Bullet.h"
 #include "X.h"
+#include "constants.h"
 
 // Constructor
 X_Bullet::X_Bullet(float *position, int inDirection)
@@ -41,11 +42,11 @@ void X_Bullet::draw(GLuint texture)
 	glEnd();
 	if(direction == 0){
 		// Move bullet
-		x1 -= 7.0;
-		x2 -= 7.0;
+		x1 -= 9.0;
+		x2 -= 9.0;
 	} else {
-		x1 += 7.0;
-		x2 += 7.0;
+		x1 += 9.0;
+		x2 += 9.0;
 	}
 	//update next frame or reset if reached the end
 	x1_tcoord += x_offset;

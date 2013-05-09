@@ -11,6 +11,7 @@
 #include <GL/gl.h>                      // OpenGL
 #include "SOIL.h" 						// Library for loading images
 #include "X.h" 							// X header file
+#include "constants.h"
 
 using namespace std;
 

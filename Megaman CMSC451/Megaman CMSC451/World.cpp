@@ -4,14 +4,14 @@
 *   By: Nelson Chen
 *       Henry Ramos
 *********************************************************************************/
-
-#include <windows.h>				// Used for sleep function
+#include <windows.h>				// Used for min/max function
 #include "World.h"
 #include "X.h"
 #include "Zero.h"
 #include <iostream>					// Uses I/O
 #include <GL/glut.h>                // GLUT
 #include <list>
+#include "constants.h"
 
 #define SET_BG_COLOR glClearColor(0.0, 0.0, 0.0, 1.0)
 
@@ -78,13 +78,13 @@ void World::update(void)
 	// check if we need to update the camera
 	int state = x->getState();
 	switch(state) {
-	case X::RUN:
-	case X::DASH: // move camera
+	case RUN:
+	case DASH: // move camera
 		{
 			// check how fast to move
-			const GLdouble diff = (X::RUN == state) ? CM_WALK : CM_DASH;
+			const GLdouble diff = (RUN == state) ? CM_WALK : CM_DASH;
 
-			if(x->getDirection() == X::RIGHT)
+			if(x->getDirection() == RIGHT)
 				cmX = min(width-bg.viewWidth, cmX + diff);
 			else
 				cmX = max(0, cmX - diff);
@@ -222,15 +222,15 @@ void World::processKeysGame(unsigned char key)
 {
 	const int old = cmX;
 	int hero_state = x->getState();
-	if(hero_state != x->ENTRY){
+	if(hero_state != ENTRY){
 		switch(key)
 		{
 			// Jump
 			case MOVE_JUMP:
 				// If not already in the air
-				if(hero_state != x->JUMP){
+				if(hero_state != JUMP){
 					x->resetTexture();
-					x->setState(x->JUMP);
+					x->setState(JUMP);
 				} // else do nothing
 				break;
 
@@ -241,27 +241,27 @@ void World::processKeysGame(unsigned char key)
 			// Move Left
 			case MOVE_LEFT:
 				// If not in jump animation
-				if(hero_state != x->JUMP && hero_state != x->DASH){
+				if(hero_state != JUMP && hero_state != DASH){
 					x->resetTexture();
-					x->setState(x->RUN);
+					x->setState(RUN);
 				}
 				// Register button pressed
-				x->setButtons(x->RUN, true);
+				x->setButtons(RUN, true);
 				// Change direction
-				x->setDirection(x->LEFT);
+				x->setDirection(LEFT);
 				break;
 
 			// Move Right
 			case MOVE_RIGHT:
 				// If not in jump animation
-				if(hero_state != x->JUMP && hero_state != x->DASH){
+				if(hero_state != JUMP && hero_state != DASH){
 					x->resetTexture();
-					x->setState(x->RUN);
+					x->setState(RUN);
 				}
 				// Register button pressed
-				x->setButtons(x->RUN, true);
+				x->setButtons(RUN, true);
 				// Change direction
-				x->setDirection(x->RIGHT);
+				x->setDirection(RIGHT);
 				break;
 
 			// Fire
@@ -272,9 +272,9 @@ void World::processKeysGame(unsigned char key)
 					// Create bullet from cannon position
 					bullets.push_front(*temp);
 					x->setFrameOn();
-					x->setState(x->FIRE);
+					x->setState(FIRE);
 					// If not in the air, reset texture frame
-					if(hero_state != x->JUMP){
+					if(hero_state != JUMP){
 						x->resetTexture();
 					}
 				}
@@ -283,9 +283,9 @@ void World::processKeysGame(unsigned char key)
 			// Dash
 			case MOVE_DASH:
 				// if X not in the air and not already dashing
-				if(hero_state != x->JUMP && hero_state != x->DASH){
+				if(hero_state != JUMP && hero_state != DASH){
 					x->resetTexture();
-					x->setState(x->DASH);
+					x->setState(DASH);
 				}
 				break;
 		}
@@ -310,12 +310,12 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 			case 's': // Kneel
 			case MOVE_LEFT: // Move Left
 			case MOVE_RIGHT: // Move Right
-				if(hero_state != x->JUMP && hero_state != x->ENTRY && hero_state != x->DASH){
+				if(hero_state != JUMP && hero_state != ENTRY && hero_state != DASH){
 					// Reset state
-					x->setState(x->STAND);
+					x->setState(STAND);
 					x->resetTexture();
 				}
-				x->setButtons(x->RUN, false);
+				x->setButtons(RUN, false);
 					break;
 			
 			// Fire
@@ -339,11 +339,23 @@ void World::bullet_draw()
 	list<X_Bullet>::iterator it = bullets.begin();
 	while(it != bullets.end()){
 		it->draw(textures[XBULLET]);
-		// If bullet reaches end of map, delete it
-		if(it->getX2() >= 800.0){
-			it = bullets.erase(it);
+		// If bullet is going right
+		if(it->getDirection() == LEFT){
+			// If bullet reaches end of the screen, delete it
+			if(it->getX1() <= cmX-20){
+				it = bullets.erase(it);
+			// If bullet hits something
+			} else {
+				it++;
+			}
+		// If bullet is going left
 		} else {
-			it++;
+			// If bullet reaches end of the screen, delete it
+			if(it->getX2() >= bg.viewWidth+cmX+20){
+				it = bullets.erase(it);
+			} else {
+				it++;
+			}
 		}
 	}
 }
@@ -391,56 +403,3 @@ void World::enableTextures()
 void done(unsigned char key, int x, int y) {
 	
 }
-
-/*
-void World::update(void) 
-{
-	// check if we need to update the camera
-	switch(x->getState()) {
-	case x->MOVE:
-		if(x->getDirection() == x->RIGHT)
-			cmX = min(width-1, cmX + CM_DIFF);
-		else
-			cmX = max(0, cmX - CM_DIFF);
-
-		updateView();
-		break;
-	case X::DASH: // move camera at faster pace
-		cout << "in update(), dashing!" << endl;
-		updateView();
-		break;
-	default:
-		glutPostRedisplay();
-		break;
-	}
-}
-*/
-
-/*void World::draw(void) 
-{
-	// Controls Frames per Second of the game
-	current_time = glutGet(GLUT_ELAPSED_TIME); // Gets current time
-	delta_time += current_time - start_time; // Gets change in time
-	start_time = current_time; // Resets start time
-	lapse_time += delta_time; // Increment total time
-	// Determines whether to draw or sleep
-	if(delta_time < ( 1000 / fps)) {
-		Sleep((1000 / fps) - delta_time);
-	} else {
-		// Draw
-		SET_BG_COLOR;
-		glClear(GL_COLOR_BUFFER_BIT);
-		// background
-		draw_helper();
-		glutSwapBuffers();
-		// Updates timer information
-		frames++;
-		delta_time = 0;
-		if(lapse_time > 1000){
-			cout << "FPS: " << frames << endl;
-			// reset timers
-			frames = 0;
-			lapse_time = 0;
-		}
-	}
-}*/

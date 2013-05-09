@@ -22,9 +22,6 @@
     <Filter Include="Source Files\Characters">
       <UniqueIdentifier>{81df99a5-5d70-44dd-aeb7-8253f2792fb8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Characters\Objects">
-      <UniqueIdentifier>{20e2f0c7-4e5a-4838-a6d6-53ea148ed844}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files\Megaman X Sprites">
       <UniqueIdentifier>{2cf55c41-f015-4e2d-963f-8f657f6209e9}</UniqueIdentifier>
     </Filter>
@@ -82,6 +79,9 @@
     <Filter Include="Resource Files\IntroScreens">
       <UniqueIdentifier>{a5274c42-ec08-4605-a0bb-14c39f7a205c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Objects">
+      <UniqueIdentifier>{20e2f0c7-4e5a-4838-a6d6-53ea148ed844}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="X.h">
@@ -112,13 +112,16 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="X_Bullet.h">
-      <Filter>Header Files\Characters\Objects</Filter>
+      <Filter>Header Files\Objects</Filter>
     </ClInclude>
     <ClInclude Include="Zero.h">
       <Filter>Header Files\Characters</Filter>
     </ClInclude>
     <ClInclude Include="Main_Menu.h">
       <Filter>Header Files\World</Filter>
+    </ClInclude>
+    <ClInclude Include="constants.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -49,7 +49,10 @@ Animation:
 	- Jump -> run needs frame timing fixes.  Doesn't look natural
 	- combination of keys + jump causes flags to screw up
 	- Bullet animation needs to be fixed according to hitting wall
-	- Jump fire animation is bugged, not working at all.
+	- Jump fire animation is bugged, not working at all.  Causing X
+	  to move wrong on the Y plane
+	- Can change direction while in dash animation
+	- character still slides when doing fire and dash animation
 
 	(Zero)
 	- Stand Animation is not straight.
