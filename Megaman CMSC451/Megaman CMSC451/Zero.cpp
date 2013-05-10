@@ -428,12 +428,12 @@ void Zero::damage()
 	// Draws the frame
 	if(direction == RIGHT){
 		glBindTexture(GL_TEXTURE_2D, textures[DAMAGE_RIGHT]); // select the active texture
-		x1 += 0.05;
-		x2 += 0.05;
+		x1 += 0.1;
+		x2 += 0.1;
 	} else {
 		glBindTexture(GL_TEXTURE_2D, textures[DAMAGE_LEFT]); // select the active texture
-		x1 -= 0.05;
-		x2 -= 0.05;
+		x1 -= 0.1;
+		x2 -= 0.1;
 	}
 	// Draw objects
 	glBegin(GL_POLYGON);

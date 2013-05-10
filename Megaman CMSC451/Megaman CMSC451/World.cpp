@@ -321,20 +321,15 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 	}
 }
 
-// Loads all textures for bullets
-void World::loadTextures()
-{
-	loadXBullet();
-	loadZBullet();
-}
-
 // Draw X_bullet
 void World::bullet_draw()
 {
 	// Go through each bullet in the world and draw them
 	list<X_Bullet>::iterator it = x_bullets.begin();
 	while(it != x_bullets.end()){
-		if(it->collision(zero)){
+		if(it->collision(zero) && zero->getState() != DAMAGE){
+			// Reset texture only if not already in damage animation
+			zero->resetTexture();
 			zero->setState(DAMAGE);
 		}
 		it->draw(textures);
@@ -346,6 +341,13 @@ void World::bullet_draw()
 			it++;
 		}
 	}
+}
+
+// Loads all textures for bullets
+void World::loadTextures()
+{
+	loadXBullet();
+	loadZBullet();
 }
 
 // Load XBullet texture
