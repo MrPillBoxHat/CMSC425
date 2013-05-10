@@ -18,8 +18,7 @@ using namespace std;
 // Constructor
 Zero::Zero()
 {
-	current_health = 140;
-	new_health = 0;
+	health = 140;
 	// Coordinates of entry
 	x1 = 405.0;
 	x2 = 533.0;
@@ -30,6 +29,11 @@ Zero::Zero()
 	cannon_position[1] = 508.0;
 	cannon_position[2] = 114.0;
 	cannon_position[3] = 151.0;
+	// collision box
+	hit_box[0] = 453.0;
+	hit_box[1] = 484.2;
+	hit_box[2] = 100.0;
+	hit_box[3] = 145.0;
 	state = ENTRY;
 	x1_tcoord = 0.0;
 	y2_tcoord = 1.0;
@@ -49,8 +53,7 @@ Zero::Zero()
 // Getter for Zero's position
 float *Zero::getPosition()
 {
-	float position[4] = {x1, x2, y1, y2};
-	return position;
+	return hit_box;
 }
 
 // Draw Zero
@@ -106,30 +109,38 @@ void Zero::move()
 	// Dash movement (faster movement)
 	if(buttons[DASH]){
 		if(direction == LEFT){
-			x1 -= 5.0;
-			x2 -= 5.0;
-			cannon_position[0] -= 5.0;
-			cannon_position[1] -= 5.0;
+			x1 -= CM_DASH;
+			x2 -= CM_DASH;
+			cannon_position[0] -= CM_DASH;
+			cannon_position[1] -= CM_DASH;
+			hit_box[0] -= CM_DASH;
+			hit_box[1] -= CM_DASH;
 		} else {
 			x1 += 5.0;
 			x2 += 5.0;
-			cannon_position[0] += 5.0;
-			cannon_position[1] += 5.0;
+			cannon_position[0] += CM_DASH;
+			cannon_position[1] += CM_DASH;
+			hit_box[0] += CM_DASH;
+			hit_box[1] += CM_DASH;
 		}
 	// Normal movements
 	} else {
 		// Move Zero horizontally
 		if(buttons[RUN]){
 			if(direction == LEFT){
-				x1 -= 2.0;
-				x2 -= 2.0;
-				cannon_position[0] -= 2.0;
-				cannon_position[1] -= 2.0;
+				x1 -= CM_WALK;
+				x2 -= CM_WALK;
+				cannon_position[0] -= CM_WALK;
+				cannon_position[1] -= CM_WALK;
+				hit_box[0] -= CM_WALK;
+				hit_box[1] -= CM_WALK;
 			} else {
 				x1 += 2.0;
 				x2 += 2.0;
-				cannon_position[0] += 2.0;
-				cannon_position[1] += 2.0;
+				cannon_position[0] += CM_WALK;
+				cannon_position[1] += CM_WALK;
+				hit_box[0] += CM_WALK;
+				hit_box[1] += CM_WALK;
 			}
 		}
 	}
@@ -145,12 +156,16 @@ void Zero::move()
 				y2 -= 22.0;
 				cannon_position[2] -= 22.0;
 				cannon_position[3] -= 22.0;
+				hit_box[2] -= 22.0;
+				hit_box[3] -= 22.0;
 			} else {
 				// Move Zero up
 				y1 += 22.0;
 				y2 += 22.0;
 				cannon_position[2] += 22.0;
 				cannon_position[3] += 22.0;
+				hit_box[2] += 22.0;
+				hit_box[3] += 22.0;
 			}
 		}
 	}
@@ -170,7 +185,7 @@ void Zero::drawHealth()
 	glEnd();
 	// If health was already drawn
 	if(!init_health && counter % 3 == 0){
-		initHealth();
+		gainHealth((health/5)-1); // max life (blocks)
 	}
 	// Draw the blocks
 	glBindTexture(GL_TEXTURE_2D, textures[HEALTH_BLOCK]); // select the active texture
@@ -196,10 +211,10 @@ void Zero::drawHealth()
 }
 
 // Draws the animation that fills Zero's health
-void Zero::initHealth()
+void Zero::gainHealth(int block_number)
 {
 	// if last block is drawn, done
-	if(health_blocks[27]){
+	if(health_blocks[block_number]){
 		init_health = true;
 	// Draw 1 block
 	} else {
@@ -212,6 +227,20 @@ void Zero::initHealth()
 				break;
 			}
 		}
+	}
+}
+
+// Decreases the amount of health blocks
+void Zero::depleteHealth(int block_number)
+{
+	// start at the end of the array
+	int i = 27;
+	// sets all health blocks to false
+	while(i >= block_number){
+		if(health_blocks[i]){
+			health_blocks[i] = false;
+		}
+		i--;
 	}
 }
 
@@ -501,10 +530,14 @@ void Zero::damage()
 		glBindTexture(GL_TEXTURE_2D, textures[DAMAGE_RIGHT]); // select the active texture
 		x1 += 0.1;
 		x2 += 0.1;
+		hit_box[0] += 0.1;
+		hit_box[1] += 0.1;
 	} else {
 		glBindTexture(GL_TEXTURE_2D, textures[DAMAGE_LEFT]); // select the active texture
 		x1 -= 0.1;
 		x2 -= 0.1;
+		hit_box[0] -= 0.1;
+		hit_box[1] -= 0.1;
 	}
 	// Draw objects
 	glBegin(GL_POLYGON);

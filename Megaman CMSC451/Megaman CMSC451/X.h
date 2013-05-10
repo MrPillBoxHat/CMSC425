@@ -12,6 +12,7 @@ class X {
 	private:
 		float x1,x2,y1,y2; // location of X
 		float position[4]; // location of cannon
+		float hit_box[4];
 		int health;
 		int state;
 		int direction; // X facing direction
@@ -57,6 +58,7 @@ class X {
 		int getState(){return state;}
 		int getDirection(){return direction;}
 		float *getCannon(){return position;}
+		float *getHitBox(){return hit_box;}
 		// setters
 		void setHealth(int number){health += number;}
 		void setState(int inState){state = inState; buttons[inState] = true;}

@@ -10,9 +10,9 @@ class Zero {
 	// Contains Zero's health and location
 	private:
 		float x1,x2,y1,y2; // location of Zero
+		float hit_box[4];
 		float cannon_position[4]; // location of cannon
-		int current_health;
-		int new_health;
+		int health;
 		bool health_blocks[28];
 		int state;
 		int direction; // Zero facing direction
@@ -50,7 +50,7 @@ class Zero {
 		void move();
 		// Draw Zero's Health bar
 		void drawHealth();
-		void initHealth();
+		void gainHealth(int block_number);
 
 	// Contains public functions
 	public:
@@ -59,11 +59,13 @@ class Zero {
 		// getters
 		int getState(){return state;}
 		int getDirection(){return direction;}
+		int getHealth(){return health;}
+		bool getInit(){return init_health;}
 		float *getCannon(){return cannon_position;}
 		float *getPosition();
 		// setters
 		void setState(int inState){state = inState; buttons[inState] = true;}
-		void setHealth(int amount){new_health = current_health + amount;}
+		void setHealth(int amount){health += amount;}
 		void setDirection(int inDirection){direction = inDirection;}
 		void setXPosition(float inx1, float inx2){x1 += inx1; x2 += inx2;}
 		void setButtons(int button, bool boolean){buttons[button] = boolean;}
@@ -72,4 +74,6 @@ class Zero {
 		void draw();
 		// Loads all textures
 		void loadTextures();
+		// When zero takes damage
+		void depleteHealth(int block_number);
 };

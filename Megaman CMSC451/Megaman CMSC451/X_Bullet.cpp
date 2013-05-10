@@ -10,9 +10,15 @@ X_Bullet::X_Bullet(float *position, int inDirection)
 	x2 = position[1];
 	y1 = position[2];
 	y2 = position[3];
+	float xmid = x1 + ((x2-x1)/2);
+	float ymid = y1 + ((y2-y1)/2);
+	hit_box[0] = xmid - 4.0;
+	hit_box[1] = xmid + 4.0;
+	hit_box[2] = ymid - 3.5;
+	hit_box[3] = ymid + 3.5;
 	x1_tcoord = 0.0;
 	y2_tcoord = 1.0;
-	damage = -10;
+	damage = -5;
 	state = 0;
 	direction = inDirection;
 	counter = 0;
@@ -44,9 +50,13 @@ void X_Bullet::draw(GLuint *texture)
 			// Move bullet
 			x1 -= 9.0;
 			x2 -= 9.0;
+			hit_box[0] -= 9.0;
+			hit_box[1] -= 9.0;
 		} else {
 			x1 += 9.0;
 			x2 += 9.0;
+			hit_box[0] += 9.0;
+			hit_box[1] += 9.0;
 		}
 	}
 	// update next frame or reset if reached the end
@@ -72,13 +82,11 @@ bool X_Bullet::collision(Zero *zero)
 	// Get Zero's Position
 	float *position = zero->getPosition();
 	// boolean flags to check where the bullet lies
-	bool withinSides = x2 >= position[0] && x1 <= position[1];
-	bool withinTopBottom = y1 <= position[3] && y2 >= position[2];
+	bool withinSides = hit_box[1] >= position[0] && hit_box[0] <= position[1];
+	bool withinTopBottom = hit_box[2] <= position[3] && hit_box[3] >= position[2];
 	// Check if the bullet touches Zero
 	if(withinSides && withinTopBottom){
 		state = DIE;
-		// damage zero
-		zero->setHealth(damage);
 		return true;
 	}
 	return false;

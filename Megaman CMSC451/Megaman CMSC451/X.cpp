@@ -29,6 +29,12 @@ X::X()
 	position[1] = 408.0;
 	position[2] = 114.0;
 	position[3] = 151.0;
+	// Hit box for X
+	hit_box[0] = 348.0;
+	hit_box[1] = 380.2;
+	hit_box[2] = 99.0;
+	hit_box[3] = 145.0;
+	// Initialize X's state
 	state = ENTRY;
 	x1_tcoord = 0.0;
 	y2_tcoord = 1.0;
@@ -114,11 +120,15 @@ void X::move()
 			x2 -= CM_DASH;
 			position[0] -= CM_DASH;
 			position[1] -= CM_DASH;
+			hit_box[0] -= CM_DASH;
+			hit_box[1] -= CM_DASH;
 		} else {
 			x1 += CM_DASH;
 			x2 += CM_DASH;
 			position[0] += CM_DASH;
 			position[1] += CM_DASH;
+			hit_box[0] += CM_DASH;
+			hit_box[1] += CM_DASH;
 		}
 	// Normal movements
 	} else {
@@ -129,11 +139,15 @@ void X::move()
 				x2 -= CM_WALK;
 				position[0] -= CM_WALK;
 				position[1] -= CM_WALK;
+				hit_box[0] -= CM_WALK;
+				hit_box[1] -= CM_WALK;
 			} else {
 				x1 += CM_WALK;
 				x2 += CM_WALK;
 				position[0] += CM_WALK;
 				position[1] += CM_WALK;
+				hit_box[0] += CM_WALK;
+				hit_box[1] += CM_WALK;
 			}
 		}
 	}
@@ -152,12 +166,16 @@ void X::move()
 					y2 -= 22.0;
 					position[2] -= 22.0;
 					position[3] -= 22.0;
+					hit_box[2] -= 22.0;
+					hit_box[3] -= 22.0;
 				} else {
 				// Move X up
 					y1 += 22.0;
 					y2 += 22.0;
 					position[2] += 22.0;
 					position[3] += 22.0;
+					hit_box[2] += 22.0;
+					hit_box[3] += 22.0;
 				}
 			// If normal jump
 			} else {
@@ -169,12 +187,16 @@ void X::move()
 					y2 -= 22.0;
 					position[2] -= 22.0;
 					position[3] -= 22.0;
+					hit_box[2] -= 22.0;
+					hit_box[3] -= 22.0;
 				} else {
 					// Move X up
 					y1 += 22.0;
 					y2 += 22.0;
 					position[2] += 22.0;
 					position[3] += 22.0;
+					hit_box[2] += 22.0;
+					hit_box[3] += 22.0;
 				}
 			}
 		}

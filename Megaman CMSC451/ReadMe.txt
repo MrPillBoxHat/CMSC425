@@ -52,14 +52,13 @@ Animation:
 	  to move wrong on the Y plane
 	- Can change direction while in dash animation
 	- character still slides when doing fire and dash animation
-	- Fix hitbox
 
 	(Zero)
 	- Jump, Saber, dash animation requires resize of texture box
-	- Fix hitbox
 	- Damage animation messy
 
 	(General)
 	- Animation link is out of place
+	- fix hitbox
 
 Camera:

@@ -118,9 +118,9 @@ void World::draw_helper()
 
 		enableTextures();
 		glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
-		bullet_draw(); // Draws all bullets on map
 		zero->draw(); // Draws zero
 		x->draw(); // Draws X
+		bullet_draw(); // Draws all bullets on map
 	}
 	// disable texturings
 	glDisable(GL_BLEND);
@@ -149,7 +149,9 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 	if(main_menu){
 		processKeysMenu(key);
 	} else {
-		processKeysGame(key);
+		if(zero != NULL && zero->getInit()){
+			processKeysGame(key);
+		}
 	}
 }
 
@@ -334,7 +336,10 @@ void World::bullet_draw()
 			// Reset texture only if not already in damage animation
 			zero->resetTexture();
 			zero->setState(DAMAGE);
+			zero->setHealth(it->getDamage());
+			zero->depleteHealth(zero->getHealth()/5);
 		}
+		// draw bullet
 		it->draw(textures);
 		// If bullet reaches end of the screen, delete it
 		if(it->getX1() <= cmX-20 || it->getX2() >= bg.viewWidth+cmX+20){
@@ -472,7 +477,7 @@ void World::loadZBullet()
 void World::enableTextures()
 {
 	// Enables texturess
-	glEnable(GL_TEXTURE_2D); // enable texturing
+	glEnable(GL_TEXTURE_2D);
 	// Enable transparency
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
