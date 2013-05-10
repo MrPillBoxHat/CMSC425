@@ -29,7 +29,7 @@ private:
 	std::list<X_Bullet> x_bullets;
 	//std::list<Z_Bullet> z_bullets;
 	BackGround bg;
-	GLuint textures[3];
+	GLuint textures[4];
 	bool main_menu;
 
 	// lower left coordinate of the camera

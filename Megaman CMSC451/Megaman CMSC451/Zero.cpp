@@ -20,20 +20,16 @@ Zero::Zero()
 {
 	health = 50;
 	// Coordinates of entry
-	/*x1 = 405.0;
+	x1 = 405.0;
 	x2 = 533.0;
 	y1 = 500.0;
-	y2 = 628.0;*/
-	x1 = 443.0;
-					x2 = 494.2;
-					y1 = 99.0;
-					y2 = 163.0;
+	y2 = 628.0;
 	// Cannon position after entry animation
 	cannon_position[0] = 477.4;
 	cannon_position[1] = 508.0;
 	cannon_position[2] = 114.0;
 	cannon_position[3] = 151.0;
-	state = DAMAGE;
+	state = ENTRY;
 	x1_tcoord = 0.0;
 	y2_tcoord = 1.0;
 	direction = LEFT;
@@ -432,8 +428,12 @@ void Zero::damage()
 	// Draws the frame
 	if(direction == RIGHT){
 		glBindTexture(GL_TEXTURE_2D, textures[DAMAGE_RIGHT]); // select the active texture
+		x1 += 0.05;
+		x2 += 0.05;
 	} else {
 		glBindTexture(GL_TEXTURE_2D, textures[DAMAGE_LEFT]); // select the active texture
+		x1 -= 0.05;
+		x2 -= 0.05;
 	}
 	// Draw objects
 	glBegin(GL_POLYGON);
@@ -451,7 +451,8 @@ void Zero::damage()
 			x1_tcoord = 0.0;
 			y2_tcoord -= y_offset;
 			if(y2_tcoord <= 0){
-				y2_tcoord = 1.0;
+				resetTexture();
+				state = STAND;
 			}
 		}
 	}

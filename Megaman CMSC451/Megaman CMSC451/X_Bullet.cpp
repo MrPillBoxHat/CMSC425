@@ -53,9 +53,11 @@ void X_Bullet::draw(GLuint *texture)
 	// Control FPS
 	x1_tcoord += x_offset;
 	if(state == DIE){
-		if(counter % 15 == 0){
+		if(counter % 60 == 0){
 			if(x1_tcoord >= 0.984375){
-				x1_tcoord = 0.0;
+				// Move bullet to where it will be deleted
+				x1 = -100;
+				x2 = -100;
 			}
 		}
 	} else {
