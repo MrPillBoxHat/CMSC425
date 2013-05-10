@@ -28,6 +28,6 @@ class X_Bullet
 		void setX1Coord(float x){x1_tcoord = x;}
 		void setDead(){state = DIE;}
 		// public functions
-		void collision();
+		bool collision(Zero *zero);
 		void draw(GLuint *texture);
 };

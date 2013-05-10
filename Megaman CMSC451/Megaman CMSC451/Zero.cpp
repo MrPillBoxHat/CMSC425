@@ -20,16 +20,20 @@ Zero::Zero()
 {
 	health = 50;
 	// Coordinates of entry
-	x1 = 405.0;
+	/*x1 = 405.0;
 	x2 = 533.0;
 	y1 = 500.0;
-	y2 = 628.0;
+	y2 = 628.0;*/
+	x1 = 443.0;
+					x2 = 494.2;
+					y1 = 99.0;
+					y2 = 163.0;
 	// Cannon position after entry animation
-	position[0] = 477.4;
-	position[1] = 508.0;
-	position[2] = 114.0;
-	position[3] = 151.0;
-	state = ENTRY;
+	cannon_position[0] = 477.4;
+	cannon_position[1] = 508.0;
+	cannon_position[2] = 114.0;
+	cannon_position[3] = 151.0;
+	state = DAMAGE;
 	x1_tcoord = 0.0;
 	y2_tcoord = 1.0;
 	direction = LEFT;
@@ -37,6 +41,13 @@ Zero::Zero()
 	for(int i = 0; i < 9; i++){
 		buttons[i] = false;
 	}
+}
+
+// Getter for Zero's position
+float *Zero::getPosition()
+{
+	float position[4] = {x1, x2, y1, y2};
+	return position;
 }
 
 // Draw Zero
@@ -90,13 +101,13 @@ void Zero::move()
 		if(direction == LEFT){
 			x1 -= 5.0;
 			x2 -= 5.0;
-			position[0] -= 5.0;
-			position[1] -= 5.0;
+			cannon_position[0] -= 5.0;
+			cannon_position[1] -= 5.0;
 		} else {
 			x1 += 5.0;
 			x2 += 5.0;
-			position[0] += 5.0;
-			position[1] += 5.0;
+			cannon_position[0] += 5.0;
+			cannon_position[1] += 5.0;
 		}
 	// Normal movements
 	} else {
@@ -105,13 +116,13 @@ void Zero::move()
 			if(direction == LEFT){
 				x1 -= 2.0;
 				x2 -= 2.0;
-				position[0] -= 2.0;
-				position[1] -= 2.0;
+				cannon_position[0] -= 2.0;
+				cannon_position[1] -= 2.0;
 			} else {
 				x1 += 2.0;
 				x2 += 2.0;
-				position[0] += 2.0;
-				position[1] += 2.0;
+				cannon_position[0] += 2.0;
+				cannon_position[1] += 2.0;
 			}
 		}
 	}
@@ -125,14 +136,14 @@ void Zero::move()
 			// Zero is falling back down
 				y1 -= 22.0;
 				y2 -= 22.0;
-				position[2] -= 22.0;
-				position[3] -= 22.0;
+				cannon_position[2] -= 22.0;
+				cannon_position[3] -= 22.0;
 			} else {
 				// Move Zero up
 				y1 += 22.0;
 				y2 += 22.0;
-				position[2] += 22.0;
-				position[3] += 22.0;
+				cannon_position[2] += 22.0;
+				cannon_position[3] += 22.0;
 			}
 		}
 	}
@@ -223,13 +234,13 @@ void Zero::run(){
 	if(direction == RIGHT){
 		glBindTexture(GL_TEXTURE_2D, textures[RUN_RIGHT]); // select the active texture
 		// Readjust cannon position
-		position[0] = x2 - 21.8;
-		position[1] = x2 + 8.8;
+		cannon_position[0] = x2 - 21.8;
+		cannon_position[1] = x2 + 8.8;
 	} else {
 		glBindTexture(GL_TEXTURE_2D, textures[RUN_LEFT]); // select the active texture
 		// Readjust cannon position
-		position[0] = x1 - 8.8;
-		position[1] = x1 + 21.8;
+		cannon_position[0] = x1 - 8.8;
+		cannon_position[1] = x1 + 21.8;
 	}
 	// Draw objects
 	glBegin(GL_POLYGON);
@@ -329,10 +340,9 @@ void Zero::fire()
 			x1_tcoord = 0.0;
 			y2_tcoord -= y_offset;
 			if(y2_tcoord <= 0){
-				/*
 				resetTexture();
 				state = STAND;
-				buttons[FIRE] = false;*/y2_tcoord = 1.0;
+				buttons[FIRE] = false;
 			}
 		}
 	}
@@ -416,7 +426,35 @@ void Zero::dash()
 // Zero damage animation
 void Zero::damage()
 {
-
+	// How many frames to jump
+	float x_offset = 0.166015625;
+	float y_offset = 0.5;
+	// Draws the frame
+	if(direction == RIGHT){
+		glBindTexture(GL_TEXTURE_2D, textures[DAMAGE_RIGHT]); // select the active texture
+	} else {
+		glBindTexture(GL_TEXTURE_2D, textures[DAMAGE_LEFT]); // select the active texture
+	}
+	// Draw objects
+	glBegin(GL_POLYGON);
+		//real coord
+		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
+		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+	glEnd();
+	// Want to draw 5 frames per second
+	if(counter % 8 == 0){
+		//update next frame or reset if reached the end
+		x1_tcoord += x_offset;
+		if(x1_tcoord >= 0.99609375){
+			x1_tcoord = 0.0;
+			y2_tcoord -= y_offset;
+			if(y2_tcoord <= 0){
+				y2_tcoord = 1.0;
+			}
+		}
+	}
 }
 
 // Zero death animation
@@ -801,12 +839,94 @@ void Zero::loadDash()
 	// reasonable filter choices
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads entry image directly as a new OpenGL texture */
+	textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Zero/dash/dash_left.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "ZeroTextureID: " << textureID << endl;
+
+	textures[DASH_LEFT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 }
 
 // Load Zero's Damage texture
 void Zero::loadDamage()
 {
+	/* loads entry image directly as a new OpenGL texture */
+	GLuint textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Zero/damage/back/damage_right.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
 
+	cout << "ZeroTextureID: " << textureID << endl;
+
+	textures[DAMAGE_RIGHT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads entry image directly as a new OpenGL texture */
+	textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Zero/damage/back/damage_left.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "ZeroTextureID: " << textureID << endl;
+
+	textures[DAMAGE_LEFT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 }
 
 // Load Zero's Death texture

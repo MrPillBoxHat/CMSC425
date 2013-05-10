@@ -334,6 +334,9 @@ void World::bullet_draw()
 	// Go through each bullet in the world and draw them
 	list<X_Bullet>::iterator it = x_bullets.begin();
 	while(it != x_bullets.end()){
+		if(it->collision(zero)){
+			zero->setState(DAMAGE);
+		}
 		it->draw(textures);
 		// If bullet reaches end of the screen, delete it
 		if(it->getX1() <= cmX-20 || it->getX2() >= bg.viewWidth+cmX+20){
