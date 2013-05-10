@@ -59,4 +59,7 @@ Animation:
 	- Fix hitbox
 	- Damage animation messy
 
+	(General)
+	- Animation link is out of place
+
 Camera:

@@ -85,6 +85,9 @@
     <Filter Include="Resource Files\Zero Sprites\Saber">
       <UniqueIdentifier>{a94fe6e1-a0ef-4f19-8cea-6c865dd0476c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Zero Sprites\Health">
+      <UniqueIdentifier>{83783aec-d95c-4d6f-96be-911b6d7620f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="X.h">
@@ -249,6 +252,12 @@
     </Image>
     <Image Include="Sprites\Zero\Saber\saber_left.png">
       <Filter>Resource Files\Zero Sprites\Saber</Filter>
+    </Image>
+    <Image Include="Sprites\Zero\Health_bar\health_bar.png">
+      <Filter>Resource Files\Zero Sprites\Health</Filter>
+    </Image>
+    <Image Include="Sprites\Zero\Health_bar\health_block.png">
+      <Filter>Resource Files\Zero Sprites\Health</Filter>
     </Image>
   </ItemGroup>
 </Project>

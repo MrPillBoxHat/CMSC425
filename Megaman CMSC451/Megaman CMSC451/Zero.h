@@ -11,14 +11,17 @@ class Zero {
 	private:
 		float x1,x2,y1,y2; // location of Zero
 		float cannon_position[4]; // location of cannon
-		int health;
+		int current_health;
+		int new_health;
+		bool health_blocks[28];
 		int state;
 		int direction; // Zero facing direction
 		int counter; // FPS controller
 		float x1_tcoord; // texture x1 coord
 		float y2_tcoord; // texture y2 coord
-		GLuint textures[20]; // stores texture
+		GLuint textures[22]; // stores texture
 		bool buttons[9]; // keeps track of state (buttons pressed)
+		bool init_health;
 
 		// Private helper functions
 		// helper functions to load textures
@@ -45,6 +48,9 @@ class Zero {
 		void die();
 		// Move Zero's coordinates
 		void move();
+		// Draw Zero's Health bar
+		void drawHealth();
+		void initHealth();
 
 	// Contains public functions
 	public:
@@ -57,6 +63,7 @@ class Zero {
 		float *getPosition();
 		// setters
 		void setState(int inState){state = inState; buttons[inState] = true;}
+		void setHealth(int amount){new_health = current_health + amount;}
 		void setDirection(int inDirection){direction = inDirection;}
 		void setXPosition(float inx1, float inx2){x1 += inx1; x2 += inx2;}
 		void setButtons(int button, bool boolean){buttons[button] = boolean;}
@@ -65,7 +72,4 @@ class Zero {
 		void draw();
 		// Loads all textures
 		void loadTextures();
-		// Decrement zero's health
-		void fillHealth(int amount);
-		void depleteHealth(int amount);
 };

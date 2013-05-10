@@ -23,22 +23,26 @@ using namespace std;
 // Constructor for the World class
 World::World(GLdouble w, GLdouble h) 
 {
-	width = w;
-	height = h;
-	bg.setBoundary(width, height);
+	// Create objects and load their texture
 	x = new X();
 	x->loadTextures();
 	zero = new Zero();
 	zero->loadTextures();
 	menu = new Main_Menu();
 	menu->loadTextures();
+	// initialize world instance variables
+	width = w;
+	height = h;
+	bg.setBoundary(width, height);
+	// initialize FPS controller variables
 	delta_time = 0;
 	start_time = glutGet(GLUT_ELAPSED_TIME);
 	current_time = 0;
 	lapse_time = 0;
 	frames = 0;
 	fps = 60;
-	main_menu = false;
+	// If in main menu
+	main_menu = false; 
 	cmX = 0;
 	// Initialize textures for intro and bullet
 	loadTextures();
@@ -208,7 +212,6 @@ void World::processKeysMenu(unsigned char key)
 				} else if(state == TRAINING){
 					// Start game in training mode
 					main_menu = false;
-
 				// if cursor is on new game
 				} else {
 					// Start game

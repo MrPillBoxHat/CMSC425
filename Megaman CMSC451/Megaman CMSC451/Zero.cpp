@@ -18,7 +18,8 @@ using namespace std;
 // Constructor
 Zero::Zero()
 {
-	health = 50;
+	current_health = 140;
+	new_health = 0;
 	// Coordinates of entry
 	x1 = 405.0;
 	x2 = 533.0;
@@ -34,9 +35,15 @@ Zero::Zero()
 	y2_tcoord = 1.0;
 	direction = LEFT;
 	counter = 0; // Counter is to keep track of FPS
+	// initialize buttons and health blocks to false;
 	for(int i = 0; i < 9; i++){
 		buttons[i] = false;
+		health_blocks[i] = false;
 	}
+	for(int i = 9; i < 28; i++){
+		health_blocks[i] = false;
+	}
+	init_health = false;
 }
 
 // Getter for Zero's position
@@ -51,6 +58,10 @@ void Zero::draw()
 {
 	// Move Zero in the world
 	move();
+	// Draw Zero's health bar
+	if(state != ENTRY){
+		drawHealth();
+	}
 	// Determines which action to draw
 	switch(state)
 	{
@@ -145,6 +156,65 @@ void Zero::move()
 	}
 }
 
+// Draws Zero's Health bar
+void Zero::drawHealth()
+{
+	// Draw the bar
+	glBindTexture(GL_TEXTURE_2D, textures[HEALTH_BAR]); // select the active texture
+	glBegin(GL_POLYGON);
+		//real coord
+		glTexCoord2d(0.0, 0.0); glVertex2d(718, 194);
+		glTexCoord2d(1.0, 0.0); glVertex2d(772, 194);
+		glTexCoord2d(1.0, 1.0); glVertex2d(772, 383);
+		glTexCoord2d(0.0, 1.0); glVertex2d(718, 383);
+	glEnd();
+	// If health was already drawn
+	if(!init_health && counter % 3 == 0){
+		initHealth();
+	}
+	// Draw the blocks
+	glBindTexture(GL_TEXTURE_2D, textures[HEALTH_BLOCK]); // select the active texture
+	// position of health blocks
+	float xx1 = 727.0;
+	float xx2 = 759.0;
+	float yy1 = 245.0;
+	float yy2 = 253.0;
+	int i = 0; // counter to iterate through health_blocks
+	// iterate through the blocks and draw them
+	while(health_blocks[i]){
+		glBegin(GL_POLYGON);
+			//real coord
+			glTexCoord2d(0.0, 0.0); glVertex2d(xx1, yy1);
+			glTexCoord2d(1.0, 0.0); glVertex2d(xx2, yy1);
+			glTexCoord2d(1.0, 1.0); glVertex2d(xx2, yy2);
+			glTexCoord2d(0.0, 1.0); glVertex2d(xx1, yy2);
+		glEnd();
+		yy1 += 4.0;
+		yy2 += 4.0;
+		i++; // increment count
+	}
+}
+
+// Draws the animation that fills Zero's health
+void Zero::initHealth()
+{
+	// if last block is drawn, done
+	if(health_blocks[27]){
+		init_health = true;
+	// Draw 1 block
+	} else {
+		// iterate through health bar
+		for(int i = 0; i < 28; i++){
+			// if the bar is not there
+			if(!health_blocks[i]){
+				// draw the bar
+				health_blocks[i] = true;
+				break;
+			}
+		}
+	}
+}
+
 // Actions
 // Zero Entry Animation
 void Zero::entry()
@@ -171,8 +241,6 @@ void Zero::entry()
 			// go to next frame
 			x1_tcoord += x_offset;
 			if(x1_tcoord >= 1.0){
-				// Reset x frame pointer
-				x1_tcoord = 0.0;
 				// Move down 1 row
 				y2_tcoord -= y_offset;
 				// When Finished, load stand
@@ -185,6 +253,9 @@ void Zero::entry()
 					y1 = 99.0;
 					y2 = 163.0;
 					resetTexture();
+				} else {
+					// Reset x frame pointer
+					x1_tcoord = 0.0;	
 				}
 			}
 		}
@@ -418,17 +489,6 @@ void Zero::dash()
 	}
 }
 
-// Create Zero Health bar
-void Zero::depleteHealth(int amount)
-{
-
-}
-
-void Zero::fillHealth(int amount)
-{
-
-}
-
 // Responses
 // Zero damage animation
 void Zero::damage()
@@ -485,6 +545,7 @@ void Zero::loadTextures()
 	loadFire();
 	loadSaber();
 	loadDash();
+	loadHealth();
 	loadDamage();
 	loadDie();
 }
@@ -884,7 +945,61 @@ void Zero::loadDash()
 // Load Zero's Health Bar texture
 void Zero::loadHealth()
 {
+	/* loads entry image directly as a new OpenGL texture */
+	GLuint textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Zero/Health_bar/health_bar.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
 
+	cout << "ZeroTextureID: " << textureID << endl;
+
+	textures[HEALTH_BAR] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads entry image directly as a new OpenGL texture */
+	textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/health_block.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "ZeroTextureID: " << textureID << endl;
+
+	textures[HEALTH_BLOCK] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 }
 
 // Load Zero's Damage texture

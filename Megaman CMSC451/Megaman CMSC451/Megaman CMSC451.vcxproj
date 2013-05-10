@@ -133,6 +133,8 @@
     <Image Include="Sprites\Zero\Entry\Zero_Entry_left.png" />
     <Image Include="Sprites\Zero\Fire\Fire_left.png" />
     <Image Include="Sprites\Zero\Fire\Fire_right.png" />
+    <Image Include="Sprites\Zero\Health_bar\health_bar.png" />
+    <Image Include="Sprites\Zero\Health_bar\health_block.png" />
     <Image Include="Sprites\Zero\jump\jump_left.png" />
     <Image Include="Sprites\Zero\jump\jump_right.png" />
     <Image Include="Sprites\Zero\Run\run_left.png" />
