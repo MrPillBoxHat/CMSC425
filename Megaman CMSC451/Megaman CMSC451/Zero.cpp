@@ -32,7 +32,7 @@ Zero::Zero()
 	state = ENTRY;
 	x1_tcoord = 0.0;
 	y2_tcoord = 1.0;
-	direction = RIGHT;
+	direction = LEFT;
 	counter = 0; // Counter is to keep track of FPS
 	for(int i = 0; i < 9; i++){
 		buttons[i] = false;
@@ -62,6 +62,9 @@ void Zero::draw()
 		case FIRE:
 			fire();
 			break;
+		case SABER:
+			saber();
+			break;
 		case DASH:
 			dash();
 			break;
@@ -71,6 +74,11 @@ void Zero::draw()
 		case DIE:
 			die();
 			break;
+	}
+	counter++;
+	//resets counter
+	if(counter == 60){
+		counter = 0;
 	}
 }
 		
@@ -174,18 +182,13 @@ void Zero::entry()
 			}
 		}
 	}
-	counter++;
-	// Resets counter
-	if(counter == 60){
-		counter = 0;
-	}
 }
 
 // Zero standing Animation
 void Zero::stand()
 {
 	// How many frames to jump
-	float x_offset = 0.1;
+	float x_offset = 0.099609375;
 	float y_offset = 1.0;
 	// Draws the frame
 	if(direction == RIGHT){
@@ -205,21 +208,10 @@ void Zero::stand()
 	if(counter % 15 == 0){
 		//update next frame or reset if reached the end
 		x1_tcoord += x_offset;
-		if(x1_tcoord >= 1.0){
+		if(x1_tcoord >= 0.99609375){
 			x1_tcoord = 0.0;
 		}
 	}
-	counter++;
-	//resets counter
-	if(counter == 60){
-		counter = 0;
-	}
-}
-
-// Zero saber attack Animation
-void Zero::saber()
-{
-
 }
 
 // Zero running Animation
@@ -264,11 +256,6 @@ void Zero::run(){
 			}
 		}
 	}
-	counter++;
-	//resets counter
-	if(counter == 60){
-		counter = 0;
-	}
 }
 
 // Zero jumping animation
@@ -312,18 +299,13 @@ void Zero::jump()
 			y2 -= 64.0;
 		}
 	}
-	counter++;
-	//resets counter
-	if(counter == 60){
-		counter = 0;
-	}
 }
 
 // Zero Fire Animation
 void Zero::fire()
 {
 	// How many frames to jump
-	float x_offset = 0.1666666666666666666666666666;
+	float x_offset = 0.166015625;
 	float y_offset = 0.5;
 	// Draws the frame
 	if(direction == RIGHT){
@@ -343,20 +325,46 @@ void Zero::fire()
 	if(counter % 8 == 0){
 		//update next frame or reset if reached the end
 		x1_tcoord += x_offset;
-		if(x1_tcoord >= 1.0){
+		if(x1_tcoord >= 0.99609375){
 			x1_tcoord = 0.0;
 			y2_tcoord -= y_offset;
 			if(y2_tcoord <= 0){
+				/*
 				resetTexture();
 				state = STAND;
-				buttons[FIRE] = false;
+				buttons[FIRE] = false;*/y2_tcoord = 1.0;
 			}
 		}
 	}
-	counter++;
-	//resets counter
-	if(counter == 60){
-		counter = 0;
+}
+
+// Zero saber attack Animation
+void Zero::saber()
+{
+	// How many frames to jump
+	float x_offset = 0.0712890625;
+	float y_offset = 1.0;
+	// Draws the frame
+	if(direction == RIGHT){
+		glBindTexture(GL_TEXTURE_2D, textures[SABER_RIGHT]); // select the active texture
+	} else {
+		glBindTexture(GL_TEXTURE_2D, textures[SABER_LEFT]); // select the active texture
+	}
+	// Draw objects
+	glBegin(GL_POLYGON);
+		//real coord
+		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
+		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+	glEnd();
+	// Want to draw 5 frames per second
+	if(counter % 5 == 0){
+		//update next frame or reset if reached the end
+		x1_tcoord += x_offset;
+		if(x1_tcoord >= 0.998046875){
+			x1_tcoord = 0.0;
+		}
 	}
 }
 
@@ -402,11 +410,6 @@ void Zero::dash()
 			}
 		}
 	}
-	counter++;
-	//resets counter
-	if(counter == 60){
-		counter = 0;
-	}
 }
 
 // Responses
@@ -430,6 +433,7 @@ void Zero::loadTextures()
 	loadMove();
 	loadJump();
 	loadFire();
+	loadSaber();
 	loadDash();
 	loadDamage();
 	loadDie();
@@ -441,7 +445,7 @@ void Zero::loadEntry()
 	/* loads entry image directly as a new OpenGL texture */
 	GLuint textureID = SOIL_load_OGL_texture
 	(
-		"Sprites/Zero/Entry/Zero_Entry.png",
+		"Sprites/Zero/Entry/Zero_Entry_left.png",
 		SOIL_LOAD_AUTO,
 		SOIL_CREATE_NEW_ID,
 		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
@@ -497,6 +501,34 @@ void Zero::loadStand()
 	// reasonable filter choices
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads entry image directly as a new OpenGL texture */
+	textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Zero/stand/stand_left.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "ZeroTextureID: " << textureID << endl;
+
+	textures[STAND_LEFT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 }
 
 // Load Zero's Running texture
@@ -521,6 +553,34 @@ void Zero::loadMove()
 	cout << "ZeroTextureID: " << textureID << endl;
 
 	textures[RUN_RIGHT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads entry image directly as a new OpenGL texture */
+	textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Zero/Run/run_left.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "ZeroTextureID: " << textureID << endl;
+
+	textures[RUN_LEFT] = textureID; // Assign it to the texture array
 	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	// repeat texture
@@ -561,12 +621,94 @@ void Zero::loadJump()
 	// reasonable filter choices
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	
+	/* loads entry image directly as a new OpenGL texture */
+	textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Zero/jump/jump_left.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "ZeroTextureID: " << textureID << endl;
+
+	textures[JUMP_LEFT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 }
 
 // Load Zero's Saber slash texture
 void Zero::loadSaber()
 {
+	/* loads entry image directly as a new OpenGL texture */
+	GLuint textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Zero/Saber/saber_right.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
 
+	cout << "ZeroTextureID: " << textureID << endl;
+
+	textures[SABER_RIGHT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads entry image directly as a new OpenGL texture */
+	textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Zero/Saber/saber_left.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "ZeroTextureID: " << textureID << endl;
+
+	textures[SABER_LEFT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 }
 
 // Load Zero's Fire texture
@@ -591,6 +733,34 @@ void Zero::loadFire()
 	cout << "ZeroTextureID: " << textureID << endl;
 
 	textures[FIRE_RIGHT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads entry image directly as a new OpenGL texture */
+	textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Zero/Fire/Fire_left.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "ZeroTextureID: " << textureID << endl;
+
+	textures[FIRE_LEFT] = textureID; // Assign it to the texture array
 	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	// repeat texture

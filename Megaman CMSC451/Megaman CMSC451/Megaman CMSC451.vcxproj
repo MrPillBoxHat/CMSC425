@@ -127,11 +127,19 @@
     <Image Include="Sprites\Megaman\Run\run_right.png" />
     <Image Include="Sprites\Megaman\stand\stand_left.png" />
     <Image Include="Sprites\Megaman\stand\stand_right.png" />
+    <Image Include="Sprites\Zero\dash\dash_left.png" />
     <Image Include="Sprites\Zero\dash\dash_right.png" />
     <Image Include="Sprites\Zero\Entry\Zero_Entry.png" />
+    <Image Include="Sprites\Zero\Entry\Zero_Entry_left.png" />
+    <Image Include="Sprites\Zero\Fire\Fire_left.png" />
     <Image Include="Sprites\Zero\Fire\Fire_right.png" />
+    <Image Include="Sprites\Zero\jump\jump_left.png" />
     <Image Include="Sprites\Zero\jump\jump_right.png" />
+    <Image Include="Sprites\Zero\Run\run_left.png" />
     <Image Include="Sprites\Zero\Run\run_right.png" />
+    <Image Include="Sprites\Zero\Saber\saber_left.png" />
+    <Image Include="Sprites\Zero\Saber\saber_right.png" />
+    <Image Include="Sprites\Zero\stand\stand_left.png" />
     <Image Include="Sprites\Zero\stand\stand_right.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -97,6 +97,11 @@ void X::draw()
 			die();
 			break;
 	}
+	counter++;
+	//resets counter
+	if(counter == 60){
+		counter = 0;
+	}
 }
 
 // Moves X in the world
@@ -223,18 +228,13 @@ void X::entry()
 			}
 		}
 	}
-	counter++;
-	//resets counter
-	if(counter == 60){
-		counter = 0;
-	}
 }
 
 // Draws X standing
 void X::stand()
 {
 	// How many frames to jump
-	float x_offset = 0.2;
+	float x_offset = 0.099609375;
 	float y_offset = 1.0;
 	// Draws the frame
 	if(direction == RIGHT){
@@ -254,14 +254,9 @@ void X::stand()
 	if(counter % 15 == 0){
 		//update next frame or reset if reached the end
 		x1_tcoord += x_offset;
-		if(x1_tcoord >= 1.0){
+		if(x1_tcoord >= 0.99609375){
 			x1_tcoord = 0.0;
 		}
-	}
-	counter++;
-	//resets counter
-	if(counter == 60){
-		counter = 0;
 	}
 }
 
@@ -308,11 +303,6 @@ void X::run()
 			}
 		}
 	}
-	counter++;
-	//resets counter
-	if(counter == 60){
-		counter = 0;
-	}
 }
 
 // Draws X jumping
@@ -354,11 +344,6 @@ void X::jump()
 			buttons[JUMP] = false;
 			buttons[DASH] = false;
 		}
-	}
-	counter++;
-	//resets counter
-	if(counter == 60){
-		counter = 0;
 	}
 }
 
@@ -406,11 +391,6 @@ void X::air_fire()
 			}
 		}
 	}
-	counter++;
-	//resets counter
-	if(counter == 60){
-		counter = 0;
-	}
 }
 
 // Draws X firing on the ground
@@ -442,11 +422,6 @@ void X::ground_fire()
 			state = STAND;
 			buttons[FIRE] = false;
 		}
-	}
-	counter++;
-	//resets counter
-	if(counter == 60){
-		counter = 0;
 	}
 }
 
@@ -491,11 +466,6 @@ void X::dash()
 			}
 			buttons[DASH] = false;
 		}
-	}
-	counter++;
-	//resets counter
-	if(counter == 60){
-		counter = 0;
 	}
 }
 

@@ -55,7 +55,6 @@ Animation:
 	- character still slides when doing fire and dash animation
 
 	(Zero)
-	- Stand Animation is not straight.
-	- Jump require height to be increased by 64 pixels since 
-	  the sprite is bigger than 64 pixels high (default).
-	- There may be something wrong with dash sprite size
+	- Jump, Saber, dash animation requires resize of texture box
+
+Camera:

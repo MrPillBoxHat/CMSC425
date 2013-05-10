@@ -17,7 +17,7 @@ class Zero {
 		int counter; // FPS controller
 		float x1_tcoord; // texture x1 coord
 		float y2_tcoord; // texture y2 coord
-		GLuint textures[18]; // stores texture
+		GLuint textures[20]; // stores texture
 		bool buttons[9]; // keeps track of state (buttons pressed)
 
 		// Private helper functions

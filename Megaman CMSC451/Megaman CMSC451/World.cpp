@@ -42,7 +42,7 @@ World::World(GLdouble w, GLdouble h)
 	lapse_time = 0;
 	frames = 0;
 	fps = 60;
-	main_menu = true;
+	main_menu = false;
 	cmX = 0;
 	// Initialize textures for intro and bullet
 	loadTextures();
@@ -69,7 +69,6 @@ void World::update(void)
 	frames++;
 	delta_time = 0;
 	if(lapse_time > 1000){
-	cout << "FPS: " << frames << endl;
 		// reset timers
 		frames = 0;
 		lapse_time = 0;

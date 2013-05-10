@@ -82,6 +82,9 @@
     <Filter Include="Header Files\Objects">
       <UniqueIdentifier>{20e2f0c7-4e5a-4838-a6d6-53ea148ed844}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Zero Sprites\Saber">
+      <UniqueIdentifier>{a94fe6e1-a0ef-4f19-8cea-6c865dd0476c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="X.h">
@@ -222,6 +225,30 @@
     </Image>
     <Image Include="Main Screen\Main_Screen_Blank.png">
       <Filter>Resource Files\IntroScreens</Filter>
+    </Image>
+    <Image Include="Sprites\Zero\dash\dash_left.png">
+      <Filter>Resource Files\Zero Sprites\Dash</Filter>
+    </Image>
+    <Image Include="Sprites\Zero\Entry\Zero_Entry_left.png">
+      <Filter>Resource Files\Zero Sprites\Entry</Filter>
+    </Image>
+    <Image Include="Sprites\Zero\jump\jump_left.png">
+      <Filter>Resource Files\Zero Sprites\Jump</Filter>
+    </Image>
+    <Image Include="Sprites\Zero\Run\run_left.png">
+      <Filter>Resource Files\Zero Sprites\Run</Filter>
+    </Image>
+    <Image Include="Sprites\Zero\stand\stand_left.png">
+      <Filter>Resource Files\Zero Sprites\Stand</Filter>
+    </Image>
+    <Image Include="Sprites\Zero\Saber\saber_right.png">
+      <Filter>Resource Files\Zero Sprites\Saber</Filter>
+    </Image>
+    <Image Include="Sprites\Zero\Fire\Fire_left.png">
+      <Filter>Resource Files\Zero Sprites\Fire</Filter>
+    </Image>
+    <Image Include="Sprites\Zero\Saber\saber_left.png">
+      <Filter>Resource Files\Zero Sprites\Saber</Filter>
     </Image>
   </ItemGroup>
 </Project>
