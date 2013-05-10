@@ -12,26 +12,24 @@ X_Bullet::X_Bullet(float *position, int inDirection)
 	x1_tcoord = 0.0;
 	y2_tcoord = 1.0;
 	damage = 10;
+	state = 0;
 	direction = inDirection;
+	counter = 0;
 }
 
-void loadTexture()
-{
-
-}
-
-void move()
-{
-
-}
-
-void X_Bullet::draw(GLuint texture)
+void X_Bullet::draw(GLuint *texture)
 {
 	// How many frames to jump
-	float x_offset = 0.5;
+	float x_offset;
 	float y_offset = 1.0;
 	// Draws the frame
-	glBindTexture(GL_TEXTURE_2D, texture); // select the active texture
+	if(state != DIE){
+		glBindTexture(GL_TEXTURE_2D, texture[XBULLET]); // select the active texture
+		x_offset = 0.5;
+	} else {
+		glBindTexture(GL_TEXTURE_2D, texture[XBULLETDIE]); // select the active texture
+		x_offset = 0.328125;
+	}
 	// Draw objects
 	glBegin(GL_POLYGON);
 		//real coord
@@ -48,15 +46,18 @@ void X_Bullet::draw(GLuint texture)
 		x1 += 9.0;
 		x2 += 9.0;
 	}
-	//update next frame or reset if reached the end
+	// update next frame or reset if reached the end
+	// Control FPS
 	x1_tcoord += x_offset;
-	if(x1_tcoord >= 1.0){
-		x1_tcoord = 0.0;
+	if(state == DIE){
+		if(counter % 15 == 0){
+			if(x1_tcoord >= 0.984375){
+				x1_tcoord = 0.0;
+			}
+		}
+	} else {
+		if(x1_tcoord >= 0.984375){
+			x1_tcoord = 0.0;
+		}
 	}
 }
-
-void detec_collision()
-{
-
-}
-

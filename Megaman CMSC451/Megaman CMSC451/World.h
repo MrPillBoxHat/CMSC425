@@ -26,21 +26,22 @@ private:
 	Main_Menu *menu;
 	// Variables to keep track of objects and textures
 	// in the world class
-	std::list<X_Bullet > bullets;
+	std::list<X_Bullet> x_bullets;
+	//std::list<Z_Bullet> z_bullets;
 	BackGround bg;
-	GLuint textures[2];
+	GLuint textures[3];
 	bool main_menu;
 
 	// lower left coordinate of the camera
 	GLdouble cmX;
 	// controls
 	static const unsigned char MOVE_LEFT = 'a', MOVE_RIGHT = 'd', MOVE_JUMP = 'w', MOVE_DASH = 'j', MOVE_FIRE = 'h';
-	enum bullet {XBULLET, ZEROBULLET};
 
 	void bullet_draw();
 	void draw_helper();
 	void loadTextures();
 	void loadXBullet();
+	void loadZBullet();
 	void updateView();
 	void processKeysMenu(unsigned char key);
 	void processKeysGame(unsigned char key);

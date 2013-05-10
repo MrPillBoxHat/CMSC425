@@ -13,6 +13,7 @@ static const enum texture_states{STAND_RIGHT, STAND_LEFT, RUN_LEFT, RUN_RIGHT, J
 								DIE_LEFT, DIE_RIGHT, CHARGE_TEXTURE, ENTRY_TEXUTRE, JUMP_FIRE_RIGHT,
 								JUMP_FIRE_LEFT, SABER_RIGHT, SABER_LEFT};
 static const enum menu_states {INTRO, INTRO_PRESS, NEWGAME, CONTINUE, OPTION, TRAINING, INGAME};
+enum bullet {XBULLET, XBULLETDIE, Z_BULLET_LEFT, Z_BULLET_RIGHT};
 //movement of camera TODO sync this up with X
 const float CM_WALK = 2.0;
 const float CM_DASH = 5.0;

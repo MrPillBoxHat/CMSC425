@@ -268,10 +268,10 @@ void World::processKeysGame(unsigned char key)
 			// Fire
 			case MOVE_FIRE:
 				// Can only fire max 3 times
-				if(bullets.size() < 3){
+				if(x_bullets.size() < 3){
 					X_Bullet *temp = new X_Bullet(x->getCannon(), x->getDirection());
 					// Create bullet from cannon position
-					bullets.push_front(*temp);
+					x_bullets.push_front(*temp);
 					x->setFrameOn();
 					x->setState(FIRE);
 					// If not in the air, reset texture frame
@@ -325,32 +325,22 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 void World::loadTextures()
 {
 	loadXBullet();
+	loadZBullet();
 }
 
 // Draw X_bullet
 void World::bullet_draw()
 {
 	// Go through each bullet in the world and draw them
-	list<X_Bullet>::iterator it = bullets.begin();
-	while(it != bullets.end()){
-		it->draw(textures[XBULLET]);
-		// If bullet is going right
-		if(it->getDirection() == LEFT){
-			// If bullet reaches end of the screen, delete it
-			if(it->getX1() <= cmX-20){
-				it = bullets.erase(it);
-			// If bullet hits something
-			} else {
-				it++;
-			}
-		// If bullet is going left
+	list<X_Bullet>::iterator it = x_bullets.begin();
+	while(it != x_bullets.end()){
+		it->draw(textures);
+		// If bullet reaches end of the screen, delete it
+		if(it->getX1() <= cmX-20 || it->getX2() >= bg.viewWidth+cmX+20){
+			it = x_bullets.erase(it);
+		// If bullet hits something
 		} else {
-			// If bullet reaches end of the screen, delete it
-			if(it->getX2() >= bg.viewWidth+cmX+20){
-				it = bullets.erase(it);
-			} else {
-				it++;
-			}
+			it++;
 		}
 	}
 }
@@ -377,6 +367,90 @@ void World::loadXBullet()
 	cout << "WorldtextureID: " << textures[XBULLET] << endl;
 
 	glBindTexture(GL_TEXTURE_2D, textures[XBULLET]); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads entry image directly as a new OpenGL texture */
+	textures[XBULLETDIE] = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/Bullet/splat.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textures[XBULLETDIE] )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "WorldtextureID: " << textures[XBULLETDIE] << endl;
+
+	glBindTexture(GL_TEXTURE_2D, textures[XBULLETDIE]); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+}
+
+void World::loadZBullet()
+{
+	/* loads entry image directly as a new OpenGL texture */
+	textures[Z_BULLET_LEFT] = SOIL_load_OGL_texture
+	(
+		"Sprites/Zero/Bullet/Zero_Bullet_Right.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textures[Z_BULLET_LEFT] )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "WorldtextureID: " << textures[Z_BULLET_LEFT] << endl;
+
+	glBindTexture(GL_TEXTURE_2D, textures[Z_BULLET_LEFT]); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads entry image directly as a new OpenGL texture */
+	textures[Z_BULLET_RIGHT] = SOIL_load_OGL_texture
+	(
+		"Sprites/Zero/Bullet/Zero_Bullet_Right.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textures[Z_BULLET_RIGHT] )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "WorldtextureID: " << textures[Z_BULLET_RIGHT] << endl;
+
+	glBindTexture(GL_TEXTURE_2D, textures[Z_BULLET_RIGHT]); // select the active texture
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	// repeat texture
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
