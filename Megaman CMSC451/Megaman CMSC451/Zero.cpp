@@ -418,6 +418,17 @@ void Zero::dash()
 	}
 }
 
+// Create Zero Health bar
+void Zero::depleteHealth(int amount)
+{
+
+}
+
+void Zero::fillHealth(int amount)
+{
+
+}
+
 // Responses
 // Zero damage animation
 void Zero::damage()
@@ -868,6 +879,12 @@ void Zero::loadDash()
 	// reasonable filter choices
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+}
+
+// Load Zero's Health Bar texture
+void Zero::loadHealth()
+{
+
 }
 
 // Load Zero's Damage texture

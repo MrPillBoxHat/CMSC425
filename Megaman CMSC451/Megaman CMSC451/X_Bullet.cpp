@@ -78,7 +78,7 @@ bool X_Bullet::collision(Zero *zero)
 	if(withinSides && withinTopBottom){
 		state = DIE;
 		// damage zero
-		zero->setHealth(damage);
+		zero->depleteHealth(damage);
 		return true;
 	}
 	return false;

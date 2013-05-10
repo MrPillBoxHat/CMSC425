@@ -29,6 +29,7 @@ class Zero {
 		void loadSaber();
 		void loadFire();
 		void loadDash();
+		void loadHealth();
 		void loadDamage();
 		void loadDie();
 		// Actions
@@ -55,7 +56,6 @@ class Zero {
 		float *getCannon(){return cannon_position;}
 		float *getPosition();
 		// setters
-		void setHealth(int number){health += number;}
 		void setState(int inState){state = inState; buttons[inState] = true;}
 		void setDirection(int inDirection){direction = inDirection;}
 		void setXPosition(float inx1, float inx2){x1 += inx1; x2 += inx2;}
@@ -65,4 +65,7 @@ class Zero {
 		void draw();
 		// Loads all textures
 		void loadTextures();
+		// Decrement zero's health
+		void fillHealth(int amount);
+		void depleteHealth(int amount);
 };
