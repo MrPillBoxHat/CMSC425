@@ -18,10 +18,6 @@
 void done(unsigned char key, int x, int y);
 void noDraw() {};
 
-//movement of camera TODO sync this up with X
-const GLdouble World::CM_WALK = 2.0;
-const GLdouble World::CM_DASH = 5.0;
-
 using namespace std;
 
 // Constructor for the World class
@@ -157,9 +153,9 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 void World::processKeysMenu(unsigned char key)
 {
 	int state = menu->getMenuState();
-	if(state == menu->INTRO || state == menu->INTRO_PRESS){
+	if(state == INTRO || state == INTRO_PRESS){
 		if(key == 13){
-			menu->setMenuState(menu->TRAINING);
+			menu->setMenuState(TRAINING);
 		}
 	} else {
 		switch(key)
@@ -167,43 +163,49 @@ void World::processKeysMenu(unsigned char key)
 			// Move cursor up
 			case 'w':
 				// if cursor is on continue
-				if(state == menu->CONTINUE){
-					menu->setMenuState(menu->NEWGAME);
+				if(state == CONTINUE){
+					menu->setMenuState(NEWGAME);
 				// if cursor is on option
-				} else if(state == menu->OPTION){
-					menu->setMenuState(menu->CONTINUE);
+				} else if(state == OPTION){
+					menu->setMenuState(CONTINUE);
 				// if cursor is on Training
-				} else if(state == menu->TRAINING){
-					menu->setMenuState(menu->OPTION);
+				} else if(state == TRAINING){
+					menu->setMenuState(OPTION);
+				// if cursor is new game
+				} else {
+					menu->setMenuState(TRAINING);
 				}
 				break;
 			
 			// Move cursor down
 			case 's':
 				// if cursor is on continue
-				if(state == menu->CONTINUE){
-					menu->setMenuState(menu->OPTION);
+				if(state == CONTINUE){
+					menu->setMenuState(OPTION);
 				// if cursor is on option
-				} else if(state == menu->OPTION){
-					menu->setMenuState(menu->TRAINING);
+				} else if(state == OPTION){
+					menu->setMenuState(TRAINING);
 				// if cursor is on new game
-				} else if(state == menu->NEWGAME){
-					menu->setMenuState(menu->CONTINUE);
+				} else if(state == NEWGAME){
+					menu->setMenuState(CONTINUE);
+				// if cursor is on training
+				} else {
+					menu->setMenuState(NEWGAME);
 				}
 				break;
 			
 			// Select cursor
 			case 13:
 				// if cursor is on continue
-				if(state == menu->CONTINUE){
+				if(state == CONTINUE){
 					// load save state
 
 				// if cursor is on Training
-				} else if(state == menu->OPTION){
+				} else if(state == OPTION){
 					// Open option screen
 
 				// if cursor is on option
-				} else if(state == menu->TRAINING){
+				} else if(state == TRAINING){
 					// Start game in training mode
 					main_menu = false;
 
@@ -289,12 +291,6 @@ void World::processKeysGame(unsigned char key)
 				break;
 		}
 	}
-
-	//cout << "cmX = " << cmX << endl;
-	/*if(old != cmX)
-		updateView();
-	else
-		glutPostRedisplay();*/
 	update();
 }
 
@@ -399,6 +395,7 @@ void World::enableTextures()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
+
 void done(unsigned char key, int x, int y) {
 	
 }

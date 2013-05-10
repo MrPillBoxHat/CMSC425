@@ -37,9 +37,6 @@ private:
 	static const unsigned char MOVE_LEFT = 'a', MOVE_RIGHT = 'd', MOVE_JUMP = 'w', MOVE_DASH = 'j', MOVE_FIRE = 'h';
 	enum bullet {XBULLET, ZEROBULLET};
 
-	// how much left and right move
-	static const GLdouble CM_WALK, CM_DASH;
-
 	void bullet_draw();
 	void draw_helper();
 	void loadTextures();

@@ -110,30 +110,30 @@ void X::move()
 	// Dash movement (faster movement)
 	if(buttons[DASH]){
 		if(direction == LEFT){
-			x1 -= 5.0;
-			x2 -= 5.0;
-			position[0] -= 5.0;
-			position[1] -= 5.0;
+			x1 -= CM_DASH;
+			x2 -= CM_DASH;
+			position[0] -= CM_DASH;
+			position[1] -= CM_DASH;
 		} else {
-			x1 += 5.0;
-			x2 += 5.0;
-			position[0] += 5.0;
-			position[1] += 5.0;
+			x1 += CM_DASH;
+			x2 += CM_DASH;
+			position[0] += CM_DASH;
+			position[1] += CM_DASH;
 		}
 	// Normal movements
 	} else {
 		// Move X horizontally
 		if(buttons[RUN]){
 			if(direction == LEFT){
-				x1 -= 2.0;
-				x2 -= 2.0;
-				position[0] -= 2.0;
-				position[1] -= 2.0;
+				x1 -= CM_WALK;
+				x2 -= CM_WALK;
+				position[0] -= CM_WALK;
+				position[1] -= CM_WALK;
 			} else {
-				x1 += 2.0;
-				x2 += 2.0;
-				position[0] += 2.0;
-				position[1] += 2.0;
+				x1 += CM_WALK;
+				x2 += CM_WALK;
+				position[0] += CM_WALK;
+				position[1] += CM_WALK;
 			}
 		}
 	}
@@ -203,8 +203,8 @@ void X::entry()
 	// Update frame pointers
 	// If X has not landed
 	if(y1 != 65.0){
-		y1 -= 5.0;
-		y2 -= 5.0;
+		y1 -= CM_DASH;
+		y2 -= CM_DASH;
 	} else {
 		if(counter % 5 == 0){
 			// go to next frame
@@ -397,27 +397,34 @@ void X::air_fire()
 void X::ground_fire()
 {
 	// How many frames to jump
-	float x_offset = 0.111111111111111111111111;
+	float x_offset = 0.109375;
 	float y_offset = 1.0;
+	// Readjust where X is being drawn
+	float xx1;
+	float xx2;
 	// Draws the frame
 	if(direction == RIGHT){
 		glBindTexture(GL_TEXTURE_2D, textures[FIRE_RIGHT]); // select the active texture
+		xx1 = x1 + 5.0;
+		xx2 = x2 + 5.0;
 	} else {
 		glBindTexture(GL_TEXTURE_2D, textures[FIRE_LEFT]); // select the active texture
+		xx1 = x1 - 5.0;
+		xx2 = x2 - 5.0;
 	}
 	// Draw objects
 	glBegin(GL_POLYGON);
 		//real coord
-		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
-		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(xx1, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(xx2, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(xx2, y2);
+		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(xx1, y2);
 	glEnd();
 	// Want to draw 5 frames per second
 	if(counter % 3 == 0){
 		//update next frame or reset if reached the end
 		x1_tcoord += x_offset;
-		if(x1_tcoord >= 1.0){
+		if(x1_tcoord >= 0.984375){
 			x1_tcoord = 0.0;
 			state = STAND;
 			buttons[FIRE] = false;

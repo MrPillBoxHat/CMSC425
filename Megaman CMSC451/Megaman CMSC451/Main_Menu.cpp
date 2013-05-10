@@ -3,6 +3,7 @@
 #include "Main_Menu.h"
 #include <GL/glut.h>                // GLUT
 #include <SOIL.h>
+#include "constants.h"
 using namespace std;
 
 Main_Menu::Main_Menu()

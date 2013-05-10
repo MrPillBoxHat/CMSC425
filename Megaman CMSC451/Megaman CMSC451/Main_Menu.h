@@ -15,7 +15,6 @@ class Main_Menu
 		void loadTraining();
 	
 	public:
-		enum states {INTRO, INTRO_PRESS, NEWGAME, CONTINUE, OPTION, TRAINING, INGAME};
 		// Constructor
 		Main_Menu();
 		// getter
