@@ -13,13 +13,15 @@ class X {
 		float x1,x2,y1,y2; // location of X
 		float position[4]; // location of cannon
 		float hit_box[4];
+		float health_location[4];
 		int health;
+		bool health_blocks[28];
 		int state;
 		int direction; // X facing direction
 		int counter; // FPS controller
 		float x1_tcoord; // texture x1 coord
 		float y2_tcoord; // texture y2 coord
-		GLuint textures[18]; // stores texture
+		GLuint textures[22]; // stores texture
 		bool buttons[9]; // keeps track of state (buttons pressed)
 		int frame_count;
 		bool play_3frame;
@@ -35,6 +37,7 @@ class X {
 		void loadDash();
 		void loadDamage();
 		void loadDie();
+		void loadHealth();
 		// Actions
 		void entry();
 		void stand();
@@ -49,6 +52,9 @@ class X {
 		void die();
 		// Move X's coordinates
 		void move();
+		// Draw X's health bar
+		void drawHealth();
+		void gainHealth(int block_number);
 
 	// Contains public functions
 	public:
@@ -57,6 +63,7 @@ class X {
 		// getters
 		int getState(){return state;}
 		int getDirection(){return direction;}
+		int getHealth(){return health;}
 		float *getCannon(){return position;}
 		float *getHitBox(){return hit_box;}
 		// setters
@@ -67,8 +74,11 @@ class X {
 		void setButtons(int button, bool boolean){buttons[button] = boolean;}
 		void resetTexture(){x1_tcoord = 0.0; y2_tcoord = 1.0;}
 		void setFrameOn(){play_3frame = true; frame_count = 1;}
+		void setHitBox(float xx1, float xx2, float yy1, float yy2);
 		// Draw X
 		void draw();
 		// Loads all textures
 		void loadTextures();
+		// When x takes damage
+		void depleteHealth(int block_number);
 };
