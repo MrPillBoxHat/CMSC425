@@ -11,11 +11,9 @@ class ZeroAI
 		X *x;
 		// thinking time
 		int counter;
-		// Actions
-		void run();
-		void jump();
+		void buster_saber_combo();
+		void buster();
 		void saber();
-		void fire();
 		void dash();
 
 	public:

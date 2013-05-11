@@ -79,6 +79,11 @@ void World::update(void)
 	if(zero->getInit()){
 		processAI();
 	}
+	// If zero is on the map
+	if(zero != NULL && x->getState() != DAMAGE){
+		x->detec_collision(zero);
+	}
+	// Check if zero crashed into X
 	// check if we need to update the camera
 	int state = x->getState();
 	switch(state) {
@@ -337,15 +342,27 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 	}
 }
 
+// Process AI commands
 void World::processAI()
 {
 	int action = zAI->getAction();
 	Z_Bullet *temp;
 	switch(action)
 	{
+		// Stand and do nothing
+		case STAND:
+			zero->resetTexture();
+			zero->setState(STAND);
+			break;
+		
 		// Fire
 		case FIRE:
 			temp = new Z_Bullet(zero->getCannon(), zero->getDirection());
+			if(zero->getDirection() == LEFT){
+				zero->setPosition(8.0, 8.0, 0.0, 0.0);
+			} else {
+				zero->setPosition(12.0, 12.0, 0.0, 0.0);
+			}
 			// Create bullet from cannon position
 			zero->resetTexture();
 			z_bullets.push_front(*temp);
@@ -353,9 +370,28 @@ void World::processAI()
 			break;
 
 		case SABER:
-			zero->setPosition(-60.0, 30.0, -7.0, 48.0);
+			// Adjust based on zero's direction
+			if(zero->getDirection() == LEFT){
+				zero->setPosition(-60.0, 30.0, -7.0, 48.0);
+			} else {
+				zero->setPosition(-30.0, 60.0, -7.0, 48.0);
+			}
 			zero->resetTexture();
 			zero->setState(SABER);
+			break;
+
+		case DASH:
+			// Adjust Zero's texture coordinates
+			zero->setPosition(-22.5, 22.5, 0.0, 0.0);
+			zero->resetTexture();
+			zero->setState(DASH);
+			break;
+
+		case RUN:
+			// Adjust Zero's texture coordinates
+			//zero->setPosition(-22.5, 22.5, 0.0, 0.0);
+			zero->resetTexture();
+			zero->setState(RUN);
 			break;
 	}
 }
@@ -534,8 +570,8 @@ void World::enableTextures()
 	// Enables texturess
 	glEnable(GL_TEXTURE_2D);
 	// Enable transparency
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void done(unsigned char key, int x, int y) {

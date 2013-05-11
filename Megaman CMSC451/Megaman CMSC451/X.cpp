@@ -11,6 +11,7 @@
 #include <GL/gl.h>                      // OpenGL
 #include "SOIL.h" 						// Library for loading images
 #include "X.h" 							// X header file
+#include "Zero.h"
 #include "constants.h"
 
 using namespace std;
@@ -63,6 +64,20 @@ void X::setHitBox(float xx1, float xx2, float yy1, float yy2)
 	hit_box[1] += xx2;
 	hit_box[2] += yy1;
 	hit_box[3] += yy2;
+}
+
+// Detecs collision with enemy
+void X::detec_collision(Zero *zero)
+{
+	float *z_hitbox = zero->getHitBox();
+	bool withinSides = hit_box[1] >= z_hitbox[0] && hit_box[0] <= z_hitbox[1];
+	bool withinTopBottom = hit_box[2] <= z_hitbox[3] && hit_box[3] >= z_hitbox[2];
+	if(withinSides && withinTopBottom){
+		resetTexture();
+		setState(DAMAGE);
+		health -= 10;
+		depleteHealth(health/5);
+	}
 }
 
 /***************************************************************************************************

@@ -6,6 +6,7 @@
 #pragma once
 
 #include <GL\glut.h>
+#include "Zero.h"
 
 class X {
 	// Contains X's health and location
@@ -81,4 +82,5 @@ class X {
 		void loadTextures();
 		// When x takes damage
 		void depleteHealth(int block_number);
+		void detec_collision(Zero *zero);
 };

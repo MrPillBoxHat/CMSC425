@@ -17,7 +17,7 @@ Z_Bullet::Z_Bullet(float *position, int inDirection)
 	hit_box[3] = ymid + 3.5;
 	x1_tcoord = 0.0;
 	y2_tcoord = 1.0;
-	damage = -10;
+	damage = -15;
 	direction = inDirection;
 	counter = 0;
 }

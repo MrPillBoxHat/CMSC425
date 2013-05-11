@@ -53,10 +53,12 @@ Animation:
 	- Cannot move when holding down button during freeze animations
 	- Dash hitbox is a bit off
 	- Health bar needs to stop when reaching end of screen (right side)
+	- Jump hit causes constant jumping
 
 	(Zero)
 	- Jump, Saber, dash animation requires resize of texture box
 	- Saber needs to add sword sheath to animation
+	- Zero makes bullet too fast
 
 	(General)
 	- Animation link is out of place

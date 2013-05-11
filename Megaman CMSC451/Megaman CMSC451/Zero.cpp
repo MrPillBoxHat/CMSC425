@@ -437,13 +437,19 @@ void Zero::fire()
 		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1-20.0, y2);
 	glEnd();
 	// Want to draw 5 frames per second
-	if(counter % 8 == 0){
+	if(counter % 6 == 0){
 		//update next frame or reset if reached the end
 		x1_tcoord += x_offset;
 		if(x1_tcoord >= 0.99609375){
 			x1_tcoord = 0.0;
 			y2_tcoord -= y_offset;
 			if(y2_tcoord <= 0){
+				// Reset texture coordinates
+				if(direction == LEFT){
+					setPosition(-8.0, -8.0, 0.0, 0.0);
+				} else {
+					setPosition(-12.0, -12.0, 0.0, 0.0);
+				}
 				resetTexture();
 				state = STAND;
 				buttons[FIRE] = false;
@@ -478,7 +484,11 @@ void Zero::saber()
 		x1_tcoord += x_offset;
 		if(x1_tcoord >= 0.998046875){
 			// Reset texture position
-			setPosition(60.0, -30.0, 7.0, -48.0);
+			if(direction == LEFT){
+				setPosition(60.0, -30.0, 7.0, -48.0);
+			} else {
+				setPosition(30.0, -60.0, 7.0, -48.0);
+			}
 			resetTexture();
 			state = STAND;
 		}
@@ -522,6 +532,8 @@ void Zero::dash()
 					y2_tcoord = 1.0;
 					state = STAND;
 				}
+				// Adjust Zero's texture coordinates
+				setPosition(22.5, -22.5, 0.0, 0.0);
 				buttons[DASH] = false;
 				y2_tcoord = 1.0;
 			}

@@ -25,41 +25,11 @@ int ZeroAI::getAction()
 		} else {
 			zero->setDirection(RIGHT);
 		}
-		return SABER;
+		return FIRE;
 	}
 	counter++;
 	if(counter % 60 == 0){
 		counter = 0;
 	}
-	return STAND;
-}
-
-// run command
-void ZeroAI::run()
-{
-
-}
-
-// jump command
-void ZeroAI::jump()
-{
-
-}
-
-// saber attack command
-void ZeroAI::saber()
-{
-
-}
-
-// buster attack command
-void ZeroAI::fire()
-{
-
-}
-
-// dash command
-void ZeroAI::dash()
-{
-
+	return -1;
 }
