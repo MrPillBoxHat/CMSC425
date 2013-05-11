@@ -56,6 +56,7 @@ Animation:
 
 	(Zero)
 	- Jump, Saber, dash animation requires resize of texture box
+	- Saber needs to add sword sheath to animation
 
 	(General)
 	- Animation link is out of place

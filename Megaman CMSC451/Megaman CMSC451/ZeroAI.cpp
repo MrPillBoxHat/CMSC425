@@ -16,7 +16,7 @@ ZeroAI::ZeroAI(Zero *z, X *inX)
 int ZeroAI::getAction()
 {
 	float *x_location = x->getHitBox();
-	float *zero_location = zero->getPosition();
+	float *zero_location = zero->getHitBox();
 	// If zero is not in an action
 	if(zero->getState() == STAND && counter % 60 == 0){
 		// Make zero face X
@@ -25,7 +25,7 @@ int ZeroAI::getAction()
 		} else {
 			zero->setDirection(RIGHT);
 		}
-		return FIRE;
+		return SABER;
 	}
 	counter++;
 	if(counter % 60 == 0){

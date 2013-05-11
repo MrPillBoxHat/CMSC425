@@ -77,7 +77,7 @@ void World::update(void)
 	}
 	// Ask AI what it wants to do
 	if(zero->getInit()){
-		//processAI();
+		processAI();
 	}
 	// check if we need to update the camera
 	int state = x->getState();
@@ -124,7 +124,7 @@ void World::draw_helper()
 		float *test = x->getHitBox();
 		glColor4f(255, 255, 0, 1);
 		glRectf(test[0], test[2], test[1], test[3]);
-		float *test2 = zero->getPosition();
+		float *test2 = zero->getHitBox();
 		glColor4f(255, 255, 0, 1);
 		glRectf(test2[0], test2[2], test2[1], test2[3]);
 		enableTextures();
@@ -340,15 +340,22 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 void World::processAI()
 {
 	int action = zAI->getAction();
+	Z_Bullet *temp;
 	switch(action)
 	{
 		// Fire
 		case FIRE:
-			Z_Bullet *temp = new Z_Bullet(zero->getCannon(), zero->getDirection());
+			temp = new Z_Bullet(zero->getCannon(), zero->getDirection());
 			// Create bullet from cannon position
 			zero->resetTexture();
 			z_bullets.push_front(*temp);
 			zero->setState(FIRE);
+			break;
+
+		case SABER:
+			zero->setPosition(-60.0, 30.0, -7.0, 48.0);
+			zero->resetTexture();
+			zero->setState(SABER);
 			break;
 	}
 }
@@ -527,8 +534,8 @@ void World::enableTextures()
 	// Enables texturess
 	glEnable(GL_TEXTURE_2D);
 	// Enable transparency
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void done(unsigned char key, int x, int y) {

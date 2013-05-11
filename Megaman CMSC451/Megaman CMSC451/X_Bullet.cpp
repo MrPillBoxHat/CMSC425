@@ -79,7 +79,7 @@ void X_Bullet::draw(GLuint *textures)
 bool X_Bullet::collision(Zero *zero)
 {
 	// Get Zero's Position
-	float *position = zero->getPosition();
+	float *position = zero->getHitBox();
 	// boolean flags to check where the bullet lies
 	bool withinSides = hit_box[1] >= position[0] && hit_box[0] <= position[1];
 	bool withinTopBottom = hit_box[2] <= position[3] && hit_box[3] >= position[2];

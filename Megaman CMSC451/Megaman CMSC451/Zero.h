@@ -62,14 +62,14 @@ class Zero {
 		int getHealth(){return health;}
 		bool getInit(){return init_health;}
 		float *getCannon(){return cannon_position;}
-		float *getPosition();
+		float *getHitBox();
 		// setters
 		void setState(int inState){state = inState; buttons[inState] = true;}
 		void setHealth(int amount){health += amount;}
 		void setDirection(int inDirection){direction = inDirection;}
-		void setXPosition(float inx1, float inx2){x1 += inx1; x2 += inx2;}
 		void setButtons(int button, bool boolean){buttons[button] = boolean;}
 		void resetTexture(){x1_tcoord = 0.0; y2_tcoord = 1.0;}
+		void setPosition(float xx1, float xx2, float yy1, float yy2);
 		// Draw Zero
 		void draw();
 		// Loads all textures

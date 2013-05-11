@@ -51,9 +51,17 @@ Zero::Zero()
 }
 
 // Getter for Zero's position
-float *Zero::getPosition()
+float *Zero::getHitBox()
 {
 	return hit_box;
+}
+
+void Zero::setPosition(float xx1, float xx2, float yy1, float yy2)
+{
+	x1 += xx1;
+	x2 += xx2;
+	y1 += yy1;
+	y2 += yy2;
 }
 
 // Draw Zero
@@ -469,7 +477,10 @@ void Zero::saber()
 		//update next frame or reset if reached the end
 		x1_tcoord += x_offset;
 		if(x1_tcoord >= 0.998046875){
-			x1_tcoord = 0.0;
+			// Reset texture position
+			setPosition(60.0, -30.0, 7.0, -48.0);
+			resetTexture();
+			state = STAND;
 		}
 	}
 }
