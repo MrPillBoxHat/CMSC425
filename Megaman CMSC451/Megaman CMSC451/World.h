@@ -5,7 +5,9 @@
 #include "Zero.h"
 #include "BackGround.h"
 #include "X_Bullet.h"
+#include "Z_Bullet.h"
 #include "Main_Menu.h"
+#include "ZeroAI.h"
 
 class World
 {
@@ -23,11 +25,13 @@ private:
 	// Hero object
 	X *x;
 	Zero *zero;
+	// Misc objects
 	Main_Menu *menu;
+	ZeroAI *zAI;
 	// Variables to keep track of objects and textures
 	// in the world class
 	std::list<X_Bullet> x_bullets;
-	//std::list<Z_Bullet> z_bullets;
+	std::list<Z_Bullet> z_bullets;
 	BackGround bg;
 	GLuint textures[4];
 	// if in main menu
@@ -46,6 +50,7 @@ private:
 	void updateView();
 	void processKeysMenu(unsigned char key);
 	void processKeysGame(unsigned char key);
+	void processAI();
 	void enableTextures();
 
 public:

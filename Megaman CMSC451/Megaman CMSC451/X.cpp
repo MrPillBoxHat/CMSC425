@@ -18,7 +18,7 @@ using namespace std;
 // Contructor
 X::X()
 {
-	health = 50;
+	health = 140;
 	// Coordinates of entry
 	x1 = 305.0;
 	x2 = 433.0;
@@ -40,8 +40,13 @@ X::X()
 	y2_tcoord = 1.0;
 	direction = RIGHT;
 	counter = 0; // Counter is to keep track of FPS
+	// Initialize health blocks and buttons pressed
 	for(int i = 0; i < 9; i++){
 		buttons[i] = false;
+		health_blocks[i] = true;
+	}
+	for(int i = 9; i < 28; i++){
+		health_blocks[i] = true;
 	}
 	bool play_3frame = false;
 	int frame_count = 1;
@@ -57,6 +62,10 @@ void X::draw()
 {
 	// Move X in the world
 	move();
+	// Draws X's health
+	if(state != ENTRY){
+		drawHealth();
+	}
 	// Determines which action to draw
 	switch(state)
 	{
@@ -200,6 +209,74 @@ void X::move()
 				}
 			}
 		}
+	}
+}
+
+/**************************************************************************************************
+* Draw health() functions
+*	Draw X's life.  Increase and decrease base on damage taken
+*   and items retrived
+**************************************************************************************************/
+// Draws Zero's Health bar
+void X::drawHealth()
+{
+	// Draw the bar
+	glBindTexture(GL_TEXTURE_2D, textures[HEALTH_BAR]); // select the active texture
+	glBegin(GL_POLYGON);
+		//real coord
+		glTexCoord2d(0.0, 0.0); glVertex2d(28.0, 194.0);
+		glTexCoord2d(1.0, 0.0); glVertex2d(82.0, 194.0);
+		glTexCoord2d(1.0, 1.0); glVertex2d(82.0, 383.0);
+		glTexCoord2d(0.0, 1.0); glVertex2d(28.0, 383.0);
+	glEnd();
+	// Draw the blocks
+	glBindTexture(GL_TEXTURE_2D, textures[HEALTH_BLOCK]); // select the active texture
+	// position of health blocks
+	float xx1 = 37.0;
+	float xx2 = 69.0;
+	float yy1 = 245.0;
+	float yy2 = 253.0;
+	int i = 0; // counter to iterate through health_blocks
+	// iterate through the blocks and draw them
+	while(health_blocks[i]){
+		glBegin(GL_POLYGON);
+			//real coord
+			glTexCoord2d(0.0, 0.0); glVertex2d(xx1, yy1);
+			glTexCoord2d(1.0, 0.0); glVertex2d(xx2, yy1);
+			glTexCoord2d(1.0, 1.0); glVertex2d(xx2, yy2);
+			glTexCoord2d(0.0, 1.0); glVertex2d(xx1, yy2);
+		glEnd();
+		yy1 += 4.0;
+		yy2 += 4.0;
+		i++; // increment count
+	}
+}
+
+// Draws the animation that fills Zero's health
+void X::gainHealth(int block_number)
+{
+	// iterate through health bar
+	for(int i = 0; i < 28; i++){
+		// if the bar is not there
+		if(!health_blocks[i]){
+			// draw the bar
+			health_blocks[i] = true;
+			break;
+		}
+	}
+}
+
+// Decreases the amount of health blocks
+void X::depleteHealth(int block_number)
+{
+	// start at the end of the array
+	int i = 27;
+	// sets all health blocks to false
+	while(i >= block_number){
+		if(health_blocks[i]){
+			health_blocks[i] = false;
+		}
+		i--;
 	}
 }
 
@@ -501,8 +578,42 @@ void X::dash()
 // Responses
 void X::damage()
 {
-
+	// How many frames to jump
+	float x_offset = 0.125;
+	float y_offset = 1.0;
+	// Draws the frame
+	if(direction == RIGHT){
+		glBindTexture(GL_TEXTURE_2D, textures[DAMAGE_RIGHT]); // select the active texture
+		x1 += 0.1;
+		x2 += 0.1;
+		hit_box[0] += 0.1;
+		hit_box[1] += 0.1;
+	} else {
+		glBindTexture(GL_TEXTURE_2D, textures[DAMAGE_LEFT]); // select the active texture
+		x1 -= 0.1;
+		x2 -= 0.1;
+		hit_box[0] -= 0.1;
+		hit_box[1] -= 0.1;
+	}
+	// Draw objects
+	glBegin(GL_POLYGON);
+		//real coord
+		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
+		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+	glEnd();
+	// Want to draw 5 frames per second
+	if(counter % 8 == 0){
+		//update next frame or reset if reached the end
+		x1_tcoord += x_offset;
+		if(x1_tcoord >= 1.0){
+			resetTexture();
+			state = STAND;
+		}
+	}
 }
+
 void X::die()
 {
 
@@ -526,6 +637,7 @@ void X::loadTextures()
 	loadDash();
 	loadDamage();
 	loadDie();
+	loadHealth();
 }
 
 /***************************************************************************************************
@@ -928,10 +1040,124 @@ void X::loadDash()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 }
 
+// Load X's Health Bar texture
+void X::loadHealth()
+{
+	/* loads entry image directly as a new OpenGL texture */
+	GLuint textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/Health_bar/health_bar.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "XHealthTextureID: " << textureID << endl;
+
+	textures[HEALTH_BAR] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads entry image directly as a new OpenGL texture */
+	textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/health_block.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "ZeroTextureID: " << textureID << endl;
+
+	textures[HEALTH_BLOCK] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+}
+
 // Loads damage (getting hit) images
 void X::loadDamage()
 {
+	/* loads jump right image directly as a new OpenGL texture */
+	GLuint textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/damage/front/damage_right.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
 
+	cout << "XtextureID: " << textureID << endl;
+
+	textures[DAMAGE_RIGHT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads jump left image directly as a new OpenGL texture */
+	textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/damage/front/damage_left.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "XtextureID: " << textureID << endl;
+
+	textures[DAMAGE_LEFT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 }
 
 // Load death image

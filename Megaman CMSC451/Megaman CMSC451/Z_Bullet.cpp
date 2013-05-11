@@ -1,12 +1,12 @@
-#include "X_Bullet.h"
+#include "Z_Bullet.h"
+#include "X.h"
 #include "constants.h"
-#include "Zero.h"
 
 // Constructor
-X_Bullet::X_Bullet(float *position, int inDirection)
+Z_Bullet::Z_Bullet(float *position, int inDirection)
 {
 	x1 = position[0];
-	x2 = position[1];
+	x2 = position[1]+20.0;
 	y1 = position[2];
 	y2 = position[3];
 	float xmid = x1 + ((x2-x1)/2);
@@ -17,24 +17,21 @@ X_Bullet::X_Bullet(float *position, int inDirection)
 	hit_box[3] = ymid + 3.5;
 	x1_tcoord = 0.0;
 	y2_tcoord = 1.0;
-	damage = -5;
-	state = 0;
+	damage = -10;
 	direction = inDirection;
 	counter = 0;
 }
 
-void X_Bullet::draw(GLuint *textures)
+void Z_Bullet::draw(GLuint *texture, int direction)
 {
 	// How many frames to jump
-	float x_offset;
+	float x_offset = 0.125;
 	float y_offset = 1.0;
 	// Draws the frame
-	if(state != DIE){
-		glBindTexture(GL_TEXTURE_2D, textures[XBULLET]); // select the active texture
-		x_offset = 0.5;
+	if(direction == LEFT){
+		glBindTexture(GL_TEXTURE_2D, texture[Z_BULLET_LEFT]); // select the active texture
 	} else {
-		glBindTexture(GL_TEXTURE_2D, textures[XBULLETDIE]); // select the active texture
-		x_offset = 0.328125;
+		glBindTexture(GL_TEXTURE_2D, texture[Z_BULLET_RIGHT]); // select the active texture
 	}
 	// Draw objects
 	glBegin(GL_POLYGON);
@@ -44,48 +41,34 @@ void X_Bullet::draw(GLuint *textures)
 		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
 		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
 	glEnd();
-	if(state != DIE){
-		if(direction == 0){
-			// Move bullet
-			x1 -= 9.0;
-			x2 -= 9.0;
-			hit_box[0] -= 9.0;
-			hit_box[1] -= 9.0;
-		} else {
-			x1 += 9.0;
-			x2 += 9.0;
-			hit_box[0] += 9.0;
-			hit_box[1] += 9.0;
-		}
+	if(direction == 0){
+		// Move bullet
+		x1 -= 5.0;
+		x2 -= 5.0;
+		hit_box[0] -= 5.0;
+		hit_box[1] -= 5.0;
+	} else {
+		x1 += 5.0;
+		x2 += 5.0;
+		hit_box[0] += 5.0;
+		hit_box[1] += 5.0;
 	}
 	// update next frame or reset if reached the end
-	// Control FPS
 	x1_tcoord += x_offset;
-	if(state == DIE){
-		if(counter % 60 == 0){
-			if(x1_tcoord >= 0.984375){
-				// Move bullet to where it will be deleted
-				x1 = -100;
-				x2 = -100;
-			}
-		}
-	} else {
-		if(x1_tcoord >= 0.984375){
-			x1_tcoord = 0.0;
-		}
+	if(x1_tcoord >= 1.0){
+		x1_tcoord = 0.75;
 	}
 }
 
-bool X_Bullet::collision(Zero *zero)
+bool Z_Bullet::collision(X *x)
 {
 	// Get Zero's Position
-	float *position = zero->getPosition();
+	float *position = x->getHitBox();
 	// boolean flags to check where the bullet lies
 	bool withinSides = hit_box[1] >= position[0] && hit_box[0] <= position[1];
 	bool withinTopBottom = hit_box[2] <= position[3] && hit_box[3] >= position[2];
 	// Check if the bullet touches Zero
 	if(withinSides && withinTopBottom){
-		state = DIE;
 		return true;
 	}
 	return false;

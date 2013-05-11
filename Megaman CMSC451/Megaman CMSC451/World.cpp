@@ -12,6 +12,7 @@
 #include <GL/glut.h>                // GLUT
 #include <list>
 #include "constants.h"
+#include "ZeroAI.h"
 
 #define SET_BG_COLOR glClearColor(0.0, 0.0, 0.0, 1.0)
 
@@ -30,6 +31,7 @@ World::World(GLdouble w, GLdouble h)
 	zero->loadTextures();
 	menu = new Main_Menu();
 	menu->loadTextures();
+	zAI = new ZeroAI(zero, x);
 	// initialize world instance variables
 	width = w;
 	height = h;
@@ -42,7 +44,7 @@ World::World(GLdouble w, GLdouble h)
 	frames = 0;
 	fps = 60;
 	// If in main menu
-	main_menu = false; 
+	main_menu = false;
 	cmX = 0;
 	// Initialize textures for intro and bullet
 	loadTextures();
@@ -73,7 +75,8 @@ void World::update(void)
 		frames = 0;
 		lapse_time = 0;
 	}
-
+	// Ask AI what it wants to do
+	//processAI();
 	// check if we need to update the camera
 	int state = x->getState();
 	switch(state) {
@@ -149,9 +152,7 @@ void World::processKeys(unsigned char key, int x_coord, int y_coord)
 	if(main_menu){
 		processKeysMenu(key);
 	} else {
-		if(zero != NULL && zero->getInit()){
-			processKeysGame(key);
-		}
+		processKeysGame(key);
 	}
 }
 
@@ -228,7 +229,7 @@ void World::processKeysGame(unsigned char key)
 {
 	const int old = cmX;
 	int hero_state = x->getState();
-	if(hero_state != ENTRY){
+	if(hero_state != ENTRY && (zero == NULL || zero->getInit())){
 		switch(key)
 		{
 			// Jump
@@ -310,7 +311,7 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 			case 's': // Kneel
 			case MOVE_LEFT: // Move Left
 			case MOVE_RIGHT: // Move Right
-				if(hero_state != JUMP && hero_state != ENTRY && hero_state != DASH){
+				if(hero_state != JUMP && hero_state != ENTRY && hero_state != DASH && (zero == NULL || zero->getInit())){
 					// Reset state
 					x->setState(STAND);
 					x->resetTexture();
@@ -326,10 +327,25 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 	}
 }
 
+void World::processAI()
+{
+	int action = zAI->getAction();
+	switch(action)
+	{
+		// Fire
+		case FIRE:
+			Z_Bullet *temp = new Z_Bullet(zero->getCannon(), zero->getDirection());
+			// Create bullet from cannon position
+			z_bullets.push_front(*temp);
+			zero->setState(FIRE);
+			break;
+	}
+}
+
 // Draw X_bullet
 void World::bullet_draw()
 {
-	// Go through each bullet in the world and draw them
+	// Go through each X_bullet in the world and draw them
 	list<X_Bullet>::iterator it = x_bullets.begin();
 	while(it != x_bullets.end()){
 		if(it->collision(zero) && zero->getState() != DAMAGE){
@@ -347,6 +363,27 @@ void World::bullet_draw()
 		// If bullet hits something
 		} else {
 			it++;
+		}
+	}
+
+	// Go through each Z_bullet in the world and draw them
+	list<Z_Bullet>::iterator it2 = z_bullets.begin();
+	while(it2 != z_bullets.end()){
+		if(it2->collision(x) && x->getState() != DAMAGE){
+			// Reset texture only if not already in damage animation
+			x->resetTexture();
+			x->setState(DAMAGE);
+			x->setHealth(it2->getDamage());
+			x->depleteHealth(x->getHealth()/5);
+		}
+		// draw bullet
+		it2->draw(textures, zero->getDirection());
+		// If bullet reaches end of the screen, delete it
+		if(it2->getX1() <= cmX-20 || it2->getX2() >= bg.viewWidth+cmX+20){
+			it2 = z_bullets.erase(it2);
+		// If bullet hits something
+		} else {
+			it2++;
 		}
 	}
 }
@@ -377,7 +414,7 @@ void World::loadXBullet()
 		exit(0);
 	}
 
-	cout << "WorldtextureID: " << textures[XBULLET] << endl;
+	cout << "XBullettextureID: " << textures[XBULLET] << endl;
 
 	glBindTexture(GL_TEXTURE_2D, textures[XBULLET]); // select the active texture
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -404,7 +441,7 @@ void World::loadXBullet()
 		exit(0);
 	}
 
-	cout << "WorldtextureID: " << textures[XBULLETDIE] << endl;
+	cout << "XBullettextureID: " << textures[XBULLETDIE] << endl;
 
 	glBindTexture(GL_TEXTURE_2D, textures[XBULLETDIE]); // select the active texture
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -421,7 +458,7 @@ void World::loadZBullet()
 	/* loads entry image directly as a new OpenGL texture */
 	textures[Z_BULLET_LEFT] = SOIL_load_OGL_texture
 	(
-		"Sprites/Zero/Bullet/Zero_Bullet_Right.png",
+		"Sprites/Zero/Bullet/Zero_Bullet_left.png",
 		SOIL_LOAD_AUTO,
 		SOIL_CREATE_NEW_ID,
 		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
@@ -434,7 +471,7 @@ void World::loadZBullet()
 		exit(0);
 	}
 
-	cout << "WorldtextureID: " << textures[Z_BULLET_LEFT] << endl;
+	cout << "ZBullettextureID: " << textures[Z_BULLET_LEFT] << endl;
 
 	glBindTexture(GL_TEXTURE_2D, textures[Z_BULLET_LEFT]); // select the active texture
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -448,7 +485,7 @@ void World::loadZBullet()
 	/* loads entry image directly as a new OpenGL texture */
 	textures[Z_BULLET_RIGHT] = SOIL_load_OGL_texture
 	(
-		"Sprites/Zero/Bullet/Zero_Bullet_Right.png",
+		"Sprites/Zero/Bullet/Zero_Bullet_right.png",
 		SOIL_LOAD_AUTO,
 		SOIL_CREATE_NEW_ID,
 		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
@@ -461,7 +498,7 @@ void World::loadZBullet()
 		exit(0);
 	}
 
-	cout << "WorldtextureID: " << textures[Z_BULLET_RIGHT] << endl;
+	cout << "ZBullettextureID: " << textures[Z_BULLET_RIGHT] << endl;
 
 	glBindTexture(GL_TEXTURE_2D, textures[Z_BULLET_RIGHT]); // select the active texture
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);

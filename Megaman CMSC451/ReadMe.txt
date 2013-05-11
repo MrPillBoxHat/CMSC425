@@ -41,24 +41,22 @@ ______________________________________________________________
 Animation:
 
 	(X)
-	- Run animation has some kind of white line on top
 	- Need to fix animation timings (some frames should
 	  be displayed longer than other frames).
 	- Fire needs to continue until finished firing
 	- Jump -> run needs frame timing fixes.  Doesn't look natural
 	- combination of keys + jump causes flags to screw up
-	- Bullet animation needs to be fixed according to hitting wall
 	- Jump fire animation is bugged, not working at all.  Causing X
 	  to move wrong on the Y plane
 	- Can change direction while in dash animation
 	- character still slides when doing fire and dash animation
+	- Cannot move when holding down button during freeze animations
 
 	(Zero)
 	- Jump, Saber, dash animation requires resize of texture box
-	- Damage animation messy
 
 	(General)
 	- Animation link is out of place
-	- fix hitbox
+	- adjusts hitbox depending on action
 
 Camera:

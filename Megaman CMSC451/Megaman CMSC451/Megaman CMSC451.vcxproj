@@ -97,6 +97,8 @@
     <ClInclude Include="X.h" />
     <ClInclude Include="X_Bullet.h" />
     <ClInclude Include="Zero.h" />
+    <ClInclude Include="ZeroAI.h" />
+    <ClInclude Include="Z_Bullet.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\image_DXT.c" />
@@ -110,6 +112,8 @@
     <ClCompile Include="World.cpp" />
     <ClCompile Include="X.cpp" />
     <ClCompile Include="Zero.cpp" />
+    <ClCompile Include="ZeroAI.cpp" />
+    <ClCompile Include="Z_Bullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Main Screen\Main_Screen_Blank.png" />

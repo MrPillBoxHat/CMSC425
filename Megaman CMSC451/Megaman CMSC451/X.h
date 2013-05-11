@@ -14,6 +14,7 @@ class X {
 		float position[4]; // location of cannon
 		float hit_box[4];
 		int health;
+		bool health_blocks[28];
 		int state;
 		int direction; // X facing direction
 		int counter; // FPS controller
@@ -35,6 +36,7 @@ class X {
 		void loadDash();
 		void loadDamage();
 		void loadDie();
+		void loadHealth();
 		// Actions
 		void entry();
 		void stand();
@@ -49,6 +51,9 @@ class X {
 		void die();
 		// Move X's coordinates
 		void move();
+		// Draw X's health bar
+		void drawHealth();
+		void gainHealth(int block_number);
 
 	// Contains public functions
 	public:
@@ -57,6 +62,7 @@ class X {
 		// getters
 		int getState(){return state;}
 		int getDirection(){return direction;}
+		int getHealth(){return health;}
 		float *getCannon(){return position;}
 		float *getHitBox(){return hit_box;}
 		// setters
@@ -71,4 +77,6 @@ class X {
 		void draw();
 		// Loads all textures
 		void loadTextures();
+		// When x takes damage
+		void depleteHealth(int block_number);
 };
