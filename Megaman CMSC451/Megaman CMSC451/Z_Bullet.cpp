@@ -5,8 +5,8 @@
 // Constructor
 Z_Bullet::Z_Bullet(float *position, int inDirection)
 {
-	x1 = position[0];
-	x2 = position[1]+20.0;
+	x1 = position[0]-70.0;
+	x2 = position[1]-20.0;
 	y1 = position[2];
 	y2 = position[3];
 	float xmid = x1 + ((x2-x1)/2);
@@ -54,9 +54,12 @@ void Z_Bullet::draw(GLuint *texture, int direction)
 		hit_box[1] += 5.0;
 	}
 	// update next frame or reset if reached the end
-	x1_tcoord += x_offset;
-	if(x1_tcoord >= 1.0){
-		x1_tcoord = 0.75;
+	counter++;
+	if(counter % 7 == 0){
+		x1_tcoord += x_offset;
+		if(x1_tcoord >= 1.0){
+			x1_tcoord = 0.625;
+		}
 	}
 }
 
