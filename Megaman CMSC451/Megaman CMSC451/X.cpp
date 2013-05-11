@@ -30,8 +30,8 @@ X::X()
 	position[2] = 114.0;
 	position[3] = 151.0;
 	// Hit box for X
-	hit_box[0] = 348.0;
-	hit_box[1] = 380.2;
+	hit_box[0] = 350.0;
+	hit_box[1] = 382.2;
 	hit_box[2] = 99.0;
 	hit_box[3] = 145.0;
 	// Initialize X's state
@@ -318,8 +318,8 @@ void X::entry()
 					// Go into standing state
 					state = STAND;
 					// Resets coordinates
-					x1 = 338.0;
-					x2 = 389.2;
+					x1 = 342.0;
+					x2 = 393.2;
 					y1 = 99.0;
 					y2 = 163.0;
 					resetTexture();

@@ -20,17 +20,17 @@ Zero::Zero()
 {
 	health = 140;
 	// Coordinates of entry
-	x1 = 405.0;
-	x2 = 533.0;
-	y1 = 500.0;
-	y2 = 628.0;
+	x1 = 403.5;
+	x2 = 532.5;
+	y1 = 499.0;
+	y2 = 627.0;
 	// Cannon position after entry animation
 	cannon_position[0] = 477.4;
 	cannon_position[1] = 508.0;
 	cannon_position[2] = 114.0;
 	cannon_position[3] = 151.0;
 	// collision box
-	hit_box[0] = 453.0;
+	hit_box[0] = 451.0;
 	hit_box[1] = 484.2;
 	hit_box[2] = 100.0;
 	hit_box[3] = 145.0;
@@ -262,7 +262,7 @@ void Zero::entry()
 	glEnd();
 	// Update frame pointers
 	// If Zero has not landed
-	if(y1 != 65.0){
+	if(y1 != 64.0){
 		y1 -= 5.0;
 		y2 -= 5.0;
 	} else {
@@ -277,10 +277,10 @@ void Zero::entry()
 					// Go into standing state
 					state = STAND;
 					// Resets coordinates
-					x1 = 443.0;
-					x2 = 494.2;
-					y1 = 99.0;
-					y2 = 163.0;
+					x1 = 440.0;
+					x2 = 491.2;
+					y1 = 97.0;
+					y2 = 161.0;
 					resetTexture();
 				} else {
 					// Reset x frame pointer
@@ -423,10 +423,10 @@ void Zero::fire()
 	// Draw objects
 	glBegin(GL_POLYGON);
 		//real coord
-		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
+		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1-20.0, y1);
 		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
 		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
-		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1-20.0, y2);
 	glEnd();
 	// Want to draw 5 frames per second
 	if(counter % 8 == 0){

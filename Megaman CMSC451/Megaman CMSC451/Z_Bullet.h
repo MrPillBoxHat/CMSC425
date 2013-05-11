@@ -30,5 +30,5 @@ class Z_Bullet
 		void setX1Coord(float x){x1_tcoord = x;}
 		// public functions
 		bool collision(X *x);
-		void draw(GLuint *texture, int direction);
+		void draw(GLuint *texture);
 };

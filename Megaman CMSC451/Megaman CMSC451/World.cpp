@@ -118,12 +118,18 @@ void World::draw_helper()
 		menu->draw();
 	} else {
 		bg.draw();
-
+		//yellow block
+		float *test = x->getHitBox();
+		glColor4f(255, 255, 0, 1);
+		glRectf(test[0], test[2], test[1], test[3]);
+		float *test2 = zero->getPosition();
+		glColor4f(255, 255, 0, 1);
+		glRectf(test2[0], test2[2], test2[1], test2[3]);
 		enableTextures();
 		glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
+		bullet_draw(); // Draws all bullets on map
 		zero->draw(); // Draws zero
 		x->draw(); // Draws X
-		bullet_draw(); // Draws all bullets on map
 	}
 	// disable texturings
 	glDisable(GL_BLEND);
@@ -336,6 +342,7 @@ void World::processAI()
 		case FIRE:
 			Z_Bullet *temp = new Z_Bullet(zero->getCannon(), zero->getDirection());
 			// Create bullet from cannon position
+			zero->resetTexture();
 			z_bullets.push_front(*temp);
 			zero->setState(FIRE);
 			break;
@@ -377,7 +384,7 @@ void World::bullet_draw()
 			x->depleteHealth(x->getHealth()/5);
 		}
 		// draw bullet
-		it2->draw(textures, zero->getDirection());
+		it2->draw(textures);
 		// If bullet reaches end of the screen, delete it
 		if(it2->getX1() <= cmX-20 || it2->getX2() >= bg.viewWidth+cmX+20){
 			it2 = z_bullets.erase(it2);

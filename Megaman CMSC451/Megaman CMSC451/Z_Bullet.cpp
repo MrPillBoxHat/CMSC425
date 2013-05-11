@@ -5,7 +5,7 @@
 // Constructor
 Z_Bullet::Z_Bullet(float *position, int inDirection)
 {
-	x1 = position[0]-70.0;
+	x1 = position[0]-60.0;
 	x2 = position[1]-20.0;
 	y1 = position[2];
 	y2 = position[3];
@@ -22,7 +22,7 @@ Z_Bullet::Z_Bullet(float *position, int inDirection)
 	counter = 0;
 }
 
-void Z_Bullet::draw(GLuint *texture, int direction)
+void Z_Bullet::draw(GLuint *texture)
 {
 	// How many frames to jump
 	float x_offset = 0.125;
