@@ -299,6 +299,8 @@ void World::processKeysGame(unsigned char key)
 			case MOVE_DASH:
 				// if X not in the air and not already dashing
 				if(hero_state != JUMP && hero_state != DASH){
+					// Hit box for X
+					x->setHitBox(0.0, 8.0, 0.0, -7.0);
 					x->resetTexture();
 					x->setState(DASH);
 				}

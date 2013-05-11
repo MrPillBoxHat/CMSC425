@@ -51,6 +51,8 @@ Animation:
 	- Can change direction while in dash animation
 	- character still slides when doing fire and dash animation
 	- Cannot move when holding down button during freeze animations
+	- Dash hitbox is a bit off
+	- Health bar needs to stop when reaching end of screen (right side)
 
 	(Zero)
 	- Jump, Saber, dash animation requires resize of texture box

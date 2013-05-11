@@ -34,6 +34,10 @@ X::X()
 	hit_box[1] = 382.2;
 	hit_box[2] = 99.0;
 	hit_box[3] = 145.0;
+	health_location[0] = 28.0;
+	health_location[1] = 82.0;
+	health_location[2] = 194.0;
+	health_location[3] = 383.0;
 	// Initialize X's state
 	state = ENTRY;
 	x1_tcoord = 0.0;
@@ -50,6 +54,15 @@ X::X()
 	}
 	bool play_3frame = false;
 	int frame_count = 1;
+}
+
+// Sets up hitbox
+void X::setHitBox(float xx1, float xx2, float yy1, float yy2)
+{
+	hit_box[0] += xx1;
+	hit_box[1] += xx2;
+	hit_box[2] += yy1;
+	hit_box[3] += yy2;
 }
 
 /***************************************************************************************************
@@ -131,6 +144,14 @@ void X::move()
 			position[1] -= CM_DASH;
 			hit_box[0] -= CM_DASH;
 			hit_box[1] -= CM_DASH;
+			// Don't move health bar off the screen
+			if(health_location[0] - CM_DASH < 28.0){
+				health_location[0] = 28.0;
+				health_location[1] = 82.0;
+			} else {
+				health_location[0] -= CM_DASH;
+				health_location[1] -= CM_DASH;
+			}
 		} else {
 			x1 += CM_DASH;
 			x2 += CM_DASH;
@@ -138,6 +159,8 @@ void X::move()
 			position[1] += CM_DASH;
 			hit_box[0] += CM_DASH;
 			hit_box[1] += CM_DASH;
+			health_location[0] += CM_DASH;
+			health_location[1] += CM_DASH;
 		}
 	// Normal movements
 	} else {
@@ -150,6 +173,14 @@ void X::move()
 				position[1] -= CM_WALK;
 				hit_box[0] -= CM_WALK;
 				hit_box[1] -= CM_WALK;
+				// Don't move health bar off the screen
+				if(health_location[0] - CM_WALK < 28.0){
+					health_location[0] = 28.0;
+					health_location[1] = 82.0;
+				} else {
+					health_location[0] -= CM_WALK;
+					health_location[1] -= CM_WALK;
+				}
 			} else {
 				x1 += CM_WALK;
 				x2 += CM_WALK;
@@ -157,6 +188,8 @@ void X::move()
 				position[1] += CM_WALK;
 				hit_box[0] += CM_WALK;
 				hit_box[1] += CM_WALK;
+				health_location[0] += CM_WALK;
+				health_location[1] += CM_WALK;
 			}
 		}
 	}
@@ -224,21 +257,21 @@ void X::drawHealth()
 	glBindTexture(GL_TEXTURE_2D, textures[HEALTH_BAR]); // select the active texture
 	glBegin(GL_POLYGON);
 		//real coord
-		glTexCoord2d(0.0, 0.0); glVertex2d(28.0, 194.0);
-		glTexCoord2d(1.0, 0.0); glVertex2d(82.0, 194.0);
-		glTexCoord2d(1.0, 1.0); glVertex2d(82.0, 383.0);
-		glTexCoord2d(0.0, 1.0); glVertex2d(28.0, 383.0);
+		glTexCoord2d(0.0, 0.0); glVertex2d(health_location[0], health_location[2]);
+		glTexCoord2d(1.0, 0.0); glVertex2d(health_location[1], health_location[2]);
+		glTexCoord2d(1.0, 1.0); glVertex2d(health_location[1], health_location[3]);
+		glTexCoord2d(0.0, 1.0); glVertex2d(health_location[0], health_location[3]);
 	glEnd();
 	// Draw the blocks
 	glBindTexture(GL_TEXTURE_2D, textures[HEALTH_BLOCK]); // select the active texture
 	// position of health blocks
-	float xx1 = 37.0;
-	float xx2 = 69.0;
-	float yy1 = 245.0;
-	float yy2 = 253.0;
+	float xx1 = health_location[0] + 9.0;
+	float xx2 = health_location[1] - 13.0;
+	float yy1 = health_location[2] + 51.0;
+	float yy2 = health_location[3] - 130.0;
 	int i = 0; // counter to iterate through health_blocks
 	// iterate through the blocks and draw them
-	while(health_blocks[i]){
+	while(i < 28 && health_blocks[i]){
 		glBegin(GL_POLYGON);
 			//real coord
 			glTexCoord2d(0.0, 0.0); glVertex2d(xx1, yy1);
@@ -570,6 +603,9 @@ void X::dash()
 				x1_tcoord = 0.0;
 				state = STAND;
 			}
+
+			// Reset hitbox
+			setHitBox(0.0, -8.0, 0.0, 7.0);
 			buttons[DASH] = false;
 		}
 	}

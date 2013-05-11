@@ -13,6 +13,7 @@ class X {
 		float x1,x2,y1,y2; // location of X
 		float position[4]; // location of cannon
 		float hit_box[4];
+		float health_location[4];
 		int health;
 		bool health_blocks[28];
 		int state;
@@ -73,6 +74,7 @@ class X {
 		void setButtons(int button, bool boolean){buttons[button] = boolean;}
 		void resetTexture(){x1_tcoord = 0.0; y2_tcoord = 1.0;}
 		void setFrameOn(){play_3frame = true; frame_count = 1;}
+		void setHitBox(float xx1, float xx2, float yy1, float yy2);
 		// Draw X
 		void draw();
 		// Loads all textures
