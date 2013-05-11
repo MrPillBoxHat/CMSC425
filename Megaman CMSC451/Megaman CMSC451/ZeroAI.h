@@ -11,14 +11,26 @@ class ZeroAI
 		X *x;
 		// thinking time
 		int counter;
-		void buster_saber_combo();
-		void buster();
-		void saber();
-		void dash();
+		// Actions performed in sequence
+		int combo;
+		int state;
+		// Keeps track of X and Zero location
+		float *x_location;
+		float *zero_location;
+		int buster_saber_combo();
+		int buster();
+		int saber();
+		int tackle();
+		int dash();
+		
+		// action states
+		enum action {THINK, SABERBUSTER, Z_SABER, BUSTER, TACKLE};
 
 	public:
 		// Constructor
 		ZeroAI(Zero *z, X *inX);
+		// Setter
+		void setState(int inState){state = inState;}
 		// AI tells Zero what to do
 		int getAction();
 };
