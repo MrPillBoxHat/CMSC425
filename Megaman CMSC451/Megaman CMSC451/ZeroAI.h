@@ -17,11 +17,14 @@ class ZeroAI
 		// Keeps track of X and Zero location
 		float *x_location;
 		float *zero_location;
+		bool zeroIsRight;
+		int distance;
 		int buster_saber_combo();
 		int buster();
 		int saber();
 		int tackle();
 		int dash();
+		void update();
 		
 		// action states
 		enum action {THINK, SABERBUSTER, Z_SABER, BUSTER, TACKLE};

@@ -14,6 +14,7 @@ ZeroAI::ZeroAI(Zero *z, X *inX)
 	combo = 0;
 	x_location = x->getHitBox();
 	zero_location = zero->getHitBox();
+	zeroIsRight = x_location[1] < zero_location[0];
 }
 
 // Start AI
@@ -21,6 +22,7 @@ int ZeroAI::getAction()
 {
 	// If zero is not in an action
 	if(zero->getState() == STAND && counter % 169 == 0 && combo == 0){
+		update();
 		// Make zero face X
 		if(x_location[1] < zero_location[0]){
 			zero->setDirection(LEFT);
@@ -31,6 +33,7 @@ int ZeroAI::getAction()
 		return saber();
 	}
 	if(zero->getState() == STAND && combo != 0){
+		update();
 		return saber();
 	}
 	counter++;
@@ -38,6 +41,22 @@ int ZeroAI::getAction()
 		counter = 0;
 	}
 	return -1;
+}
+
+// Update instance variables
+void ZeroAI::update()
+{
+	zeroIsRight = x_location[1] < zero_location[0];
+	// Check if X is within saber range
+	if(zeroIsRight){
+		// Turn zero to face right
+		zero->setDirection(LEFT);
+		distance = zero_location[0] - x_location[1];
+	} else {
+		// Turn zero to face left
+		zero->setDirection(RIGHT);
+		distance = x_location[1] - zero_location[0];
+	}
 }
 
 int ZeroAI::buster_saber_combo()
@@ -55,19 +74,18 @@ int ZeroAI::buster_saber_combo()
 int ZeroAI::saber()
 {
 	// flags to check conditions
-	bool zeroIsRight = x_location[1] < zero_location[0];
 	bool xInRange = false;
 	// Check if X is within saber range
 	if(zeroIsRight){
 		// Turn zero to face right
 		zero->setDirection(LEFT);
-		if(65 > zero_location[0] - x_location[1]){
+		if(50 > zero_location[0] - x_location[1]){
 			xInRange = true;
 		}
 	} else {
 		// Turn zero to face left
 		zero->setDirection(RIGHT);
-		if(65 > (x_location[1] - zero_location[0])){
+		if(50 > (x_location[1] - zero_location[0])){
 			 xInRange = true;
 		 }
 	}
@@ -84,7 +102,6 @@ int ZeroAI::saber()
 int ZeroAI::tackle()
 {
 	// flags to check conditions
-	bool zeroIsRight = x_location[1] < zero_location[0];
 	bool passX;
 	if(zeroIsRight){
 		passX = x_location[0] > zero_location[1];
@@ -98,7 +115,7 @@ int ZeroAI::tackle()
 		} else {
 			zero->setDirection(RIGHT);
 		}
-		combo == 0;
+		combo = 0;
 	// dash until contact is made
 	} else {
 		return dash();

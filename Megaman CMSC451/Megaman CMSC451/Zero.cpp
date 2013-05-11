@@ -477,7 +477,7 @@ void Zero::saber()
 		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
 	glEnd();
 	// Want to draw 5 frames per second
-	if(counter % 5 == 0){
+	if(counter % 3 == 0){
 		//update next frame or reset if reached the end
 		x1_tcoord += x_offset;
 		if(x1_tcoord >= 0.998046875){
