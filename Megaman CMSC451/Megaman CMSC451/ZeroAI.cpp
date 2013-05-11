@@ -1,4 +1,6 @@
 #pragma once
+#include <ctime>
+#include <cstdlib>
 #include "ZeroAI.h"
 #include "Zero.h"
 #include "X.h"	
@@ -9,43 +11,86 @@ ZeroAI::ZeroAI(Zero *z, X *inX)
 {
 	zero = z;
 	x = inX;
-	counter = 0;
+	counter = -1;
 	state = THINK;
+	last_action = THINK;
 	combo = 0;
 	x_location = x->getHitBox();
 	zero_location = zero->getHitBox();
 	zeroIsRight = x_location[1] < zero_location[0];
+	srand(time(0));
 }
 
 // Start AI
-int ZeroAI::getAction()
-{
-	// If zero is not in an action
-	if(zero->getState() == STAND && counter % 169 == 0 && combo == 0){
-		update();
-		// Make zero face X
-		if(x_location[1] < zero_location[0]){
-			zero->setDirection(LEFT);
-		} else {
-			zero->setDirection(RIGHT);
-		}
-		combo++;
-		return saber();
-	}
-	if(zero->getState() == STAND && combo != 0){
-		update();
-		return saber();
-	}
+int ZeroAI::getAction(){
 	counter++;
-	if(counter % 170 == 0){
+	if(counter % 101 == 0){
 		counter = 0;
 	}
+	// If not in an action, perform new action
+	if(zero->getState() == STAND){
+		update();
+		if(combo == 0 && counter % 100 == 0){
+			// new action
+			return runAI();
+		// If in the middle of an action, keep going
+		} else {
+			switch(state)
+			{
+				case Z_SABER:
+					return saber();
+					
+				case SABERBUSTER:
+					return buster_saber_combo();
+					
+				case TACKLE:
+					return tackle();
+					
+			}
+		}
+	}
+	// Do nothing
 	return -1;
+}
+
+int ZeroAI::runAI()
+{
+	random = rand() % 3;
+	if(last_action == Z_SABER || last_action == TACKLE){
+		last_action = MOVE_AWAY;
+		return dashAway();
+	} else if (distance <= 50) {
+		last_action = Z_SABER;
+		return saber();
+	} else if (distance > 50 && distance <= 400){
+		// Randomly perform either saber, tackle, or buster attack
+		if(random == 0){
+			last_action = state = Z_SABER;
+			return saber();
+		} else if(random == 1) {
+			state = last_action = BUSTER;
+			return buster();
+		} else {
+			state = last_action = TACKLE;
+			return tackle();
+		}
+	// Perform saber buster combo
+	} else {
+		state = last_action = SABERBUSTER;
+		return buster_saber_combo();
+	}
 }
 
 // Update instance variables
 void ZeroAI::update()
 {
+	// Check if zero passed X
+	if(zeroIsRight){
+		passX = x_location[0] > zero_location[1];
+	} else {
+		passX = x_location[1] < zero_location[0];
+	}
+	// update Zero's position
 	zeroIsRight = x_location[1] < zero_location[0];
 	// Check if X is within saber range
 	if(zeroIsRight){
@@ -55,15 +100,16 @@ void ZeroAI::update()
 	} else {
 		// Turn zero to face left
 		zero->setDirection(RIGHT);
-		distance = x_location[1] - zero_location[0];
+		distance = x_location[0] - zero_location[1];
 	}
 }
 
 int ZeroAI::buster_saber_combo()
 {
 	// If first or 2nd attack
-	if(combo == 1 || combo == 2){
+	if(combo == 0 || combo == 1){
 		combo++;
+		state = SABERBUSTER;
 		return buster();
 	// If 3rd attack
 	} else {
@@ -79,13 +125,13 @@ int ZeroAI::saber()
 	if(zeroIsRight){
 		// Turn zero to face right
 		zero->setDirection(LEFT);
-		if(50 > zero_location[0] - x_location[1]){
+		if(50 > distance){
 			xInRange = true;
 		}
 	} else {
 		// Turn zero to face left
 		zero->setDirection(RIGHT);
-		if(50 > (x_location[1] - zero_location[0])){
+		if(50 > distance){
 			 xInRange = true;
 		 }
 	}
@@ -93,21 +139,17 @@ int ZeroAI::saber()
 	if(xInRange){
 		// reset combo
 		combo = 0;
+		state = THINK;
+		counter = 100; // react imediately
 		return SABER;
 	} else {
-		return dash();
+		combo++;
+		return dashFoward();
 	}
 }
 
 int ZeroAI::tackle()
 {
-	// flags to check conditions
-	bool passX;
-	if(zeroIsRight){
-		passX = x_location[0] > zero_location[1];
-	} else {
-		passX = x_location[1] < zero_location[0];
-	}
 	// If passed X, face X
 	if(passX){
 		if(zeroIsRight){
@@ -116,13 +158,27 @@ int ZeroAI::tackle()
 			zero->setDirection(RIGHT);
 		}
 		combo = 0;
+		state = THINK;
+		counter = 100;
+		return STAND;
 	// dash until contact is made
 	} else {
-		return dash();
+		combo++;
+		return dashFoward();
 	}
 }
 
-int ZeroAI::dash(){
+int ZeroAI::dashFoward(){
+	return DASH;
+}
+
+int ZeroAI::dashAway()
+{
+	if(zeroIsRight){
+		zero->setDirection(RIGHT);
+	} else {
+		zero->setDirection(LEFT);
+	}
 	return DASH;
 }
 

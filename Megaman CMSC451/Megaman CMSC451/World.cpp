@@ -125,18 +125,19 @@ void World::draw_helper()
 		menu->draw();
 	} else {
 		bg.draw();
-		//yellow block
+
 		float *test = x->getHitBox();
 		glColor4f(255, 255, 0, 1);
 		glRectf(test[0], test[2], test[1], test[3]);
 		float *test2 = zero->getHitBox();
 		glColor4f(255, 255, 0, 1);
 		glRectf(test2[0], test2[2], test2[1], test2[3]);
+
 		enableTextures();
 		glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
-		bullet_draw(); // Draws all bullets on map
 		zero->draw(); // Draws zero
 		x->draw(); // Draws X
+		bullet_draw(); // Draws all bullets on map
 	}
 	// disable texturings
 	glDisable(GL_BLEND);
