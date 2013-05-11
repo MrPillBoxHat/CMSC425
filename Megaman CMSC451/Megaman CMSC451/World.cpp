@@ -76,7 +76,9 @@ void World::update(void)
 		lapse_time = 0;
 	}
 	// Ask AI what it wants to do
-	processAI();
+	if(zero->getInit()){
+		//processAI();
+	}
 	// check if we need to update the camera
 	int state = x->getState();
 	switch(state) {

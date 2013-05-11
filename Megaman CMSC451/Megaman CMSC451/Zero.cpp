@@ -196,7 +196,7 @@ void Zero::drawHealth()
 	float yy2 = 253.0;
 	int i = 0; // counter to iterate through health_blocks
 	// iterate through the blocks and draw them
-	while(health_blocks[i]){
+	while(i <= 27 && health_blocks[i]){
 		glBegin(GL_POLYGON);
 			//real coord
 			glTexCoord2d(0.0, 0.0); glVertex2d(xx1, yy1);
