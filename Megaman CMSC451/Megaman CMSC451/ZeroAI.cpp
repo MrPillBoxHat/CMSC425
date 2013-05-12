@@ -113,7 +113,9 @@ int ZeroAI::buster_saber_combo()
 		return buster();
 	// If 3rd attack
 	} else {
-		return saber();
+		combo = 0;
+		state = THINK;
+		return SABER_MISSILE;
 	}
 }
 

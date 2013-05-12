@@ -372,6 +372,8 @@ void World::processAI()
 			zero->setState(FIRE);
 			break;
 
+		case SABER_MISSILE:
+			missile = new saber_missile(zero->getCannon(), zero->getDirection());
 		case SABER:
 			// Adjust based on zero's direction
 			if(zero->getDirection() == LEFT){
@@ -392,7 +394,6 @@ void World::processAI()
 
 		case RUN:
 			// Adjust Zero's texture coordinates
-			//zero->setPosition(-22.5, 22.5, 0.0, 0.0);
 			zero->resetTexture();
 			zero->setState(RUN);
 			break;

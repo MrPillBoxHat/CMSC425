@@ -51,11 +51,13 @@ Animation:
 	  to move wrong on the Y plane
 	- Can change direction while in dash animation
 	- character still slides when doing fire and dash animation
+	- jump 
 
 	(Zero)
 	- Jump, Saber, dash animation requires resize of texture box
 	- Need to create saber hitbox
 	- fix bullet animation (coming out too early)
+	- fix saber missile (coming out too early)
 
 	(general)
 	- Fix dash.  Only move when in dash animation (not when stoppin/starting)

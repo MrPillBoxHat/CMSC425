@@ -21,7 +21,7 @@ saber_missile::saber_missile(float *position, int inDirection)
 	hit_box[3] = ymid + 3.5;
 	x1_tcoord = 0.0;
 	y2_tcoord = 1.0;
-	damage = -15;
+	damage = -20;
 	direction = inDirection;
 	counter = 0;
 }
@@ -33,9 +33,9 @@ void saber_missile::draw(GLuint *texture)
 	float y_offset = 1.0;
 	// Draws the frame
 	if(direction == LEFT){
-		glBindTexture(GL_TEXTURE_2D, texture[Z_BULLET_LEFT]); // select the active texture
+		glBindTexture(GL_TEXTURE_2D, texture[Z_SABER_LEFT]); // select the active texture
 	} else {
-		glBindTexture(GL_TEXTURE_2D, texture[Z_BULLET_RIGHT]); // select the active texture
+		glBindTexture(GL_TEXTURE_2D, texture[Z_SABER_RIGHT]); // select the active texture
 	}
 	// Draw objects
 	glBegin(GL_POLYGON);
@@ -57,12 +57,16 @@ void saber_missile::draw(GLuint *texture)
 		hit_box[0] += 5.0;
 		hit_box[1] += 5.0;
 	}
+	y1 += 1.0;
+	y2 += 1.0;
+	hit_box[2] += 1.0;
+	hit_box[3] += 1.0;
 	// update next frame or reset if reached the end
 	counter++;
-	if(counter % 7 == 0){
+	if(counter % 3 == 0){
 		x1_tcoord += x_offset;
 		if(x1_tcoord >= 1.0){
-			x1_tcoord = 0.625;
+			x1_tcoord = 0.0;
 		}
 	}
 }
@@ -79,3 +83,4 @@ bool saber_missile::collision(X *x)
 		return true;
 	}
 	return false;
+}
