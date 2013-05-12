@@ -20,6 +20,7 @@ class X {
 		int state;
 		int direction; // X facing direction
 		int counter; // FPS controller
+		int count; // Frame Reset counter
 		float x1_tcoord; // texture x1 coord
 		float y2_tcoord; // texture y2 coord
 		GLuint textures[22]; // stores texture
@@ -53,6 +54,8 @@ class X {
 		void die();
 		// Move X's coordinates
 		void move();
+		// helper function to control movement when jumping
+		void jump_move();
 		// Draw X's health bar
 		void drawHealth();
 		void gainHealth(int block_number);

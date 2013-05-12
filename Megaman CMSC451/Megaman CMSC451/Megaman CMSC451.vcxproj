@@ -93,6 +93,7 @@
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="constants.h" />
+    <ClInclude Include="Saber.h" />
     <ClInclude Include="Main_Menu.h" />
     <ClInclude Include="Point2D.h" />
     <ClInclude Include="Rectangle2D.h" />
@@ -114,6 +115,7 @@
     <ClCompile Include="Main_Menu.cpp" />
     <ClCompile Include="Point2D.cpp" />
     <ClCompile Include="Rectangle2D.cpp" />
+    <ClCompile Include="Saber.cpp" />
     <ClCompile Include="X_Bullet.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="X.cpp" />

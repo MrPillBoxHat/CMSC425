@@ -8,6 +8,7 @@
 #include "Z_Bullet.h"
 #include "Main_Menu.h"
 #include "ZeroAI.h"
+#include "Saber.h"
 
 class World
 {
@@ -32,10 +33,14 @@ private:
 	// in the world class
 	std::list<X_Bullet> x_bullets;
 	std::list<Z_Bullet> z_bullets;
+	Saber *missile;
+	Saber *saber;
 	BackGround bg;
-	GLuint textures[4];
+	GLuint textures[6];
 	// if in main menu
 	bool main_menu;
+	// checks if a missile was created
+	bool create;
 
 	// lower left coordinate of the camera
 	GLdouble cmX;
@@ -47,11 +52,14 @@ private:
 	void loadTextures();
 	void loadXBullet();
 	void loadZBullet();
+	void loadZBulletMissile();
 	void updateView();
 	void processKeysMenu(unsigned char key);
 	void processKeysGame(unsigned char key);
 	void processAI();
 	void enableTextures();
+	void createMissiles();
+	void damage(Zero *z, X *x, int damage, int health);
 
 public:
 	World(GLdouble w, GLdouble h);

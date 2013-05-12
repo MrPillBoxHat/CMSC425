@@ -38,6 +38,7 @@ Zero::Zero()
 	y2_tcoord = 1.0;
 	direction = LEFT;
 	counter = 0; // Counter is to keep track of FPS
+	count = 0; // keeps track of frames
 	// initialize buttons and health blocks to false;
 	for(int i = 0; i < 9; i++){
 		buttons[i] = false;
@@ -47,12 +48,22 @@ Zero::Zero()
 		health_blocks[i] = false;
 	}
 	init_health = false;
+	
 }
 
 // Getter for Zero's position
 float *Zero::getHitBox()
 {
 	return hit_box;
+}
+
+// Determine which frame the animation is on
+float *Zero::getTextureCoord()
+{
+	float coord[2];
+	coord[0] = x1_tcoord;
+	coord[1] = y2_tcoord;
+	return coord;
 }
 
 void Zero::setPosition(float xx1, float xx2, float yy1, float yy2)
@@ -90,6 +101,7 @@ void Zero::draw()
 		case FIRE:
 			fire();
 			break;
+		case SABER_MISSILE:
 		case SABER:
 			saber();
 			break;
@@ -115,20 +127,23 @@ void Zero::move()
 {
 	// Dash movement (faster movement)
 	if(buttons[DASH]){
-		if(direction == LEFT){
-			x1 -= CM_DASH;
-			x2 -= CM_DASH;
-			cannon_position[0] -= CM_DASH;
-			cannon_position[1] -= CM_DASH;
-			hit_box[0] -= CM_DASH;
-			hit_box[1] -= CM_DASH;
-		} else {
-			x1 += 5.0;
-			x2 += 5.0;
-			cannon_position[0] += CM_DASH;
-			cannon_position[1] += CM_DASH;
-			hit_box[0] += CM_DASH;
-			hit_box[1] += CM_DASH;
+		// Only move during certain frames
+		if(!(x1_tcoord >= 0.2 && y2_tcoord == 0.5)){
+			if(direction == LEFT){
+				x1 -= CM_DASH;
+				x2 -= CM_DASH;
+				cannon_position[0] -= CM_DASH;
+				cannon_position[1] -= CM_DASH;
+				hit_box[0] -= CM_DASH;
+				hit_box[1] -= CM_DASH;
+			} else {
+				x1 += 5.0;
+				x2 += 5.0;
+				cannon_position[0] += CM_DASH;
+				cannon_position[1] += CM_DASH;
+				hit_box[0] += CM_DASH;
+				hit_box[1] += CM_DASH;
+			}
 		}
 	// Normal movements
 	} else {
@@ -517,6 +532,12 @@ void Zero::dash()
 	if(counter % 3 == 0){
 		//update next frame or reset if reached the end
 		x1_tcoord += x_offset;
+		// Resets frame to play again
+		if(x1_tcoord >= 0.2 && y2_tcoord == 0.5 && count < 2){
+			count++;
+			x1_tcoord = 0.8;
+			y2_tcoord = 1.0;
+		}
 		if(x1_tcoord >= 1.0){
 			x1_tcoord = 0.0;
 			y2_tcoord -= y_offset;
@@ -530,6 +551,7 @@ void Zero::dash()
 					y2_tcoord = 1.0;
 					state = STAND;
 				}
+				count = 0;
 				// Adjust Zero's texture coordinates
 				setPosition(22.5, -22.5, 0.0, 0.0);
 				buttons[DASH] = false;

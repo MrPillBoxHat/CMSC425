@@ -65,3 +65,12 @@ Animation:
 	- adjusts hitbox depending on action
 
 Camera:
+
+
+Things need to implement:
+______________________________________________________________
+
+	(Characters)
+	- Invinciple state after damage
+	- Music/SFX
+	- Boss areana/stage entrance

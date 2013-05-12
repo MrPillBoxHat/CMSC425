@@ -41,7 +41,6 @@ ______________________________________________________________
 Animation:
 
 	(X)
-	- Run animation has some kind of white line on top
 	- Need to fix animation timings (some frames should
 	  be displayed longer than other frames).
 	- Fire needs to continue until finished firing
@@ -52,13 +51,16 @@ Animation:
 	  to move wrong on the Y plane
 	- Can change direction while in dash animation
 	- character still slides when doing fire and dash animation
+	- jump 
 
 	(Zero)
-	- Jump, Saber, dash animation requires resize of texture box
-	- Damage animation messy
+	- No Known Bugs
 
-	(General)
-	- Animation link is out of place
-	- fix hitbox
+	(general)
+	- Fix dash.  Only move when in dash animation (not when stoppin/starting)
+	- need to detec where contact is made in order to play proper damage animation
+	  and move in the correct location
 
 Camera:
+	- Doesn't follow X when jumping
+	- Moves at end of dash

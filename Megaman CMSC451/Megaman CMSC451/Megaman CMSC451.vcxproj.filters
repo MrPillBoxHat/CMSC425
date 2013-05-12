@@ -149,6 +149,9 @@
     </ClInclude>
     <ClInclude Include="Box.h">
       <Filter>Header Files\World</Filter>
+	</ClInclude>
+    <ClInclude Include="Saber.h">
+      <Filter>Header Files\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -199,6 +202,9 @@
     </ClCompile>
     <ClCompile Include="Box.cpp">
       <Filter>Source Files</Filter>
+	</ClCompile>
+    <ClCompile Include="Saber.cpp">
+      <Filter>Source Files\Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
