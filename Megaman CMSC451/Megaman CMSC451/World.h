@@ -41,6 +41,8 @@ private:
 	bool main_menu;
 	// checks if a missile was created
 	bool create;
+	// check if zero was created
+	bool initZero;
 
 	// lower left coordinate of the camera
 	GLdouble cmX;
@@ -60,6 +62,7 @@ private:
 	void enableTextures();
 	void createMissiles();
 	void damage(Zero *z, X *x, int damage, int health);
+	void initBossRoom();
 
 public:
 	World(GLdouble w, GLdouble h);

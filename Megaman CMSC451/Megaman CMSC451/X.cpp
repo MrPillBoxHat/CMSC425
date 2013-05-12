@@ -379,8 +379,8 @@ void X::entry()
 					// Resets coordinates
 					x1 = 342.0;
 					x2 = 393.2;
-					y1 = 99.0;
-					y2 = 163.0;
+					y1 = 97.0;
+					y2 = 161.0;
 					resetTexture();
 				}
 			}
@@ -634,10 +634,8 @@ void X::dash()
 				x1_tcoord = 0.0;
 				state = STAND;
 			}
-
 			// Reset hitbox
 			count = 0;
-
 			if(direction == RIGHT){
 				setHitBox(0.0, -8.0, 0.0, 12.0);
 			} else {

@@ -28,11 +28,11 @@ World::World(GLdouble w, GLdouble h)
 	// Create objects and load their texture
 	x = new X();
 	x->loadTextures();
-	zero = new Zero();
-	zero->loadTextures();
+	zero = NULL;
+	initZero = false;
 	menu = new Main_Menu();
 	menu->loadTextures();
-	zAI = new ZeroAI(zero, x);
+	zAI = NULL;
 	missile = NULL;
 	saber = NULL;
 	create = false;
@@ -80,13 +80,16 @@ void World::update(void)
 		frames = 0;
 		lapse_time = 0;
 	}
-	// Ask AI what it wants to do
-	if(zero->getInit()){
-		//processAI();
-	}
-	// If zero is on the map
-	if(zero != NULL && x->getState() != DAMAGE){
-		x->detec_collision(zero);
+	// AI for Zero and collision can only be used if Zero is initialized
+	if(zero != NULL){
+		// Ask AI what it wants to do
+		if(zero->getInit()){
+			processAI();
+		}
+		// Detect X colliding with Zero
+		if(x->getState() != DAMAGE){
+			x->detec_collision(zero);
+		}
 	}
 	// Check if zero crashed into X
 	// check if we need to update the camera
@@ -112,6 +115,14 @@ void World::update(void)
 	}
 }
 
+void World::initBossRoom()
+{
+	initZero = true;
+	zero = new Zero();
+	zero->loadTextures();
+	zAI = new ZeroAI(zero, x);
+}
+
 void World::draw(void) 
 {
 	// Draw
@@ -131,17 +142,20 @@ void World::draw_helper()
 	} else {
 		bg.draw();
 
+		/* Hit box for testing
 		float *test = x->getHitBox();
 		glColor4f(255, 255, 0, 1);
 		glRectf(test[0], test[2], test[1], test[3]);
 		float *test2 = zero->getHitBox();
 		glColor4f(255, 255, 0, 1);
-		glRectf(test2[0], test2[2], test2[1], test2[3]);
+		glRectf(test2[0], test2[2], test2[1], test2[3]);*/
 
 		enableTextures();
 		glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
-		zero->draw(); // Draws zero
-		createMissiles();
+		if(zero != NULL){
+			zero->draw(); // Draws zero
+			createMissiles(); // Draw zero objects
+		}
 		x->draw(); // Draws X
 		bullet_draw(); // Draws all bullets on map
 	}
@@ -267,28 +281,35 @@ void World::processKeysGame(unsigned char key)
 
 			// Move Left
 			case MOVE_LEFT:
-				// If not in jump animation
-				if(hero_state != JUMP && hero_state != DASH){
-					x->resetTexture();
-					x->setState(RUN);
-				}
-				// Register button pressed
-				x->setButtons(RUN, true);
-				// Change direction
-				x->setDirection(LEFT);
-				break;
-
 			// Move Right
 			case MOVE_RIGHT:
 				// If not in jump animation
-				if(hero_state != JUMP && hero_state != DASH){
+				if(hero_state != JUMP && hero_state != DASH && hero_state != DAMAGE){
 					x->resetTexture();
 					x->setState(RUN);
 				}
+				// Change direction if in a dash
+				if(key == MOVE_LEFT){
+					// Get out of dash state if moving in opposite direction
+					if(x->getDirection() == RIGHT && hero_state == DASH){
+						x->setButtons(DASH, false);
+						x->setHitBox(0.0, -8.0, 0.0, 12.0);
+						x->resetTexture();
+						x->setState(RUN);
+					}
+					x->setDirection(LEFT);
+				} else if (key == MOVE_RIGHT){
+					// Get out of dash state if moving in opposite direction
+					if(x->getDirection() == LEFT && hero_state == DASH){
+						x->setButtons(DASH, false);
+						x->setHitBox(8.0, 0.0, 0.0, 12.0);
+						x->resetTexture();
+						x->setState(RUN);
+					}
+					x->setDirection(RIGHT);
+				}
 				// Register button pressed
 				x->setButtons(RUN, true);
-				// Change direction
-				x->setDirection(RIGHT);
 				break;
 
 			// Fire
@@ -298,6 +319,16 @@ void World::processKeysGame(unsigned char key)
 					X_Bullet *temp = new X_Bullet(x->getCannon(), x->getDirection());
 					// Create bullet from cannon position
 					x_bullets.push_front(*temp);
+					if(hero_state == DASH){
+						// Get out of dash animation
+						if(x->getDirection() == RIGHT){
+							x->setButtons(DASH, false);
+							x->setHitBox(0.0, -8.0, 0.0, 12.0);
+						} else {
+							x->setButtons(DASH, false);
+							x->setHitBox(8.0, 0.0, 0.0, 12.0);
+						}
+					}
 					x->setFrameOn();
 					x->setState(FIRE);
 					// If not in the air, reset texture frame
@@ -452,9 +483,12 @@ void World::bullet_draw()
 	// Go through each X_bullet in the world and draw them
 	list<X_Bullet>::iterator it = x_bullets.begin();
 	while(it != x_bullets.end()){
-		// Take damage only if not already in damage animation
-		if(it->collision(zero) && zero->getState() != DAMAGE){
-			damage(zero, NULL, it->getDamage(), zero->getHealth()/5);
+		// Make sure zero is created
+		if(zero != NULL){
+			// Take damage only if not already in damage animation
+			if(it->collision(zero) && zero->getState() != DAMAGE){
+				damage(zero, NULL, it->getDamage(), zero->getHealth()/5);
+			}
 		}
 		// draw bullet
 		it->draw(textures);
