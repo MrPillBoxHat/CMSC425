@@ -91,8 +91,11 @@
     <ClInclude Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\stbi_DDS_aug_c.h" />
     <ClInclude Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\stb_image_aug.h" />
     <ClInclude Include="BackGround.h" />
+    <ClInclude Include="Box.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="Main_Menu.h" />
+    <ClInclude Include="Point2D.h" />
+    <ClInclude Include="Rectangle2D.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="X.h" />
     <ClInclude Include="X_Bullet.h" />
@@ -106,8 +109,11 @@
     <ClCompile Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\SOIL.c" />
     <ClCompile Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\stb_image_aug.c" />
     <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="Box.cpp" />
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="Main_Menu.cpp" />
+    <ClCompile Include="Point2D.cpp" />
+    <ClCompile Include="Rectangle2D.cpp" />
     <ClCompile Include="X_Bullet.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="X.cpp" />

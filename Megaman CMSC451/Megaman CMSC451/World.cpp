@@ -36,6 +36,7 @@ World::World(GLdouble w, GLdouble h)
 	width = w;
 	height = h;
 	bg.setBoundary(width, height);
+	bg.initGround();
 	// initialize FPS controller variables
 	delta_time = 0;
 	start_time = glutGet(GLUT_ELAPSED_TIME);
