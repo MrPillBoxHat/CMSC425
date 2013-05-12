@@ -59,10 +59,13 @@ int ZeroAI::runAI()
 	if(last_action == Z_SABER || last_action == TACKLE){
 		last_action = MOVE_AWAY;
 		return dashAway();
-	} else if (distance <= 50) {
+	} else if (last_action == SABER_MISSILE){
+		last_action = THINK;
+		return dashFoward();
+	}else if (distance <= 50) {
 		last_action = Z_SABER;
 		return saber();
-	} else if (distance > 50 && distance <= 330){
+	} else if (distance > 50 && distance <= 250){
 		// Randomly perform either saber, tackle, or buster attack
 		if(random == 0){
 			last_action = state = Z_SABER;
@@ -76,7 +79,7 @@ int ZeroAI::runAI()
 		}
 	// Perform saber buster combo
 	} else {
-		state = last_action = SABERBUSTER;
+		state = SABERBUSTER;
 		return buster_saber_combo();
 	}
 }
@@ -115,6 +118,7 @@ int ZeroAI::buster_saber_combo()
 	} else {
 		combo = 0;
 		state = THINK;
+		last_action = SABER_MISSILE;
 		return SABER_MISSILE;
 	}
 }
