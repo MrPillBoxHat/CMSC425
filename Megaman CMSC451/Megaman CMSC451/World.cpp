@@ -143,13 +143,13 @@ void World::draw_helper()
 	} else {
 		bg.draw();
 
-		/* Hit box for testing
+		// Hit box for testing
 		float *test = x->getHitBox();
 		glColor4f(255, 255, 0, 1);
 		glRectf(test[0], test[2], test[1], test[3]);
 		float *test2 = zero->getHitBox();
 		glColor4f(255, 255, 0, 1);
-		glRectf(test2[0], test2[2], test2[1], test2[3]);*/
+		glRectf(test2[0], test2[2], test2[1], test2[3]);
 
 		enableTextures();
 		glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
@@ -486,9 +486,15 @@ void World::bullet_draw()
 	while(it != x_bullets.end()){
 		// Make sure zero is created
 		if(zero != NULL){
-			// Take damage only if not already in damage animation
-			if(it->collision(zero) && zero->getState() != DAMAGE){
-				damage(zero, NULL, it->getDamage(), zero->getHealth()/5);
+			// Take damage only if not already in damage state
+			if(it->collision(zero) && !zero->ifInvincible()){
+				if(zero->getState() == STAND){
+					zero->resetTexture();
+					zero->setState(DAMAGE);
+				}
+				zero->setHealth(it->getDamage());
+				zero->depleteHealth(zero->getHealth()/5);
+				zero->setInvincibility();
 			}
 		}
 		// draw bullet
@@ -507,7 +513,7 @@ void World::bullet_draw()
 	while(it2 != z_bullets.end()){
 		// Take damage only if not already in damage animation
 		if(it2->collision(x) && !x->ifInvinciple()){
-			damage(NULL, x, it2->getDamage(), x->getHealth()/5);
+			damage(it2->getDamage(), x->getHealth()/5);
 		}
 		// draw bullet
 		it2->draw(textures);
@@ -524,7 +530,7 @@ void World::bullet_draw()
 	if(missile != NULL){
 		// Take damage only if not already in damage animation
 		if(missile->collision(x) && !x->ifInvinciple()){
-			damage(NULL, x, missile->getDamage(), x->getHealth()/5);
+			damage(missile->getDamage(), x->getHealth()/5);
 		}
 		missile->draw(textures);
 		// If missile reaches end of the screen, delete it
@@ -537,25 +543,18 @@ void World::bullet_draw()
 	// Detect whether saber hit X
 	if(saber != NULL){
 		if(saber->collision(x) && !x->ifInvinciple()){
-			damage(NULL, x, saber->getDamage(), x->getHealth()/5);
+			damage(saber->getDamage(), x->getHealth()/5);
 		}
 	}
 }
 
 // helper function that does damage mechanics
-void World::damage(Zero *z, X *x, int damage, int health)
+void World::damage(int damage, int health)
 {
-	if(z != NULL){
-		z->resetTexture();
-		z->setState(DAMAGE);
-		z->setHealth(damage);
-		z->depleteHealth(health);
-	} else {
-		x->resetTexture();
-		x->setState(DAMAGE);
-		x->setHealth(damage);
-		x->depleteHealth(health);
-	}
+	x->resetTexture();
+	x->setState(DAMAGE);
+	x->setHealth(damage);
+	x->depleteHealth(health);
 }
 
 // Loads all textures for bullets

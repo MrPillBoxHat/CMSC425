@@ -18,11 +18,13 @@ class Zero {
 		int direction; // Zero facing direction
 		int counter; // FPS controller
 		int count; // keeps track of times frames reset
+		int count2; // Keeps track of invincibility time
 		float x1_tcoord; // texture x1 coord
 		float y2_tcoord; // texture y2 coord
 		GLuint textures[22]; // stores texture
 		bool buttons[9]; // keeps track of state (buttons pressed)
 		bool init_health;
+		bool invincible;
 
 		// Private helper functions
 		// helper functions to load textures
@@ -62,6 +64,7 @@ class Zero {
 		int getDirection(){return direction;}
 		int getHealth(){return health;}
 		bool getInit(){return init_health;}
+		bool ifInvincible(){return invincible;}
 		float *getCannon(){return cannon_position;}
 		float *getHitBox();
 		float *getTextureCoord();
@@ -72,6 +75,7 @@ class Zero {
 		void setButtons(int button, bool boolean){buttons[button] = boolean;}
 		void resetTexture(){x1_tcoord = 0.0; y2_tcoord = 1.0;}
 		void setPosition(float xx1, float xx2, float yy1, float yy2);
+		void setInvincibility(){invincible = true;}
 		// Draw Zero
 		void draw();
 		// Loads all textures

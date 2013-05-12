@@ -39,6 +39,8 @@ Zero::Zero()
 	direction = LEFT;
 	counter = 0; // Counter is to keep track of FPS
 	count = 0; // keeps track of frames
+	count2 = 0; // Keeps track of invincibility time
+	invincible = false;
 	// initialize buttons and health blocks to false;
 	for(int i = 0; i < 9; i++){
 		buttons[i] = false;
@@ -66,6 +68,7 @@ float *Zero::getTextureCoord()
 	return coord;
 }
 
+// Adjust Zero's texture box
 void Zero::setPosition(float xx1, float xx2, float yy1, float yy2)
 {
 	x1 += xx1;
@@ -119,6 +122,12 @@ void Zero::draw()
 	//resets counter
 	if(counter == 60){
 		counter = 0;
+	}
+	if(invincible){
+		if(count2++ == 130){
+			count2 = 0;
+			invincible = false;
+		}
 	}
 }
 		
@@ -325,14 +334,16 @@ void Zero::stand()
 	} else {
 		glBindTexture(GL_TEXTURE_2D, textures[STAND_LEFT]); // select the active texture
 	}
-	// Draw objects
-	glBegin(GL_POLYGON);
-		//real coord
-		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
-		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
-	glEnd();
+	if(count2 % 2 == 0){
+		// Draw objects
+		glBegin(GL_POLYGON);
+			//real coord
+			glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
+			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
+			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
+			glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+		glEnd();
+	}
 	// Want to draw 5 frames per second
 	if(counter % 15 == 0){
 		//update next frame or reset if reached the end
@@ -360,14 +371,16 @@ void Zero::run(){
 		cannon_position[0] = x1 - 8.8;
 		cannon_position[1] = x1 + 21.8;
 	}
-	// Draw objects
-	glBegin(GL_POLYGON);
-		//real coord
-		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
-		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
-	glEnd();
+	if(count2 % 2 == 0){
+		// Draw objects
+		glBegin(GL_POLYGON);
+			//real coord
+			glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
+			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
+			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
+			glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+		glEnd();
+	}
 	// Update frame pointers
 	if(counter % 5 == 0){
 		// go to next frame
@@ -399,14 +412,16 @@ void Zero::jump()
 	} else {
 		glBindTexture(GL_TEXTURE_2D, textures[JUMP_LEFT]); // select the active texture
 	}
-	// Draw objects
-	glBegin(GL_POLYGON);
-		//real coord
-		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
-		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
-	glEnd();
+	if(count2 % 2 == 0){
+		// Draw objects
+		glBegin(GL_POLYGON);
+			//real coord
+			glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
+			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
+			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
+			glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+		glEnd();
+	}
 	// Update frame pointers
 	if(counter % 5 == 0){
 		// if max height frame is reached
@@ -442,14 +457,16 @@ void Zero::fire()
 	} else {
 		glBindTexture(GL_TEXTURE_2D, textures[FIRE_LEFT]); // select the active texture
 	}
-	// Draw objects
-	glBegin(GL_POLYGON);
-		//real coord
-		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1-20.0, y1);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
-		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1-20.0, y2);
-	glEnd();
+	if(count2 % 2 == 0){
+		// Draw objects
+		glBegin(GL_POLYGON);
+			//real coord
+			glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1-20.0, y1);
+			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
+			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
+			glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1-20.0, y2);
+		glEnd();
+	}
 	// Want to draw 5 frames per second
 	if(counter % 6 == 0){
 		//update next frame or reset if reached the end
@@ -483,14 +500,16 @@ void Zero::saber()
 	} else {
 		glBindTexture(GL_TEXTURE_2D, textures[SABER_LEFT]); // select the active texture
 	}
-	// Draw objects
-	glBegin(GL_POLYGON);
-		//real coord
-		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
-		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
-	glEnd();
+	if(count2 % 2 == 0){
+		// Draw objects
+		glBegin(GL_POLYGON);
+			//real coord
+			glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
+			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
+			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
+			glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+		glEnd();
+	}
 	// Want to draw 5 frames per second
 	if(counter % 3 == 0){
 		//update next frame or reset if reached the end
@@ -520,14 +539,16 @@ void Zero::dash()
 	} else {
 		glBindTexture(GL_TEXTURE_2D, textures[DASH_LEFT]); // select the active texture
 	}
-	// Draw objects
-	glBegin(GL_POLYGON);
-		//real coord
-		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
-		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
-	glEnd();
+	if(count2 % 2 == 0){
+		// Draw objects
+		glBegin(GL_POLYGON);
+			//real coord
+			glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
+			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
+			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
+			glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+		glEnd();
+	}
 	// Want to draw 5 frames per second
 	if(counter % 3 == 0){
 		//update next frame or reset if reached the end

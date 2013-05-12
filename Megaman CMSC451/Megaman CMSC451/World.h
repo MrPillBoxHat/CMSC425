@@ -61,7 +61,7 @@ private:
 	void processAI();
 	void enableTextures();
 	void createMissiles();
-	void damage(Zero *z, X *x, int damage, int health);
+	void damage(int damage, int health);
 	void initBossRoom();
 
 public:
