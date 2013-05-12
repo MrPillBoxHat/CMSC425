@@ -17,10 +17,12 @@ class X {
 		float health_location[4];
 		int health;
 		bool health_blocks[28];
+		bool invinciple;
 		int state;
 		int direction; // X facing direction
 		int counter; // FPS controller
 		int count; // Frame Reset counter
+		int count2; // Invincibility time
 		float x1_tcoord; // texture x1 coord
 		float y2_tcoord; // texture y2 coord
 		GLuint textures[22]; // stores texture
@@ -70,6 +72,7 @@ class X {
 		int getHealth(){return health;}
 		float *getCannon(){return position;}
 		float *getHitBox(){return hit_box;}
+		bool ifInvinciple(){return invinciple;}
 		// setters
 		void setHealth(int number){health += number;}
 		void setState(int inState){state = inState; buttons[inState] = true;}
@@ -79,6 +82,7 @@ class X {
 		void resetTexture(){x1_tcoord = 0.0; y2_tcoord = 1.0;}
 		void setFrameOn(){play_3frame = true; frame_count = 1;}
 		void setHitBox(float xx1, float xx2, float yy1, float yy2);
+		void setInvinciple(){invinciple = true;}
 		// Draw X
 		void draw();
 		// Loads all textures

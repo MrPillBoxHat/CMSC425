@@ -87,8 +87,9 @@ void World::update(void)
 			processAI();
 		}
 		// Detect X colliding with Zero
-		if(x->getState() != DAMAGE){
+		if(!x->ifInvinciple()){
 			x->detec_collision(zero);
+			x->setInvinciple();
 		}
 	}
 	// Check if zero crashed into X
@@ -161,7 +162,7 @@ void World::draw_helper()
 	}
 	// disable texturings
 	glDisable(GL_BLEND);
-	glDisable(GL_TEXTURE_2D); 
+	glDisable(GL_TEXTURE_2D);
 }
 
 void World::setSize(int w, int h) 
@@ -505,7 +506,7 @@ void World::bullet_draw()
 	list<Z_Bullet>::iterator it2 = z_bullets.begin();
 	while(it2 != z_bullets.end()){
 		// Take damage only if not already in damage animation
-		if(it2->collision(x) && x->getState() != DAMAGE){
+		if(it2->collision(x) && !x->ifInvinciple()){
 			damage(NULL, x, it2->getDamage(), x->getHealth()/5);
 		}
 		// draw bullet
@@ -522,7 +523,7 @@ void World::bullet_draw()
 	// Draw the saber missile if it exists
 	if(missile != NULL){
 		// Take damage only if not already in damage animation
-		if(missile->collision(x) && x->getState() != DAMAGE){
+		if(missile->collision(x) && !x->ifInvinciple()){
 			damage(NULL, x, missile->getDamage(), x->getHealth()/5);
 		}
 		missile->draw(textures);
@@ -535,7 +536,7 @@ void World::bullet_draw()
 
 	// Detect whether saber hit X
 	if(saber != NULL){
-		if(saber->collision(x)){
+		if(saber->collision(x) && !x->ifInvinciple()){
 			damage(NULL, x, saber->getDamage(), x->getHealth()/5);
 		}
 	}

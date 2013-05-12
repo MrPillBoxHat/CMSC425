@@ -55,6 +55,7 @@ Animation:
 	(General)
 	- Fix camera
 	- Add in more implementations
+	- Health bar too big
 
 Camera:
 
@@ -66,3 +67,4 @@ ______________________________________________________________
 	- Invinciple state after damage
 	- Music/SFX
 	- Boss areana/stage entrance
+	- 
