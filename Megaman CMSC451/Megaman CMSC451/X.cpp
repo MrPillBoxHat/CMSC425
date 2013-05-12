@@ -214,52 +214,58 @@ void X::move()
 	}
 	// Move X vertically
 	if(buttons[JUMP]){
-		// FPS control
-		if(counter %5 == 0){
-			// If firing in the air
-			if(buttons[FIRE] && buttons[JUMP]){
-				if(x1_tcoord >= .27 && y2_tcoord == 0.5){
-					// no change in position
-				} else if ((y2_tcoord == 0.5 && x1_tcoord < .27) || 
-						   (y2_tcoord == 1.0 && x1_tcoord >= .27)){
-					// X is falling back down
-					y1 -= 22.0;
-					y2 -= 22.0;
-					position[2] -= 22.0;
-					position[3] -= 22.0;
-					hit_box[2] -= 22.0;
-					hit_box[3] -= 22.0;
-				} else {
-				// Move X up
-					y1 += 22.0;
-					y2 += 22.0;
-					position[2] += 22.0;
-					position[3] += 22.0;
-					hit_box[2] += 22.0;
-					hit_box[3] += 22.0;
-				}
-			// If normal jump
-			} else {
-				if(x1_tcoord >= 0.72){
+		jump_move();
+	}
+}
+
+//helper function to move x while in jump state
+void X::jump_move()
+{
+	// FPS control
+	if(counter %5 == 0){
+	// If firing in the air
+		if(buttons[FIRE] && buttons[JUMP]){
+			if(x1_tcoord >= .27 && y2_tcoord == 0.5){
 				// no change in position
-				} else if(x1_tcoord >= 0.36 && x1_tcoord < 0.72){
+			} else if ((y2_tcoord == 0.5 && x1_tcoord < .27) || 
+					   (y2_tcoord == 1.0 && x1_tcoord >= .27)){
 				// X is falling back down
-					y1 -= 22.0;
-					y2 -= 22.0;
-					position[2] -= 22.0;
-					position[3] -= 22.0;
-					hit_box[2] -= 22.0;
-					hit_box[3] -= 22.0;
-				} else {
-					// Move X up
-					y1 += 22.0;
-					y2 += 22.0;
-					position[2] += 22.0;
-					position[3] += 22.0;
-					hit_box[2] += 22.0;
-					hit_box[3] += 22.0;
-				}
+				y1 -= 22.0;
+				y2 -= 22.0;
+				position[2] -= 22.0;
+				position[3] -= 22.0;
+				hit_box[2] -= 22.0;
+				hit_box[3] -= 22.0;
+			} else {
+			// Move X up
+				y1 += 22.0;
+				y2 += 22.0;
+				position[2] += 22.0;
+				position[3] += 22.0;
+				hit_box[2] += 22.0;
+				hit_box[3] += 22.0;
 			}
+			// If normal jump
+		} else {
+			if(x1_tcoord >= 0.72){
+			// no change in position
+			} else if(x1_tcoord >= 0.36 && x1_tcoord < 0.72){
+			// X is falling back down
+				y1 -= 22.0;
+				y2 -= 22.0;
+				position[2] -= 22.0;
+				position[3] -= 22.0;
+				hit_box[2] -= 22.0;
+				hit_box[3] -= 22.0;
+			} else {
+				// Move X up
+				y1 += 22.0;
+				y2 += 22.0;
+				position[2] += 22.0;
+				position[3] += 22.0;
+				hit_box[2] += 22.0;
+				hit_box[3] += 22.0;
+			}	
 		}
 	}
 }

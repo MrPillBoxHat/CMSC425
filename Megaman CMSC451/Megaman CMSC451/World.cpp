@@ -446,12 +446,9 @@ void World::bullet_draw()
 	// Go through each X_bullet in the world and draw them
 	list<X_Bullet>::iterator it = x_bullets.begin();
 	while(it != x_bullets.end()){
+		// Take damage only if not already in damage animation
 		if(it->collision(zero) && zero->getState() != DAMAGE){
-			// Reset texture only if not already in damage animation
-			zero->resetTexture();
-			zero->setState(DAMAGE);
-			zero->setHealth(it->getDamage());
-			zero->depleteHealth(zero->getHealth()/5);
+			damage(zero, NULL, it->getDamage(), zero->getHealth()/5);
 		}
 		// draw bullet
 		it->draw(textures);
@@ -467,12 +464,9 @@ void World::bullet_draw()
 	// Go through each Z_bullet in the world and draw them
 	list<Z_Bullet>::iterator it2 = z_bullets.begin();
 	while(it2 != z_bullets.end()){
+		// Take damage only if not already in damage animation
 		if(it2->collision(x) && x->getState() != DAMAGE){
-			// Reset texture only if not already in damage animation
-			x->resetTexture();
-			x->setState(DAMAGE);
-			x->setHealth(it2->getDamage());
-			x->depleteHealth(x->getHealth()/5);
+			damage(NULL, x, it2->getDamage(), x->getHealth()/5);
 		}
 		// draw bullet
 		it2->draw(textures);
@@ -487,12 +481,9 @@ void World::bullet_draw()
 
 	// Draw the saber missile if it exists
 	if(missile != NULL){
+		// Take damage only if not already in damage animation
 		if(missile->collision(x) && x->getState() != DAMAGE){
-			// Reset texture only if not already in damage animation
-			x->resetTexture();
-			x->setState(DAMAGE);
-			x->setHealth(missile->getDamage());
-			x->depleteHealth(x->getHealth()/5);
+			damage(NULL, x, missile->getDamage(), x->getHealth()/5);
 		}
 		missile->draw(textures);
 		// If missile reaches end of the screen, delete it
@@ -500,6 +491,29 @@ void World::bullet_draw()
 			delete(missile);
 			missile = NULL;
 		}
+	}
+
+	// Detect whether saber hit X
+	if(saber != NULL){
+		if(saber->collision(x)){
+			damage(NULL, x, saber->getDamage(), x->getHealth()/5);
+		}
+	}
+}
+
+// helper function that does damage mechanics
+void World::damage(Zero *z, X *x, int damage, int health)
+{
+	if(z != NULL){
+		z->resetTexture();
+		z->setState(DAMAGE);
+		z->setHealth(damage);
+		z->depleteHealth(health);
+	} else {
+		x->resetTexture();
+		x->setState(DAMAGE);
+		x->setHealth(damage);
+		x->depleteHealth(health);
 	}
 }
 

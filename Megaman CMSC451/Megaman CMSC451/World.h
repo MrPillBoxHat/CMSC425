@@ -59,6 +59,7 @@ private:
 	void processAI();
 	void enableTextures();
 	void createMissiles();
+	void damage(Zero *z, X *x, int damage, int health);
 
 public:
 	World(GLdouble w, GLdouble h);
