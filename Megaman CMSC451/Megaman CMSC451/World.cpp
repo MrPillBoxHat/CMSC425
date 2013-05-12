@@ -13,6 +13,7 @@
 #include <list>
 #include "constants.h"
 #include "ZeroAI.h"
+#include "saber_missile.h"
 
 #define SET_BG_COLOR glClearColor(0.0, 0.0, 0.0, 1.0)
 
@@ -32,6 +33,7 @@ World::World(GLdouble w, GLdouble h)
 	menu = new Main_Menu();
 	menu->loadTextures();
 	zAI = new ZeroAI(zero, x);
+	missile = NULL;
 	// initialize world instance variables
 	width = w;
 	height = h;
@@ -397,7 +399,7 @@ void World::processAI()
 	}
 }
 
-// Draw X_bullet
+// Draw all bullets/missiles on the map
 void World::bullet_draw()
 {
 	// Go through each X_bullet in the world and draw them
@@ -441,6 +443,23 @@ void World::bullet_draw()
 			it2++;
 		}
 	}
+
+	// Draw the saber missile if it exists
+	if(missile != NULL){
+		if(missile->collision(x) && x->getState() != DAMAGE){
+			// Reset texture only if not already in damage animation
+			x->resetTexture();
+			x->setState(DAMAGE);
+			x->setHealth(missile->getDamage());
+			x->depleteHealth(x->getHealth()/5);
+		}
+		missile->draw(textures);
+		// If missile reaches end of the screen, delete it
+		if(missile->getX1() <= cmX-20 || missile->getX2() >= bg.viewWidth+cmX+20){
+			delete(missile);
+			missile = NULL;
+		}
+	}
 }
 
 // Loads all textures for bullets
@@ -448,6 +467,7 @@ void World::loadTextures()
 {
 	loadXBullet();
 	loadZBullet();
+	loadZBulletMissile();
 }
 
 // Load XBullet texture
@@ -556,6 +576,63 @@ void World::loadZBullet()
 	cout << "ZBullettextureID: " << textures[Z_BULLET_RIGHT] << endl;
 
 	glBindTexture(GL_TEXTURE_2D, textures[Z_BULLET_RIGHT]); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+}
+
+void World::loadZBulletMissile()
+{
+	/* loads entry image directly as a new OpenGL texture */
+	textures[Z_SABER_LEFT] = SOIL_load_OGL_texture
+	(
+		"Sprites/Zero/Saber/saber_range_left.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textures[Z_SABER_LEFT] )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "ZBullettextureID: " << textures[Z_SABER_LEFT] << endl;
+
+	glBindTexture(GL_TEXTURE_2D, textures[Z_SABER_LEFT]); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads entry image directly as a new OpenGL texture */
+	textures[Z_SABER_RIGHT] = SOIL_load_OGL_texture
+	(
+		"Sprites/Zero/Saber/saber_range_right.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textures[Z_SABER_RIGHT] )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "ZBullettextureID: " << textures[Z_SABER_RIGHT] << endl;
+
+	glBindTexture(GL_TEXTURE_2D, textures[Z_SABER_RIGHT]); // select the active texture
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	// repeat texture
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

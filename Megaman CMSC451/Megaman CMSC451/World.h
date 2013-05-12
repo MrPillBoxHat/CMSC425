@@ -8,6 +8,7 @@
 #include "Z_Bullet.h"
 #include "Main_Menu.h"
 #include "ZeroAI.h"
+#include "saber_missile.h"
 
 class World
 {
@@ -32,8 +33,9 @@ private:
 	// in the world class
 	std::list<X_Bullet> x_bullets;
 	std::list<Z_Bullet> z_bullets;
+	saber_missile *missile;
 	BackGround bg;
-	GLuint textures[4];
+	GLuint textures[6];
 	// if in main menu
 	bool main_menu;
 
@@ -47,6 +49,7 @@ private:
 	void loadTextures();
 	void loadXBullet();
 	void loadZBullet();
+	void loadZBulletMissile();
 	void updateView();
 	void processKeysMenu(unsigned char key);
 	void processKeysGame(unsigned char key);

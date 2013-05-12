@@ -140,7 +140,7 @@ int ZeroAI::saber()
 		// reset combo
 		combo = 0;
 		state = THINK;
-		counter = 100; // react imediately
+		counter = 50;
 		return SABER;
 	} else {
 		combo++;
