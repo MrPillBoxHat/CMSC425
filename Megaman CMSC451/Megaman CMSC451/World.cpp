@@ -454,7 +454,7 @@ void World::createMissiles()
 			create = true;
 		}
 		// If on the correct frame, create saber object
-	} else if (z_state == SABER){
+	} else if (z_state == SABER || z_state == SABER_MISSILE){
 		float *tempInt = zero->getTextureCoord();
 		// Create saber object
 		if(tempInt[0] >= 0.42 && tempInt[0] < 0.45){
