@@ -41,28 +41,22 @@ ______________________________________________________________
 Animation:
 
 	(X)
-	- Need to fix animation timings (some frames should
-	  be displayed longer than other frames).
-	- Fire needs to continue until finished firing
 	- Jump -> run needs frame timing fixes.  Doesn't look natural
 	- combination of keys + jump causes flags to screw up
 	- Jump fire animation is bugged, not working at all.  Causing X
 	  to move wrong on the Y plane
 	- Can change direction while in dash animation
 	- character still slides when doing fire and dash animation
-	- Cannot move when holding down button during freeze animations
-	- Dash hitbox is a bit off
 	- Health bar needs to stop when reaching end of screen (right side)
 	- Jump hit causes constant jumping
 
 	(Zero)
-	- Jump, Saber, dash animation requires resize of texture box
+	- Zero saber attack needs to dash in front of X, not past X
 	- Saber needs to add sword sheath to animation
-	- Zero makes bullet too fast
 
 	(General)
-	- Animation link is out of place
-	- adjusts hitbox depending on action
+	- Fix camera
+	- Add in more implementations
 
 Camera:
 
