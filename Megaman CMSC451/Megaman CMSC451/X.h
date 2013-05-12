@@ -20,6 +20,7 @@ class X {
 		int state;
 		int direction; // X facing direction
 		int counter; // FPS controller
+		int count; // Frame Reset counter
 		float x1_tcoord; // texture x1 coord
 		float y2_tcoord; // texture y2 coord
 		GLuint textures[22]; // stores texture

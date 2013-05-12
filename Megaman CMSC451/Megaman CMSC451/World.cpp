@@ -81,7 +81,7 @@ void World::update(void)
 	}
 	// Ask AI what it wants to do
 	if(zero->getInit()){
-		processAI();
+		//processAI();
 	}
 	// If zero is on the map
 	if(zero != NULL && x->getState() != DAMAGE){
@@ -136,11 +136,6 @@ void World::draw_helper()
 		float *test2 = zero->getHitBox();
 		glColor4f(255, 255, 0, 1);
 		glRectf(test2[0], test2[2], test2[1], test2[3]);
-		if(saber != NULL){
-			float *test3 = saber->getHitBox();
-			glColor4f(0, 255, 255, 1);
-			glRectf(test3[0], test3[2], test3[1], test3[3]);
-		}
 
 		enableTextures();
 		glColor4f(1.0, 1.0, 1.0, 1.0); // Set color

@@ -128,17 +128,15 @@ void Zero::move()
 	// Dash movement (faster movement)
 	if(buttons[DASH]){
 		// Only move during certain frames
-		if(direction == LEFT){
-			if(!(x1_tcoord >= 0.2 && y2_tcoord == 0.5)){
+		if(!(x1_tcoord >= 0.2 && y2_tcoord == 0.5)){
+			if(direction == LEFT){
 				x1 -= CM_DASH;
 				x2 -= CM_DASH;
 				cannon_position[0] -= CM_DASH;
 				cannon_position[1] -= CM_DASH;
 				hit_box[0] -= CM_DASH;
 				hit_box[1] -= CM_DASH;
-			}
-		} else {
-			if(!(x1_tcoord >= 0.2 && y2_tcoord == 0.5)){
+			} else {
 				x1 += 5.0;
 				x2 += 5.0;
 				cannon_position[0] += CM_DASH;

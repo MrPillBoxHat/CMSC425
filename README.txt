@@ -54,7 +54,7 @@ Animation:
 	- jump 
 
 	(Zero)
-	- Need to create saber hitbox
+	- No Known Bugs
 
 	(general)
 	- Fix dash.  Only move when in dash animation (not when stoppin/starting)
@@ -62,3 +62,5 @@ Animation:
 	  and move in the correct location
 
 Camera:
+	- Doesn't follow X when jumping
+	- Moves at end of dash

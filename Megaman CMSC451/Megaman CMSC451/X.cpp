@@ -45,6 +45,7 @@ X::X()
 	y2_tcoord = 1.0;
 	direction = RIGHT;
 	counter = 0; // Counter is to keep track of FPS
+	count = 0; // Frame controller
 	// Initialize health blocks and buttons pressed
 	for(int i = 0; i < 9; i++){
 		buttons[i] = false;
@@ -152,30 +153,33 @@ void X::move()
 {
 	// Dash movement (faster movement)
 	if(buttons[DASH]){
-		if(direction == LEFT){
-			x1 -= CM_DASH;
-			x2 -= CM_DASH;
-			position[0] -= CM_DASH;
-			position[1] -= CM_DASH;
-			hit_box[0] -= CM_DASH;
-			hit_box[1] -= CM_DASH;
-			// Don't move health bar off the screen
-			if(health_location[0] - CM_DASH < 28.0){
-				health_location[0] = 28.0;
-				health_location[1] = 82.0;
+		// Move only if at the correct frame
+		if(x1_tcoord < .5){
+			if(direction == LEFT){
+				x1 -= CM_DASH;
+				x2 -= CM_DASH;
+				position[0] -= CM_DASH;
+				position[1] -= CM_DASH;
+				hit_box[0] -= CM_DASH;
+				hit_box[1] -= CM_DASH;
+				// Don't move health bar off the screen
+				if(health_location[0] - CM_DASH < 28.0){
+					health_location[0] = 28.0;
+					health_location[1] = 82.0;
+				} else {
+					health_location[0] -= CM_DASH;
+					health_location[1] -= CM_DASH;
+				}
 			} else {
-				health_location[0] -= CM_DASH;
-				health_location[1] -= CM_DASH;
+				x1 += CM_DASH;
+				x2 += CM_DASH;
+				position[0] += CM_DASH;
+				position[1] += CM_DASH;
+				hit_box[0] += CM_DASH;
+				hit_box[1] += CM_DASH;
+				health_location[0] += CM_DASH;
+				health_location[1] += CM_DASH;
 			}
-		} else {
-			x1 += CM_DASH;
-			x2 += CM_DASH;
-			position[0] += CM_DASH;
-			position[1] += CM_DASH;
-			hit_box[0] += CM_DASH;
-			hit_box[1] += CM_DASH;
-			health_location[0] += CM_DASH;
-			health_location[1] += CM_DASH;
 		}
 	// Normal movements
 	} else {
@@ -608,6 +612,11 @@ void X::dash()
 	if(counter % 3 == 0){
 		//update next frame or reset if reached the end
 		x1_tcoord += x_offset;
+		// Resets frame to play again
+		if(x1_tcoord >= 0.5 && count < 4){
+			count++;
+			x1_tcoord = 0.375;
+		}
 		if(x1_tcoord >= 1.0){
 			// If player is holding move change to run
 			if(buttons[RUN]){
@@ -620,6 +629,7 @@ void X::dash()
 			}
 
 			// Reset hitbox
+			count = 0;
 			setHitBox(0.0, -8.0, 0.0, 7.0);
 			buttons[DASH] = false;
 		}
