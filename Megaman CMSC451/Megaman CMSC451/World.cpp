@@ -53,6 +53,7 @@ World::World(GLdouble w, GLdouble h)
 	cmX = 0;
 	// Initialize textures for intro and bullet
 	loadTextures();
+	initBossRoom();
 }
 
 World::~World(void) 
@@ -89,7 +90,6 @@ void World::update(void)
 		// Detect X colliding with Zero
 		if(!x->ifInvinciple()){
 			x->detec_collision(zero);
-			x->setInvinciple();
 		}
 	}
 	// Check if zero crashed into X
@@ -264,7 +264,7 @@ void World::processKeysGame(unsigned char key)
 {
 	const int old = cmX;
 	int hero_state = x->getState();
-	if(hero_state != ENTRY && (zero == NULL || zero->getInit())){
+	if(hero_state != ENTRY && hero_state != DAMAGE && (zero == NULL || zero->getInit())){
 		switch(key)
 		{
 			// Jump

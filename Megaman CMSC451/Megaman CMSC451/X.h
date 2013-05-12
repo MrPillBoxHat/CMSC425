@@ -82,7 +82,6 @@ class X {
 		void resetTexture(){x1_tcoord = 0.0; y2_tcoord = 1.0;}
 		void setFrameOn(){play_3frame = true; frame_count = 1;}
 		void setHitBox(float xx1, float xx2, float yy1, float yy2);
-		void setInvinciple(){invinciple = true;}
 		// Draw X
 		void draw();
 		// Loads all textures

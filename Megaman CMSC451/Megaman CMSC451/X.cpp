@@ -138,6 +138,7 @@ void X::draw()
 			dash();
 			break;
 		case DAMAGE:
+			invinciple = true;
 			damage();
 			break;
 		case DIE:
@@ -151,7 +152,7 @@ void X::draw()
 	}
 	// Keeps track of invinciple time
 	if(invinciple){
-		if(count2++ == 120){
+		if(count2++ == 110){
 			count2 = 0;
 			invinciple = false;
 		}
@@ -412,7 +413,7 @@ void X::stand()
 		glBindTexture(GL_TEXTURE_2D, textures[STAND_LEFT]); // select the active texture
 	}
 	//create flicker effect
-	if(counter % 2 == 0){
+	if(count2 % 2 == 0){
 		// Draw objects
 		glBegin(GL_POLYGON);
 			//real coord
@@ -451,7 +452,7 @@ void X::run()
 		position[1] = x1 + 21.8;
 	}
 	//create flicker effect
-	if(counter % 2 == 0){
+	if(count2 % 2 == 0){
 		// Draw objects
 		glBegin(GL_POLYGON);
 			//real coord
@@ -493,7 +494,7 @@ void X::jump()
 		glBindTexture(GL_TEXTURE_2D, textures[JUMP_LEFT]); // select the active texture
 	}
 	//create flicker effect
-	if(counter % 2 == 0){
+	if(count2 % 2 == 0){
 		// Draw objects
 		glBegin(GL_POLYGON);
 			//real coord
@@ -591,7 +592,7 @@ void X::ground_fire()
 		xx2 = x2 - 5.0;
 	}
 	//create flicker effect
-	if(counter % 2 == 0){
+	if(count2 % 2 == 0){
 		// Draw objects
 		glBegin(GL_POLYGON);
 			//real coord
@@ -631,7 +632,7 @@ void X::dash()
 		glBindTexture(GL_TEXTURE_2D, textures[DASH_LEFT]); // select the active texture
 	}
 	//create flicker effect
-	if(counter % 2 == 0){
+	if(count2 % 2 == 0){
 		// Draw objects
 		glBegin(GL_POLYGON);
 			//real coord
