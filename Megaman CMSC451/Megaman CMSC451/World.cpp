@@ -311,7 +311,11 @@ void World::processKeysGame(unsigned char key)
 				// if X not in the air and not already dashing
 				if(hero_state != JUMP && hero_state != DASH){
 					// Hit box for X
-					x->setHitBox(0.0, 8.0, 0.0, -7.0);
+					if(x->getDirection() == RIGHT){
+						x->setHitBox(0.0, 8.0, 0.0, -12.0);
+					} else {
+						x->setHitBox(-8.0, 0.0, 0.0, -12.0);
+					}
 					x->resetTexture();
 					x->setState(DASH);
 				}
@@ -346,6 +350,7 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 				break;
 		}
 	}
+	update();
 }
 
 // Process AI commands
