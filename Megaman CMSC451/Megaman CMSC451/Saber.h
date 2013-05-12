@@ -6,7 +6,7 @@
 #include <GL/gl.h>                      // OpenGL
 #include "X.h"
 
-class saber_missile{
+class Saber{
 	private:
 		// Position of missile
 		float x1,x2,y1,y2;
@@ -18,7 +18,8 @@ class saber_missile{
 
 	public:
 		// Constructor
-		saber_missile(float *position, int direction);
+		Saber(float *position, int direction);
+		Saber(float *position, int direction, int i);
 		// getters
 		int getDamage(){return damage;}
 		float getX2(){return x2;}

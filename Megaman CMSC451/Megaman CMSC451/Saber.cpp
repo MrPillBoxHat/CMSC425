@@ -1,4 +1,4 @@
-#include "saber_missile.h"
+#include "Saber.h"
 #include "constants.h"
 #include <SOIL.h>
 #include <GL/glut.h>                    // GLUT
@@ -6,8 +6,8 @@
 #include <GL/gl.h>                      // OpenGL
 #include "X.h"
 
-// Constructor
-saber_missile::saber_missile(float *position, int inDirection)
+// Constructor (missile)
+Saber::Saber(float *position, int inDirection)
 {
 	x1 = position[0]-70.0;
 	x2 = position[1]-30.0;
@@ -21,12 +21,39 @@ saber_missile::saber_missile(float *position, int inDirection)
 	hit_box[3] = ymid + 16.5;
 	x1_tcoord = 0.0;
 	y2_tcoord = 1.0;
-	damage = -20;
+	damage = -15;
 	direction = inDirection;
 	counter = 0;
 }
 
-void saber_missile::draw(GLuint *texture)
+// Constructor (saber)
+Saber::Saber(float *position, int direction, int i)
+{
+	x1 = position[0]-70.0;
+	x2 = position[1]-30.0;
+	y1 = position[2];
+	y2 = position[3];
+	float xmid = x1 + ((x2-x1)/2);
+	float ymid = y1 + ((y2-y1)/2);
+	if(direction == LEFT){
+		hit_box[0] = xmid - 50.0;
+		hit_box[1] = xmid + 8.0;
+		hit_box[2] = ymid - 25.0;
+		hit_box[3] = ymid + 20.0;
+	} else {
+		hit_box[0] = xmid + 40.0;
+		hit_box[1] = xmid + 95.0;
+		hit_box[2] = ymid - 30.0;
+		hit_box[3] = ymid + 20.0;
+	}
+	x1_tcoord = 0.0;
+	y2_tcoord = 1.0;
+	damage = -25;
+	counter = 0;
+}
+
+// Draw saber missile
+void Saber::draw(GLuint *texture)
 {
 	// How many frames to jump
 	float x_offset = 0.125;
@@ -71,7 +98,7 @@ void saber_missile::draw(GLuint *texture)
 	}
 }
 
-bool saber_missile::collision(X *x)
+bool Saber::collision(X *x)
 {
 	// Get Zero's Position
 	float *position = x->getHitBox();

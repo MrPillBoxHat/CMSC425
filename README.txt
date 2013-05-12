@@ -54,15 +54,11 @@ Animation:
 	- jump 
 
 	(Zero)
-	- Jump, Saber, dash animation requires resize of texture box
 	- Need to create saber hitbox
-	- fix bullet animation (coming out too early)
-	- fix saber missile (coming out too early)
 
 	(general)
 	- Fix dash.  Only move when in dash animation (not when stoppin/starting)
 	- need to detec where contact is made in order to play proper damage animation
 	  and move in the correct location
-	- AI saber needs to react faster
 
 Camera:

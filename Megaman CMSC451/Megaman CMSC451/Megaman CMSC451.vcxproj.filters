@@ -135,7 +135,7 @@
     <ClInclude Include="Z_Bullet.h">
       <Filter>Header Files\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="saber_missile.h">
+    <ClInclude Include="Saber.h">
       <Filter>Header Files\Objects</Filter>
     </ClInclude>
   </ItemGroup>
@@ -179,7 +179,7 @@
     <ClCompile Include="Z_Bullet.cpp">
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="saber_missile.cpp">
+    <ClCompile Include="Saber.cpp">
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
   </ItemGroup>

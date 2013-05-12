@@ -13,7 +13,7 @@
 #include <list>
 #include "constants.h"
 #include "ZeroAI.h"
-#include "saber_missile.h"
+#include "Saber.h"
 
 #define SET_BG_COLOR glClearColor(0.0, 0.0, 0.0, 1.0)
 
@@ -34,6 +34,7 @@ World::World(GLdouble w, GLdouble h)
 	menu->loadTextures();
 	zAI = new ZeroAI(zero, x);
 	missile = NULL;
+	saber = NULL;
 	create = false;
 	// initialize world instance variables
 	width = w;
@@ -135,6 +136,11 @@ void World::draw_helper()
 		float *test2 = zero->getHitBox();
 		glColor4f(255, 255, 0, 1);
 		glRectf(test2[0], test2[2], test2[1], test2[3]);
+		if(saber != NULL){
+			float *test3 = saber->getHitBox();
+			glColor4f(0, 255, 255, 1);
+			glRectf(test3[0], test3[2], test3[1], test3[3]);
+		}
 
 		enableTextures();
 		glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
@@ -414,12 +420,26 @@ void World::createMissiles()
 			z_bullets.push_front(*temp);
 			create = true;
 		}
-	} else if (z_state == SABER_MISSILE){
+		// If on the correct frame, create saber object
+	} else if (z_state == SABER){
 		float *tempInt = zero->getTextureCoord();
-		if(tempInt[0] >= 0.25 && tempInt[0] < 0.35 && create == false){
-			missile = new saber_missile(zero->getCannon(), zero->getDirection());
-			create = true;
+		// Create saber object
+		if(tempInt[0] >= 0.42 && tempInt[0] < 0.45){
+			saber = new Saber(zero->getCannon(), zero->getDirection(), 1);
+		} else if (tempInt[0] >= 0.45){
+			delete(saber);
+			saber = NULL;
 		}
+
+		// Create a missile object
+		if(z_state == SABER_MISSILE){
+			if(tempInt[0] >= 0.25 && tempInt[0] < 0.35 && create == false){
+				missile = new Saber(zero->getCannon(), zero->getDirection());
+				create = true;
+			}
+		}
+
+	// Nothing was created
 	} else {
 		create = false;
 	}
