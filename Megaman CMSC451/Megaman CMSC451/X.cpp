@@ -638,8 +638,6 @@ void X::dash()
 			// Reset hitbox
 			count = 0;
 
-			//setHitBox(0.0, -8.0, 0.0, 7.0);
-
 			if(direction == RIGHT){
 				setHitBox(0.0, -8.0, 0.0, 12.0);
 			} else {
