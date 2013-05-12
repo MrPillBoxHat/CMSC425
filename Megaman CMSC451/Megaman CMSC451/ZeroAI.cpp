@@ -62,7 +62,7 @@ int ZeroAI::runAI()
 	} else if (distance <= 50) {
 		last_action = Z_SABER;
 		return saber();
-	} else if (distance > 50 && distance <= 400){
+	} else if (distance > 50 && distance <= 330){
 		// Randomly perform either saber, tackle, or buster attack
 		if(random == 0){
 			last_action = state = Z_SABER;

@@ -17,6 +17,7 @@ class Zero {
 		int state;
 		int direction; // Zero facing direction
 		int counter; // FPS controller
+		int count; // keeps track of times frames reset
 		float x1_tcoord; // texture x1 coord
 		float y2_tcoord; // texture y2 coord
 		GLuint textures[22]; // stores texture
@@ -63,6 +64,7 @@ class Zero {
 		bool getInit(){return init_health;}
 		float *getCannon(){return cannon_position;}
 		float *getHitBox();
+		float *getTextureCoord();
 		// setters
 		void setState(int inState){state = inState; buttons[inState] = true;}
 		void setHealth(int amount){health += amount;}

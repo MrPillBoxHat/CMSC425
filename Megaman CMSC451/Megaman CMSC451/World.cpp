@@ -34,6 +34,7 @@ World::World(GLdouble w, GLdouble h)
 	menu->loadTextures();
 	zAI = new ZeroAI(zero, x);
 	missile = NULL;
+	create = false;
 	// initialize world instance variables
 	width = w;
 	height = h;
@@ -138,6 +139,7 @@ void World::draw_helper()
 		enableTextures();
 		glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
 		zero->draw(); // Draws zero
+		createMissiles();
 		x->draw(); // Draws X
 		bullet_draw(); // Draws all bullets on map
 	}
@@ -349,7 +351,6 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 void World::processAI()
 {
 	int action = zAI->getAction();
-	Z_Bullet *temp;
 	switch(action)
 	{
 		// Stand and do nothing
@@ -360,7 +361,6 @@ void World::processAI()
 		
 		// Fire
 		case FIRE:
-			temp = new Z_Bullet(zero->getCannon(), zero->getDirection());
 			if(zero->getDirection() == LEFT){
 				zero->setPosition(8.0, 8.0, 0.0, 0.0);
 			} else {
@@ -368,12 +368,10 @@ void World::processAI()
 			}
 			// Create bullet from cannon position
 			zero->resetTexture();
-			z_bullets.push_front(*temp);
 			zero->setState(FIRE);
 			break;
 
 		case SABER_MISSILE:
-			missile = new saber_missile(zero->getCannon(), zero->getDirection());
 		case SABER:
 			// Adjust based on zero's direction
 			if(zero->getDirection() == LEFT){
@@ -382,7 +380,11 @@ void World::processAI()
 				zero->setPosition(-30.0, 60.0, -7.0, 48.0);
 			}
 			zero->resetTexture();
-			zero->setState(SABER);
+			if(action == SABER){
+				zero->setState(SABER);
+			} else {
+				zero->setState(SABER_MISSILE);
+			}
 			break;
 
 		case DASH:
@@ -397,6 +399,29 @@ void World::processAI()
 			zero->resetTexture();
 			zero->setState(RUN);
 			break;
+	}
+}
+
+// Create all bullets and missile objects
+void World::createMissiles()
+{
+	int z_state = zero->getState();
+	if(z_state == FIRE){
+		// If on the correct frame, create bullet
+		float *tempInt = zero->getTextureCoord();
+		if(tempInt[0] >= 0.66 && tempInt[0] < 0.76 && tempInt[1] == 0.5 && create == false){
+			Z_Bullet *temp = new Z_Bullet(zero->getCannon(), zero->getDirection());
+			z_bullets.push_front(*temp);
+			create = true;
+		}
+	} else if (z_state == SABER_MISSILE){
+		float *tempInt = zero->getTextureCoord();
+		if(tempInt[0] >= 0.25 && tempInt[0] < 0.35 && create == false){
+			missile = new saber_missile(zero->getCannon(), zero->getDirection());
+			create = true;
+		}
+	} else {
+		create = false;
 	}
 }
 

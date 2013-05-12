@@ -9,16 +9,16 @@
 // Constructor
 saber_missile::saber_missile(float *position, int inDirection)
 {
-	x1 = position[0]-60.0;
-	x2 = position[1]-20.0;
+	x1 = position[0]-70.0;
+	x2 = position[1]-30.0;
 	y1 = position[2];
 	y2 = position[3];
 	float xmid = x1 + ((x2-x1)/2);
 	float ymid = y1 + ((y2-y1)/2);
-	hit_box[0] = xmid - 4.0;
-	hit_box[1] = xmid + 4.0;
-	hit_box[2] = ymid - 3.5;
-	hit_box[3] = ymid + 3.5;
+	hit_box[0] = xmid - 16.5;
+	hit_box[1] = xmid + 16.5;
+	hit_box[2] = ymid - 16.5;
+	hit_box[3] = ymid + 16.5;
 	x1_tcoord = 0.0;
 	y2_tcoord = 1.0;
 	damage = -20;

@@ -38,6 +38,8 @@ private:
 	GLuint textures[6];
 	// if in main menu
 	bool main_menu;
+	// checks if a missile was created
+	bool create;
 
 	// lower left coordinate of the camera
 	GLdouble cmX;
@@ -55,6 +57,7 @@ private:
 	void processKeysGame(unsigned char key);
 	void processAI();
 	void enableTextures();
+	void createMissiles();
 
 public:
 	World(GLdouble w, GLdouble h);
