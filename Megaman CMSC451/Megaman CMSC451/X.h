@@ -70,6 +70,8 @@ class X {
 		int getHealth(){return health;}
 		float *getCannon(){return position;}
 		float *getHitBox(){return hit_box;}
+		float getStart() const {return x1; }
+		int middle() const { return hit_box[0] + (hit_box[1] - hit_box[0]) / 2; }
 		// setters
 		void setHealth(int number){health += number;}
 		void setState(int inState){state = inState; buttons[inState] = true;}

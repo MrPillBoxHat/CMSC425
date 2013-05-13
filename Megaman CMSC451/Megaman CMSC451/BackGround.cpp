@@ -97,4 +97,9 @@ void BackGround::initGround()
 	bx = new Box(500, H, 200, H/5);
 	bx->setColor(50, 50, 150);
 	ground.push_back(bx);
+
+		// small box on top
+	bx = new Box(1400, H, 200, H/5);
+	bx->setColor(150, 50, 150);
+	ground.push_back(bx);
 }

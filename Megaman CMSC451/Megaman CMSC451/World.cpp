@@ -89,27 +89,8 @@ void World::update(void)
 		x->detec_collision(zero);
 	}
 	// Check if zero crashed into X
-	// check if we need to update the camera
-	int state = x->getState();
-	switch(state) {
-	case RUN:
-	case DASH: // move camera
-		{
-			// check how fast to move
-			const GLdouble diff = (RUN == state) ? CM_WALK : CM_DASH;
 
-			if(x->getDirection() == RIGHT)
-				cmX = min(width-bg.viewWidth, cmX + diff);
-			else
-				cmX = max(0, cmX - diff);
-
-			updateView();
-			break;
-		}
-	default:
-		glutPostRedisplay();
-		break;
-	}
+	updateView();
 }
 
 void World::draw(void) 
@@ -160,7 +141,15 @@ void World::updateView()
 {
 	glMatrixMode(GL_PROJECTION);                // update projection
     glLoadIdentity();
-	gluOrtho2D(cmX, cmX + bg.viewWidth, 0, bg.viewHeight);     // one to one
+	// position at X
+	const int pt = x->middle();	
+	GLdouble diff = bg.viewWidth;
+	cout << "mid-point = " << pt << " , viewWidth = " << bg.viewWidth << endl;
+	if(pt >= 0 && pt >= (bg.viewWidth / 2) ) 
+	{
+		cmX = pt - (bg.viewWidth / 2);
+	}
+	gluOrtho2D(cmX, cmX + diff, 0, bg.viewHeight);     // one to one
     glMatrixMode(GL_MODELVIEW);
 
     glutPostRedisplay();                        // request redisplay
