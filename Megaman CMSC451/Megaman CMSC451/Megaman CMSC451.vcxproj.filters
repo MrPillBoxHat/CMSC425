@@ -156,7 +156,7 @@
     <ClInclude Include="ZeroAI.h">
       <Filter>Header Files\Characters</Filter>
     </ClInclude>
-    <ClInclude Include="Music.h">
+    <ClInclude Include="Sound.h">
       <Filter>Header Files\World</Filter>
     </ClInclude>
   </ItemGroup>
@@ -212,7 +212,7 @@
     <ClCompile Include="Box.cpp">
       <Filter>Source Files\Geometry</Filter>
     </ClCompile>
-    <ClCompile Include="Music.cpp">
+    <ClCompile Include="Sound.cpp">
       <Filter>Source Files\World</Filter>
     </ClCompile>
   </ItemGroup>

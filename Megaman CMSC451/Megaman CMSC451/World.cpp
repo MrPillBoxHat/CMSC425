@@ -14,7 +14,7 @@
 #include "constants.h"
 #include "ZeroAI.h"
 #include "Saber.h"
-#include "Music.h"
+#include "Sound.h"
 
 #define SET_BG_COLOR glClearColor(0.0, 0.0, 0.0, 1.0)
 
@@ -50,10 +50,12 @@ World::World(GLdouble w, GLdouble h)
 	frames = 0;
 	fps = 60;
 	// If in main menu
-	main_menu = false;
+	main_menu = true;
 	cmX = 0;
 	// Initialize textures for intro and bullet
 	loadTextures();
+	sound = new Sound();
+	sound->playMusic("Music/Intro.wav");
 }
 
 World::~World(void) 
@@ -246,6 +248,7 @@ void World::processKeysMenu(unsigned char key)
 
 				// if cursor is on option
 				} else if(state == TRAINING){
+					sound->playMusic("Music/stage_2.wav");
 					// Start game in training mode
 					main_menu = false;
 				// if cursor is on new game

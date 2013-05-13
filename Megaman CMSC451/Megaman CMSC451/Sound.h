@@ -7,11 +7,20 @@
 using namespace irrklang;
 #pragma once
 
-class Music{
+class Sound{
 	private:
 		ISoundEngine* engine;
 
-	private:
-		Music();
-		void play(char *music);
+	public:
+		Sound();
+		void playMusic(char *music);
+		void playCursorSFX();
+		void playSelectSFX();
+		void playSaberSFX();
+		void playXBusterSFX();
+		void playZBusterSFX();
+		void playDashSFX();
+		void playJumpSFX();
+		void playLandSFX();
+		void playDamageSFX();
 };

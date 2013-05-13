@@ -52,15 +52,15 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\CMSC425\lib\Simple OpenGL Image Library\src;C:\CMSC425\lib\IrrKlang\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\CMSC425\lib\Simple OpenGL Image Library\src;C:\CMSC425\lib\IrrKlang\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <AdditionalOptions> /NODEFAULTLIB:"MSVCRT"</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\CMSC425\lib\Simple OpenGL Image Library\lib;C:\CMSC425\lib\IrrKlang\lib\Win32-visualStudio</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\CMSC425\lib\IrrKlang\lib\Win32-visualStudio;C:\CMSC425\lib\Simple OpenGL Image Library\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -93,7 +93,7 @@
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="constants.h" />
-    <ClInclude Include="Music.h" />
+    <ClInclude Include="Sound.h" />
     <ClInclude Include="Saber.h" />
     <ClInclude Include="Main_Menu.h" />
     <ClInclude Include="Point2D.h" />
@@ -114,7 +114,7 @@
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="Main_Menu.cpp" />
-    <ClCompile Include="Music.cpp" />
+    <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Point2D.cpp" />
     <ClCompile Include="Rectangle2D.cpp" />
     <ClCompile Include="Saber.cpp" />
