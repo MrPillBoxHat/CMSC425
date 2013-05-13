@@ -268,6 +268,9 @@ void World::processKeysGame(unsigned char key)
 			case MOVE_JUMP:
 				// If not already in the air
 				if(hero_state != JUMP){
+					if(hero_state == DASH){
+						resetHitBox();
+					}
 					x->resetTexture();
 					x->setState(JUMP);
 				} // else do nothing

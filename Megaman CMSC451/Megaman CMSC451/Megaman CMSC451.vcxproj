@@ -113,6 +113,7 @@
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="Main_Menu.cpp" />
+    <ClCompile Include="Music.cpp" />
     <ClCompile Include="Point2D.cpp" />
     <ClCompile Include="Rectangle2D.cpp" />
     <ClCompile Include="Saber.cpp" />

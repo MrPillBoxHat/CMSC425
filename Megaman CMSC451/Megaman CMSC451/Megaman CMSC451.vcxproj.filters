@@ -94,6 +94,9 @@
     <Filter Include="Source Files\Geometry">
       <UniqueIdentifier>{78ce3194-15a5-489c-889e-875a94249aee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\World">
+      <UniqueIdentifier>{85443356-6307-45c7-ad19-c6b5447e3763}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="X.h">
@@ -129,12 +132,6 @@
     <ClInclude Include="Main_Menu.h">
       <Filter>Header Files\World</Filter>
     </ClInclude>
-    <ClInclude Include="constants.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ZeroAI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Z_Bullet.h">
       <Filter>Header Files\Objects</Filter>
     </ClInclude>
@@ -149,9 +146,15 @@
     </ClInclude>
     <ClInclude Include="Box.h">
       <Filter>Header Files\World</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="Saber.h">
       <Filter>Header Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="constants.h">
+      <Filter>Header Files\World</Filter>
+    </ClInclude>
+    <ClInclude Include="ZeroAI.h">
+      <Filter>Header Files\Characters</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -159,9 +162,6 @@
       <Filter>Source Files\Characters</Filter>
     </ClCompile>
     <ClCompile Include="Driver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="World.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\image_DXT.c">
@@ -176,20 +176,11 @@
     <ClCompile Include="..\..\..\..\..\..\..\CMSC425\lib\Simple OpenGL Image Library\src\stb_image_aug.c">
       <Filter>Source Files\SOIL</Filter>
     </ClCompile>
-    <ClCompile Include="BackGround.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="X_Bullet.cpp">
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
     <ClCompile Include="Zero.cpp">
       <Filter>Source Files\Characters</Filter>
-    </ClCompile>
-    <ClCompile Include="Main_Menu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ZeroAI.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Z_Bullet.cpp">
       <Filter>Source Files\Objects</Filter>
@@ -200,11 +191,26 @@
     <ClCompile Include="Rectangle2D.cpp">
       <Filter>Source Files\Geometry</Filter>
     </ClCompile>
-    <ClCompile Include="Box.cpp">
-      <Filter>Source Files</Filter>
-	</ClCompile>
     <ClCompile Include="Saber.cpp">
       <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="ZeroAI.cpp">
+      <Filter>Source Files\Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="BackGround.cpp">
+      <Filter>Source Files\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Main_Menu.cpp">
+      <Filter>Source Files\World</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Source Files\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Box.cpp">
+      <Filter>Source Files\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Music.cpp">
+      <Filter>Source Files\World</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
