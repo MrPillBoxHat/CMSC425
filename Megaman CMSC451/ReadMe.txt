@@ -45,8 +45,6 @@ Animation:
 	- combination of keys + jump causes flags to screw up
 	- Jump fire animation is bugged, not working at all.  Causing X
 	  to move wrong on the Y plane
-	- Can change direction while in dash animation
-	- character still slides when doing fire and dash animation
 	- Health bar needs to stop when reaching end of screen (right side)
 	- Jump hit causes constant jumping
 
@@ -57,6 +55,7 @@ Animation:
 	(General)
 	- Fix camera
 	- Add in more implementations
+	- Health bar too big
 
 Camera:
 
@@ -68,3 +67,4 @@ ______________________________________________________________
 	- Invinciple state after damage
 	- Music/SFX
 	- Boss areana/stage entrance
+	- 
