@@ -49,6 +49,7 @@ Animation:
 	- Jump hit causes constant jumping
 	- No charge shot
 	- Dash jump implementation messed up
+	- bullet splat is messed up
 
 	(Zero)
 	- Zero saber attack needs to dash in front of X, not past X
