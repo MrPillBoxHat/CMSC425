@@ -2,8 +2,6 @@
 #include <ctime>
 #include <cstdlib>
 #include "ZeroAI.h"
-#include "Zero.h"
-#include "X.h"	
 #include "constants.h"
 
 // Constructor

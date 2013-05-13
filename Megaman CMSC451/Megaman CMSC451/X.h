@@ -5,7 +5,7 @@
 *******************************************************/
 #pragma once
 
-#include <GL\glut.h>
+#include "BackGround.h"
 #include "Zero.h"
 
 class X {
@@ -29,6 +29,7 @@ class X {
 		bool buttons[9]; // keeps track of state (buttons pressed)
 		int frame_count;
 		bool play_3frame;
+		BackGround *bg; // keeps track of environment
 
 		// Private helper functions
 		// helper functions to load textures
@@ -65,7 +66,7 @@ class X {
 	// Contains public functions
 	public:
 		// Contructor
-		X();
+		X(BackGround *inBG);
 		// getters
 		int getState(){return state;}
 		int getDirection(){return direction;}

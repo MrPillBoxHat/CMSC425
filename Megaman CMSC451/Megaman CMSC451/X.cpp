@@ -11,7 +11,6 @@
 #include <GL/gl.h>                      // OpenGL
 #include "SOIL.h" 						// Library for loading images
 #include "X.h" 							// X header file
-#include "Zero.h"
 #include "constants.h"
 #include "Sound.h"
 using namespace std;
@@ -19,7 +18,7 @@ Sound *sound = new Sound();
 bool land = false;
 
 // Contructor
-X::X()
+X::X(BackGround *inBG)
 {
 	health = 140;
 	// Coordinates of entry
@@ -50,6 +49,7 @@ X::X()
 	count = 0; // Frame controller
 	count2 = 0; // Invincibility Time
 	invinciple = false; // Determine whether X can take damage
+	//bg = inBG;
 	// Initialize health blocks and buttons pressed
 	for(int i = 0; i < 9; i++){
 		buttons[i] = false;
@@ -178,6 +178,7 @@ void X::move()
 {
 	// Dash movement (faster movement)
 	if(buttons[DASH]){
+		
 		// Move only if at the correct frame
 		if(x1_tcoord < .5){
 			if(direction == LEFT){

@@ -1,10 +1,10 @@
 #pragma once
-#include "constants.h"
 #include <SOIL.h>
 #include <GL/glut.h>                    // GLUT
 #include <GL/glu.h>                     // GLU
 #include <GL/gl.h>                      // OpenGL
 #include "X.h"
+#include "constants.h"
 
 class Saber{
 	private:

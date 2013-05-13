@@ -5,12 +5,12 @@
 *       Henry Ramos
 *********************************************************************************/
 #include <windows.h>				// Used for min/max function
-#include "World.h"
-#include "X.h"
-#include "Zero.h"
 #include <iostream>					// Uses I/O
 #include <GL/glut.h>                // GLUT
 #include <list>
+#include "World.h"
+#include "X.h"
+#include "Zero.h"
 #include "constants.h"
 #include "ZeroAI.h"
 #include "Saber.h"
@@ -26,17 +26,6 @@ using namespace std;
 // Constructor for the World class
 World::World(GLdouble w, GLdouble h) 
 {
-	// Create objects and load their texture
-	x = new X();
-	x->loadTextures();
-	zero = NULL;
-	initZero = false;
-	menu = new Main_Menu();
-	menu->loadTextures();
-	zAI = NULL;
-	missile = NULL;
-	saber = NULL;
-	create = false;
 	// initialize world instance variables
 	width = w;
 	height = h;
@@ -49,6 +38,17 @@ World::World(GLdouble w, GLdouble h)
 	lapse_time = 0;
 	frames = 0;
 	fps = 60;
+	// Create objects and load their texture
+	x = new X(&bg);
+	x->loadTextures();
+	zero = NULL;
+	initZero = false;
+	menu = new Main_Menu();
+	menu->loadTextures();
+	zAI = NULL;
+	missile = NULL;
+	saber = NULL;
+	create = false;
 	// If in main menu
 	main_menu = true;
 	cmX = 0;
