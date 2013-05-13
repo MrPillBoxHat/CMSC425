@@ -101,13 +101,15 @@ void BackGround::initGround()
 	bx = new Box(1200, 0, 100, H/4); // pit
 	ground.push_back(bx);
 
-	bx = new Box(1300, 0, 400, H); // space, then another block
-	bx->setColor(0, 150, 100);
+	bx = new Box(1300, 0, 300, H, grdTxt); // space, then another block
 	ground.push_back(bx);
 
-	bx = new Box(1700, 0, width - 1650 , H);  // rest of the floor
-	bx->setColor(150, 150, 150);
-	ground.push_back(bx);
+	for(UINT x = 1600; x < width; x += 400) 
+	{
+		bx = new Box(x, 0, 400, H, grdTxt);  // rest of the floor
+		ground.push_back(bx);
+	}
+
 
 	// small box on top
 	bx = new Box(500, H, 200, H/5);
@@ -128,7 +130,7 @@ void BackGround::initGround()
 
 void BackGround::initTextures()
 {
-	grdTxt = new Texture("Sprites/Background/factoryironstone2.jpg");
+	grdTxt = new Texture("Sprites/Background/ground.png");
 
 	bossTxt = new Texture("Sprites/Misc/mmx5_dynamo_stage_bg_c.png");
 	// set edges
