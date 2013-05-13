@@ -52,15 +52,15 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\CMSC425\lib\Simple OpenGL Image Library\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\CMSC425\lib\Simple OpenGL Image Library\src;C:\CMSC425\lib\IrrKlang\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <AdditionalOptions> /NODEFAULTLIB:"MSVCRT"</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\CMSC425\lib\Simple OpenGL Image Library\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\CMSC425\lib\Simple OpenGL Image Library\lib;C:\CMSC425\lib\IrrKlang\lib\Win32-visualStudio</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -72,14 +72,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\Henry\Documents\GitHub\CMSC425\Megaman CMSC451\Simple OpenGL Image Library\src;C:\Users\Nelson\Documents\GitHub\CMSC425\Megaman CMSC451\Simple OpenGL Image Library\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\CMSC425\lib\Simple OpenGL Image Library\src;C:\CMSC425\lib\IrrKlang\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Users\Nelson\Documents\GitHub\CMSC425\Megaman CMSC451\Simple OpenGL Image Library\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\CMSC425\lib\Simple OpenGL Image Library\lib;C:\CMSC425\lib\IrrKlang\lib\Win32-visualStudio</AdditionalLibraryDirectories>
       <AdditionalDependencies>libSOIL.a;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -93,6 +93,7 @@
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="constants.h" />
+    <ClInclude Include="Music.h" />
     <ClInclude Include="Saber.h" />
     <ClInclude Include="Main_Menu.h" />
     <ClInclude Include="Point2D.h" />

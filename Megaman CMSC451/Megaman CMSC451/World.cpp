@@ -14,6 +14,7 @@
 #include "constants.h"
 #include "ZeroAI.h"
 #include "Saber.h"
+#include "Music.h"
 
 #define SET_BG_COLOR glClearColor(0.0, 0.0, 0.0, 1.0)
 
