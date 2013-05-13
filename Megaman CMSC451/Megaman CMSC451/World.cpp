@@ -142,7 +142,7 @@ void World::draw_helper()
 		glColor4f(255, 255, 0, 1);
 		glRectf(test2[0], test2[2], test2[1], test2[3]);*/
 		enableTextures();
-		bg.draw(cmX);
+//		bg.draw(cmX);
 
 		glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
 		if(zero != NULL){

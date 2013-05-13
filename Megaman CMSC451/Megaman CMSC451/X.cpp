@@ -22,22 +22,22 @@ X::X(BackGround *inBG)
 {
 	health = 140;
 	// Coordinates of entry
-	x1 = 305.0;
-	x2 = 433.0;
-	y1 = 565.0;
-	y2 = 693.0;
+	x1 = 280.0;
+	x2 = 458.0;
+	y1 = 490.0;
+	y2 = 728.0;
 	// Cannon position after entry animation
-	position[0] = 377.4;
-	position[1] = 408.0;
-	position[2] = 114.0;
-	position[3] = 151.0;
+	position[0] = 352.4;
+	position[1] = 433.0;
+	position[2] = 89.0;
+	position[3] = 176.0;
 	// Hit box for X
-	hit_box[0] = 350.0;
-	hit_box[1] = 382.2;
-	hit_box[2] = 99.0;
-	hit_box[3] = 145.0;
+	hit_box[0] = 325.0;
+	hit_box[1] = 407.2;
+	hit_box[2] = 74.0;
+	hit_box[3] = 153.0;
 	health_location[0] = 28.0;
-	health_location[1] = 82.0;
+	health_location[1] = 100.0;
 	health_location[2] = 194.0;
 	health_location[3] = 383.0;
 	// Initialize X's state
@@ -49,7 +49,7 @@ X::X(BackGround *inBG)
 	count = 0; // Frame controller
 	count2 = 0; // Invincibility Time
 	invinciple = false; // Determine whether X can take damage
-	//bg = inBG;
+	bg = inBG;
 	// Initialize health blocks and buttons pressed
 	for(int i = 0; i < 9; i++){
 		buttons[i] = false;
@@ -178,33 +178,22 @@ void X::move()
 {
 	// Dash movement (faster movement)
 	if(buttons[DASH]){
-		
 		// Move only if at the correct frame
-		if(x1_tcoord < .5){
+		if(x1_tcoord < 0.5){
 			if(direction == LEFT){
-				x1 -= CM_DASH;
-				x2 -= CM_DASH;
-				position[0] -= CM_DASH;
-				position[1] -= CM_DASH;
-				hit_box[0] -= CM_DASH;
-				hit_box[1] -= CM_DASH;
-				// Don't move health bar off the screen
-				if(health_location[0] - CM_DASH < 28.0){
-					health_location[0] = 28.0;
-					health_location[1] = 82.0;
+				// Check if possible to move left
+				if(bg->canMove(hit_box[0] - CM_DASH, hit_box[3])){
+					run_move(CM_DASH * -1);
 				} else {
-					health_location[0] -= CM_DASH;
-					health_location[1] -= CM_DASH;
+					x1_tcoord = 0.5;
 				}
 			} else {
-				x1 += CM_DASH;
-				x2 += CM_DASH;
-				position[0] += CM_DASH;
-				position[1] += CM_DASH;
-				hit_box[0] += CM_DASH;
-				hit_box[1] += CM_DASH;
-				health_location[0] += CM_DASH;
-				health_location[1] += CM_DASH;
+				// Check if possible to move right
+				if(bg->canMove(hit_box[0] + CM_DASH, hit_box[3])){
+					run_move(CM_DASH);
+				} else {
+					x1_tcoord = 0.5;
+				}
 			}
 		}
 	// Normal movements
@@ -212,29 +201,15 @@ void X::move()
 		// Move X horizontally
 		if(buttons[RUN]){
 			if(direction == LEFT){
-				x1 -= CM_WALK;
-				x2 -= CM_WALK;
-				position[0] -= CM_WALK;
-				position[1] -= CM_WALK;
-				hit_box[0] -= CM_WALK;
-				hit_box[1] -= CM_WALK;
-				// Don't move health bar off the screen
-				if(health_location[0] - CM_WALK < 28.0){
-					health_location[0] = 28.0;
-					health_location[1] = 82.0;
-				} else {
-					health_location[0] -= CM_WALK;
-					health_location[1] -= CM_WALK;
+				// Check if possible to move left
+				if(bg->canMove(hit_box[0] - CM_WALK, hit_box[3])){
+					run_move(CM_WALK * -1);
 				}
 			} else {
-				x1 += CM_WALK;
-				x2 += CM_WALK;
-				position[0] += CM_WALK;
-				position[1] += CM_WALK;
-				hit_box[0] += CM_WALK;
-				hit_box[1] += CM_WALK;
-				health_location[0] += CM_WALK;
-				health_location[1] += CM_WALK;
+				// Check if possible to move right
+				if(bg->canMove(hit_box[0] + CM_WALK, hit_box[3])){
+					run_move(CM_WALK);
+				}
 			}
 		}
 	}
@@ -242,6 +217,17 @@ void X::move()
 	if(buttons[JUMP]){
 		jump_move();
 	}
+}
+
+void X::run_move(float distance)
+{
+
+	x1 += distance;
+	x2 += distance;
+	position[0] += distance;
+	position[1] += distance;
+	hit_box[0] += distance;
+	hit_box[1] += distance;
 }
 
 //helper function to move x while in jump state
@@ -294,6 +280,14 @@ void X::jump_move()
 			}	
 		}
 	}
+}
+
+void X::move_health(float distanceX, float distanceY)
+{
+	health_location[0] = distanceX;
+	health_location[1] = distanceX;
+	health_location[2] = distanceY;
+	health_location[3] = distanceY;
 }
 
 /**************************************************************************************************
@@ -387,7 +381,7 @@ void X::entry()
 	glEnd();
 	// Update frame pointers
 	// If X has not landed
-	if(y1 > 65.0){
+	if(y1 > 10.0){
 		y1 -= 10.0;
 		y2 -= 10.0;
 	} else {
@@ -404,10 +398,10 @@ void X::entry()
 					// Go into standing state
 					state = STAND;
 					// Resets coordinates
-					x1 = 342.0;
-					x2 = 393.2;
-					y1 = 97.0;
-					y2 = 161.0;
+					x1 = 317.0;
+					x2 = 418.2;
+					y1 = 72.0;
+					y2 = 186.0;
 					resetTexture();
 				}
 			}
@@ -439,7 +433,7 @@ void X::stand()
 		glEnd();
 	}
 	// Want to draw 5 frames per second
-	if(counter % 15 == 0){
+	if(counter % 10 == 0){
 		//update next frame or reset if reached the end
 		x1_tcoord += x_offset;
 		if(x1_tcoord >= 0.99609375){

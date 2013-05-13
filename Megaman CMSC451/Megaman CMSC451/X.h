@@ -57,8 +57,9 @@ class X {
 		void die();
 		// Move X's coordinates
 		void move();
-		// helper function to control movement when jumping
+		// helper function to control movement
 		void jump_move();
+		void run_move(float distance);
 		// Draw X's health bar
 		void drawHealth();
 		void gainHealth(int block_number);
@@ -93,4 +94,5 @@ class X {
 		// When x takes damage
 		void depleteHealth(int block_number);
 		void detec_collision(Zero *zero);
+		void move_health(float distanceX, float distanceY);
 };

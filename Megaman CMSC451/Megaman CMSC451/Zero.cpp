@@ -20,20 +20,20 @@ Zero::Zero()
 {
 	health = 140;
 	// Coordinates of entry
-	x1 = 3803.5;
-	x2 = 3932.5;
-	y1 = 509.0;
-	y2 = 637.0;
+	x1 = 3778.5;
+	x2 = 3957.5;
+	y1 = 484.0;
+	y2 = 662.0;
 	// Cannon position after entry animation
-	cannon_position[0] = 3877.4;
-	cannon_position[1] = 3908.0;
-	cannon_position[2] = 114.0;
-	cannon_position[3] = 151.0;
+	cannon_position[0] = 3852.4;
+	cannon_position[1] = 3933.0;
+	cannon_position[2] = 89.0;
+	cannon_position[3] = 176.0;
 	// collision box
-	hit_box[0] = 3851.0;
-	hit_box[1] = 3884.2;
-	hit_box[2] = 100.0;
-	hit_box[3] = 145.0;
+	hit_box[0] = 3826.0;
+	hit_box[1] = 3909.2;
+	hit_box[2] = 75.0;
+	hit_box[3] = 170.0;
 	state = ENTRY;
 	tcoord[0] = 0.0;
 	tcoord[1] = 1.0;
@@ -295,10 +295,10 @@ void Zero::entry()
 					// Go into standing state
 					state = STAND;
 					// Resets coordinates
-					x1 = 3840.0;
-					x2 = 3891.2;
-					y1 = 97.0;
-					y2 = 161.0;
+					x1 = 3815.0;
+					x2 = 3916.2;
+					y1 = 72.0;
+					y2 = 186.0;
 					resetTexture();
 				} else {
 					// Reset x frame pointer

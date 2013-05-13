@@ -55,10 +55,13 @@ Animation:
 	- Fix dash.  Only move when in dash animation (not when stoppin/starting)
 	- need to detec where contact is made in order to play proper damage animation
 	  and move in the correct location
+	- Move X and Zero sound class into their own class.
 
 Camera:
 	- Doesn't follow X when jumping
 	- Moves at end of dash
+	- Jump health bar
+	- needs to be fixed at boss
 
 
 Implementations:
