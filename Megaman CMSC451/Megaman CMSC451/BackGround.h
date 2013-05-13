@@ -14,7 +14,7 @@ public:
 	BackGround(void);
 	~BackGround(void);
 
-	void draw();
+	void draw(GLint cmX);
 	void setBoundary(GLdouble w, GLdouble h) { width = w; height = h;}
 	// Create the boxes for the ground
 	void initGround();
@@ -35,7 +35,7 @@ private:
 
 	void initTextures();
 	void drawGround();
-	void drawView();
+	void drawView(GLint cmX);
 	void drawTop();
 };
 

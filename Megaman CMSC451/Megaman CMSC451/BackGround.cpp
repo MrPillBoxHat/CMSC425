@@ -14,16 +14,15 @@ BackGround::~BackGround(void)
 {
 }
 
-void BackGround::draw() 
+void BackGround::draw(GLint cmX) 
 {
+	// background view
+	drawView(cmX);
 	drawGround();
 }
 
 void BackGround::drawGround() 
 {
-	// background view
-	drawView();
-
 	for(Box * bx : ground) // draw each box
 	{
 		glColor3f(1, 1, 1);
@@ -45,18 +44,24 @@ void BackGround::drawGround()
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
 }
 
-void BackGround::drawView()
+void BackGround::drawView(GLint cmX)
 {
 	glColor3f(1, 1, 1);
-	const UINT Y1 = 100;
+	/*const UINT Y = 100;
 	const UINT H = height - viewHeight;
-	const UINT W = width/10;
+	const UINT W = width/5;
 
 	for(UINT x = 0; x < width; x += W) 
 	{
-		Box b(x, Y1, W, H, bg);
+		Box b(x, Y, W, H, bg);
 		b.draw();
 	}
+	*/
+	const UINT Y = 100;
+	const UINT H = height - viewHeight;
+	const UINT W = viewWidth;
+	Box b(cmX, Y, W, H, bg);
+	b.draw();
 }
 Rectangle2D * BackGround::getBelow(GLint x, GLint y)
 {
@@ -74,6 +79,8 @@ Rectangle2D * BackGround::getBelow(GLint x, GLint y)
 
 bool BackGround::canMove(GLint x, GLint y)
 {
+	if(x < 0 || x > width) return false; // out of boundary
+
 	const Point2D pnt = Point2D(x, y);
 
 	for(Box * bx : ground)
@@ -137,5 +144,6 @@ void BackGround::initTextures()
 	bossTxt->setBoundary(.5, .1, 1, 1);
 
 	// background
-	bg = new Texture("Sprites/Background/back.png");
+	bg = new Texture("Sprites/Background/sky.png");
+	bg->setBoundary(.05, .3, 1, 1);
 }
