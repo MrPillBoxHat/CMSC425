@@ -129,8 +129,6 @@ void World::draw_helper()
 		enableTextures();
 		menu->draw();
 	} else {
-		bg.draw();
-
 		// Hit box for testing
 		float *test = x->getHitBox();
 		glColor4f(255, 255, 0, 1);
@@ -139,8 +137,9 @@ void World::draw_helper()
 		float *test2 = zero->getHitBox();
 		glColor4f(255, 255, 0, 1);
 		glRectf(test2[0], test2[2], test2[1], test2[3]);*/
-
 		enableTextures();
+		bg.draw();
+
 		glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
 		if(zero != NULL){
 			zero->draw(); // Draws zero
@@ -167,7 +166,6 @@ void World::updateView()
 	// position at X
 	const int pt = x->middle();	
 	GLdouble diff = bg.viewWidth;
-	cout << "mid-point = " << pt << " , viewWidth = " << bg.viewWidth << endl;
 	if(pt >= 0 && pt >= (bg.viewWidth / 2) ) 
 	{
 		cmX = pt - (bg.viewWidth / 2);

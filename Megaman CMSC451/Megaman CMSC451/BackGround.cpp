@@ -21,8 +21,12 @@ void BackGround::draw()
 
 void BackGround::drawGround() 
 {
+	// background view
+	drawView();
+
 	for(Box * bx : ground) // draw each box
 	{
+		glColor3f(1, 1, 1);
 		bx->draw();
 	}
 
@@ -41,6 +45,19 @@ void BackGround::drawGround()
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
 }
 
+void BackGround::drawView()
+{
+	glColor3f(1, 1, 1);
+	const UINT Y1 = 100;
+	const UINT H = height - viewHeight;
+	const UINT W = width/10;
+
+	for(UINT x = 0; x < width; x += W) 
+	{
+		Box b(x, Y1, W, H, bg);
+		b.draw();
+	}
+}
 Rectangle2D * BackGround::getBelow(GLint x, GLint y)
 {
 	Box * ret = nullptr;
@@ -68,18 +85,17 @@ bool BackGround::canMove(GLint x, GLint y)
 
 void BackGround::initGround()
 {
+	// load textures for background
+	initTextures(); 
 	const UINT H = 100;
 
-	Box * bx = new Box(0, 0, 400, H); // yellow box
-	bx->setColor(255, 255, 0);
+	Box * bx = new Box(0, 0, 400, H, grdTxt); // yellow box
 	ground.push_back(bx);
 
-	bx = new Box(400, 0, 400, H);	// red box
-	bx->setColor(255, 0, 0);
+	bx = new Box(400, 0, 400, H, grdTxt);	// red box
 	ground.push_back(bx);
 
-	bx = new Box(800, 0, 400, H); // green box
-	bx->setColor(0, 255, 0);
+	bx = new Box(800, 0, 400, H, grdTxt); // green box
 	ground.push_back(bx);
 
 	bx = new Box(1200, 0, 100, H/4); // pit
@@ -102,4 +118,22 @@ void BackGround::initGround()
 	bx = new Box(1400, H, 200, H/5);
 	bx->setColor(150, 50, 150);
 	ground.push_back(bx);
+
+	bx = new Box(3400, H, width-3400, height - viewHeight, bossTxt);
+	ground.push_back(bx);
+
+	// main background
+	view = new Box(0, H, width/10, height - viewHeight, bg);
+}
+
+void BackGround::initTextures()
+{
+	grdTxt = new Texture("Sprites/Background/factoryironstone2.jpg");
+
+	bossTxt = new Texture("Sprites/Misc/mmx5_dynamo_stage_bg_c.png");
+	// set edges
+	bossTxt->setBoundary(.5, .1, 1, 1);
+
+	// background
+	bg = new Texture("Sprites/Background/back.png");
 }

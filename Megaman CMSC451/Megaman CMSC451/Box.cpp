@@ -7,10 +7,10 @@ Box::Box(int x, int y, UINT w, UINT h) : Rectangle2D(x, y, w , h)
 	clr[0] = 235;
 	clr[1] = 100;
 	clr[2] = 100;
-	txtr = -1;
+	txtr = nullptr;
 }
 
-Box::Box(int x, int y, UINT w, UINT h, GLint texture) : Rectangle2D(x, y, w, h)
+Box::Box(int x, int y, UINT w, UINT h, Texture * texture) : Rectangle2D(x, y, w, h)
 {
 	txtr = texture;
 
@@ -30,7 +30,7 @@ void Box::setColor(GLubyte r, GLubyte g, GLubyte b)
 
 void Box::draw() 
 {
-	if(txtr > 0)
+	if(txtr != nullptr)
 		textureDraw();
 	else
 		simpleDraw();
@@ -44,4 +44,13 @@ void Box::simpleDraw()
 
 void Box::textureDraw()
 {
+	glBindTexture(GL_TEXTURE_2D, txtr->getId()); // bind
+
+	glBegin(GL_POLYGON);
+		//real coord
+		txtr->bottLeft();    glVertex2d(getMinX(), getMinY());
+		txtr->bottRight();   glVertex2d(getMaxX(), getMinY());
+		txtr->topRight();    glVertex2d(getMaxX(), getMaxY());
+		txtr->topLeft();     glVertex2d(getMinX(), getMaxY());
+	glEnd();
 }

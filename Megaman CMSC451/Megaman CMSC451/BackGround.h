@@ -6,6 +6,7 @@
 
 #include "Rectangle2D.h"
 #include "Box.h"
+#include "Texture.h"
 
 class BackGround
 {
@@ -26,8 +27,15 @@ public:
 private:
 	GLdouble width, height;	
 	std::vector<Box *> ground;
+	Box * view;
+	Texture * bg;
 
+	Texture * grdTxt;
+	Texture * bossTxt;
+
+	void initTextures();
 	void drawGround();
+	void drawView();
 	void drawTop();
 };
 

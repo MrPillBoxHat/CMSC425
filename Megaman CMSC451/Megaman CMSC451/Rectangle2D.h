@@ -20,6 +20,9 @@ public:
 	UINT getWidth() const { return width; }
 	int getMaxX() const { return origin.getX() + width; }
 	int getMaxY() const { return origin.getY() + height; }
+	int getMinY() const { return origin.getY(); }
+	int getMinX() const { return origin.getX(); }
+
 	bool betweenX(int x) const { return between(x, origin.getX(), width); }
 
 	bool intersects(const Point2D &point) const;

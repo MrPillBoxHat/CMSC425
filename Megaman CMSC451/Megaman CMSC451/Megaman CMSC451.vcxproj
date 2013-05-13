@@ -52,14 +52,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\CMSC425\lib\Simple OpenGL Image Library\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\CMSC425\lib\openAL\include;C:\CMSC425\lib\Simple OpenGL Image Library\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <AdditionalOptions> /NODEFAULTLIB:"MSVCRT"</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\CMSC425\lib\Simple OpenGL Image Library\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\CMSC425\lib\openAL\include;C:\CMSC425\lib\Simple OpenGL Image Library\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -72,14 +72,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\Henry\Documents\GitHub\CMSC425\Megaman CMSC451\Simple OpenGL Image Library\src;C:\Users\Nelson\Documents\GitHub\CMSC425\Megaman CMSC451\Simple OpenGL Image Library\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\CMSC425\lib\openAL\include;C:\Users\Henry\Documents\GitHub\CMSC425\Megaman CMSC451\Simple OpenGL Image Library\src;C:\Users\Nelson\Documents\GitHub\CMSC425\Megaman CMSC451\Simple OpenGL Image Library\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Users\Nelson\Documents\GitHub\CMSC425\Megaman CMSC451\Simple OpenGL Image Library\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\CMSC425\lib\openAL\include;C:\Users\Nelson\Documents\GitHub\CMSC425\Megaman CMSC451\Simple OpenGL Image Library\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libSOIL.a;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -97,6 +97,7 @@
     <ClInclude Include="Main_Menu.h" />
     <ClInclude Include="Point2D.h" />
     <ClInclude Include="Rectangle2D.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="X.h" />
     <ClInclude Include="X_Bullet.h" />
@@ -116,6 +117,7 @@
     <ClCompile Include="Point2D.cpp" />
     <ClCompile Include="Rectangle2D.cpp" />
     <ClCompile Include="Saber.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="X_Bullet.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="X.cpp" />
