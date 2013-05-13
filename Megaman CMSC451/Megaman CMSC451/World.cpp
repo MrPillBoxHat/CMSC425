@@ -106,6 +106,7 @@ void World::initBossRoom()
 	zero = new Zero();
 	zero->loadTextures();
 	zAI = new ZeroAI(zero, x);
+	x->setButtons(RUN, false);
 	resetHitBox();
 	x->setState(STAND);
 	x->resetTexture();
@@ -338,7 +339,7 @@ void World::processKeysGame(unsigned char key)
 			// Dash
 			case MOVE_DASH:
 				// if X not in the air and not already dashing
-				if(hero_state != JUMP && hero_state != DASH){
+				if(hero_state != JUMP && hero_state != DASH && hero_state != DAMAGE){
 					// Hit box for X
 					if(x->getDirection() == RIGHT){
 						x->setHitBox(0.0, 8.0, 0.0, -12.0);
@@ -365,7 +366,8 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 			case 's': // Kneel
 			case MOVE_LEFT: // Move Left
 			case MOVE_RIGHT: // Move Right
-				if(hero_state != JUMP && hero_state != ENTRY && hero_state != DASH && (zero == NULL || zero->getInit())){
+				if(hero_state != STAND && hero_state != JUMP && hero_state != ENTRY 
+					&& hero_state != DASH && hero_state != DAMAGE && (zero == NULL || zero->getInit())){
 					// Reset state
 					x->setState(STAND);
 					x->resetTexture();
@@ -477,6 +479,7 @@ void World::createMissiles()
 // Draw all bullets/missiles on the map
 void World::bullet_draw()
 {
+	int x_state = x->getState();
 	// Go through each X_bullet in the world and draw them
 	list<X_Bullet>::iterator it = x_bullets.begin();
 	while(it != x_bullets.end()){
@@ -510,7 +513,11 @@ void World::bullet_draw()
 	while(it2 != z_bullets.end()){
 		// Take damage only if not already in damage animation
 		if(it2->collision(x) && !x->ifInvinciple()){
-			resetHitBox();
+			if(x_state == DASH){
+				resetHitBox();
+			} else if (x_state == RUN){
+				x->setButtons(RUN, false);
+			}
 			damage(it2->getDamage(), x->getHealth()/5);
 		}
 		// draw bullet
@@ -528,7 +535,11 @@ void World::bullet_draw()
 	if(missile != NULL){
 		// Take damage only if not already in damage animation
 		if(missile->collision(x) && !x->ifInvinciple()){
-			resetHitBox();
+			if(x_state == DASH){
+				resetHitBox();
+			} else if (x_state == RUN){
+				x->setButtons(RUN, false);
+			}
 			damage(missile->getDamage(), x->getHealth()/5);
 		}
 		missile->draw(textures);
@@ -542,7 +553,11 @@ void World::bullet_draw()
 	// Detect whether saber hit X
 	if(saber != NULL){
 		if(saber->collision(x) && !x->ifInvinciple()){
-			resetHitBox();
+			if(x_state == DASH){
+				resetHitBox();
+			} else if (x_state == RUN){
+				x->setButtons(RUN, false);
+			}
 			damage(saber->getDamage(), x->getHealth()/5);
 		}
 	}
@@ -749,16 +764,12 @@ void World::enableTextures()
 
 void World::resetHitBox()
 {
-	bool ifXAction = x->getState() == DASH || x->getState() == RUN;
 	// Get out of dash animation and stop moving
-	if(ifXAction){
-		x->setButtons(DASH, false);
-		x->setButtons(RUN, false);
-		if(x->getDirection() == RIGHT){
-			x->setHitBox(0.0, -8.0, 0.0, 12.0);
-		} else {
-			x->setHitBox(8.0, 0.0, 0.0, 12.0);
-		}
+	x->setButtons(DASH, false);
+	if(x->getDirection() == RIGHT){
+		x->setHitBox(0.0, -8.0, 0.0, 12.0);
+	} else {
+		x->setHitBox(8.0, 0.0, 0.0, 12.0);
 	}
 }
 

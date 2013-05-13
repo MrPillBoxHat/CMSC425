@@ -76,6 +76,17 @@ void X::detec_collision(Zero *zero)
 	bool withinSides = hit_box[1] >= z_hitbox[0] && hit_box[0] <= z_hitbox[1];
 	bool withinTopBottom = hit_box[2] <= z_hitbox[3] && hit_box[3] >= z_hitbox[2];
 	if(withinSides && withinTopBottom){
+		// Get out of dash animation and stop moving
+		if(state == DASH){
+			setButtons(DASH, false);
+			if(direction == RIGHT){
+				setHitBox(0.0, -8.0, 0.0, 12.0);
+			} else {
+				setHitBox(8.0, 0.0, 0.0, 12.0);
+			}
+		} else if (state == RUN) {
+			buttons[RUN] = false;
+		}
 		resetTexture();
 		setState(DAMAGE);
 		health -= 10;
