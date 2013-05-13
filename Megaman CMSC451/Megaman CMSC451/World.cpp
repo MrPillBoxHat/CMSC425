@@ -53,7 +53,6 @@ World::World(GLdouble w, GLdouble h)
 	cmX = 0;
 	// Initialize textures for intro and bullet
 	loadTextures();
-	initBossRoom();
 }
 
 World::~World(void) 
@@ -92,13 +91,18 @@ void World::update(void)
 			x->detec_collision(zero);
 		}
 	}
-	// Check if zero crashed into X
+	float *x_position = x->getHitBox();
+	// If X reaches boss room
+	if(!initZero && x_position[0] >= 3555.0){
+		initBossRoom();
+	}
 	// check if we need to update the camera
 	int state = x->getState();
-	switch(state) {
-	case RUN:
-	case DASH: // move camera
-		{
+	switch(state) 
+	{
+		case RUN:
+		case DASH: // move camera
+			{
 			// check how fast to move
 			const GLdouble diff = (RUN == state) ? CM_WALK : CM_DASH;
 
@@ -109,10 +113,10 @@ void World::update(void)
 
 			updateView();
 			break;
-		}
-	default:
-		glutPostRedisplay();
-		break;
+			}
+		default:
+			glutPostRedisplay();
+			break;
 	}
 }
 
@@ -122,6 +126,9 @@ void World::initBossRoom()
 	zero = new Zero();
 	zero->loadTextures();
 	zAI = new ZeroAI(zero, x);
+	resetHitBox();
+	x->setState(STAND);
+	x->resetTexture();
 }
 
 void World::draw(void) 
@@ -147,9 +154,10 @@ void World::draw_helper()
 		float *test = x->getHitBox();
 		glColor4f(255, 255, 0, 1);
 		glRectf(test[0], test[2], test[1], test[3]);
+		/*
 		float *test2 = zero->getHitBox();
 		glColor4f(255, 255, 0, 1);
-		glRectf(test2[0], test2[2], test2[1], test2[3]);
+		glRectf(test2[0], test2[2], test2[1], test2[3]);*/
 
 		enableTextures();
 		glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
@@ -495,6 +503,7 @@ void World::bullet_draw()
 				zero->setHealth(it->getDamage());
 				zero->depleteHealth(zero->getHealth()/5);
 				zero->setInvincibility();
+				it->setX1Coord(0.0);
 			}
 		}
 		// draw bullet
@@ -513,6 +522,7 @@ void World::bullet_draw()
 	while(it2 != z_bullets.end()){
 		// Take damage only if not already in damage animation
 		if(it2->collision(x) && !x->ifInvinciple()){
+			resetHitBox();
 			damage(it2->getDamage(), x->getHealth()/5);
 		}
 		// draw bullet
@@ -530,6 +540,7 @@ void World::bullet_draw()
 	if(missile != NULL){
 		// Take damage only if not already in damage animation
 		if(missile->collision(x) && !x->ifInvinciple()){
+			resetHitBox();
 			damage(missile->getDamage(), x->getHealth()/5);
 		}
 		missile->draw(textures);
@@ -543,6 +554,7 @@ void World::bullet_draw()
 	// Detect whether saber hit X
 	if(saber != NULL){
 		if(saber->collision(x) && !x->ifInvinciple()){
+			resetHitBox();
 			damage(saber->getDamage(), x->getHealth()/5);
 		}
 	}
@@ -745,6 +757,21 @@ void World::enableTextures()
 	// Enable transparency
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+void World::resetHitBox()
+{
+	bool ifXAction = x->getState() == DASH || x->getState() == RUN;
+	// Get out of dash animation and stop moving
+	if(ifXAction){
+		x->setButtons(DASH, false);
+		x->setButtons(RUN, false);
+		if(x->getDirection() == RIGHT){
+			x->setHitBox(0.0, -8.0, 0.0, 12.0);
+		} else {
+			x->setHitBox(8.0, 0.0, 0.0, 12.0);
+		}
+	}
 }
 
 void done(unsigned char key, int x, int y) {

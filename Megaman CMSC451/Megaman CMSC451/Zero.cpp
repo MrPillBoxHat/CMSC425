@@ -19,18 +19,18 @@ Zero::Zero()
 {
 	health = 140;
 	// Coordinates of entry
-	x1 = 403.5;
-	x2 = 532.5;
+	x1 = 3803.5;
+	x2 = 3932.5;
 	y1 = 499.0;
 	y2 = 627.0;
 	// Cannon position after entry animation
-	cannon_position[0] = 477.4;
-	cannon_position[1] = 508.0;
+	cannon_position[0] = 3877.4;
+	cannon_position[1] = 3908.0;
 	cannon_position[2] = 114.0;
 	cannon_position[3] = 151.0;
 	// collision box
-	hit_box[0] = 451.0;
-	hit_box[1] = 484.2;
+	hit_box[0] = 3851.0;
+	hit_box[1] = 3884.2;
 	hit_box[2] = 100.0;
 	hit_box[3] = 145.0;
 	state = ENTRY;
@@ -40,7 +40,7 @@ Zero::Zero()
 	counter = 0; // Counter is to keep track of FPS
 	count = 0; // keeps track of frames
 	count2 = 0; // Keeps track of invincibility time
-	invincible = false;
+	//invincible = false;
 	// initialize buttons and health blocks to false;
 	for(int i = 0; i < 9; i++){
 		buttons[i] = false;
@@ -209,10 +209,10 @@ void Zero::drawHealth()
 	glBindTexture(GL_TEXTURE_2D, textures[HEALTH_BAR]); // select the active texture
 	glBegin(GL_POLYGON);
 		//real coord
-		glTexCoord2d(0.0, 0.0); glVertex2d(718, 194);
-		glTexCoord2d(1.0, 0.0); glVertex2d(772, 194);
-		glTexCoord2d(1.0, 1.0); glVertex2d(772, 383);
-		glTexCoord2d(0.0, 1.0); glVertex2d(718, 383);
+		glTexCoord2d(0.0, 0.0); glVertex2d(3918, 194);
+		glTexCoord2d(1.0, 0.0); glVertex2d(3972, 194);
+		glTexCoord2d(1.0, 1.0); glVertex2d(3972, 383);
+		glTexCoord2d(0.0, 1.0); glVertex2d(3918, 383);
 	glEnd();
 	// If health was already drawn
 	if(!init_health && counter % 3 == 0){
@@ -221,8 +221,8 @@ void Zero::drawHealth()
 	// Draw the blocks
 	glBindTexture(GL_TEXTURE_2D, textures[HEALTH_BLOCK]); // select the active texture
 	// position of health blocks
-	float xx1 = 727.0;
-	float xx2 = 759.0;
+	float xx1 = 3927.0;
+	float xx2 = 3959.0;
 	float yy1 = 245.0;
 	float yy2 = 253.0;
 	int i = 0; // counter to iterate through health_blocks
@@ -308,8 +308,8 @@ void Zero::entry()
 					// Go into standing state
 					state = STAND;
 					// Resets coordinates
-					x1 = 440.0;
-					x2 = 491.2;
+					x1 = 3840.0;
+					x2 = 3891.2;
 					y1 = 97.0;
 					y2 = 161.0;
 					resetTexture();
