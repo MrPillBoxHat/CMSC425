@@ -41,6 +41,7 @@ ______________________________________________________________
 Animation:
 
 	(X)
+	- Fix X jump
 	- Jump -> run needs frame timing fixes.  Doesn't look natural
 	- combination of keys + jump causes flags to screw up
 	- Jump fire animation is bugged, not working at all.  Causing X
@@ -62,5 +63,4 @@ Camera:
 
 Implementations:
 ______________________________________________________________
-	- Music/SFX
 	- Boss arena/Room
