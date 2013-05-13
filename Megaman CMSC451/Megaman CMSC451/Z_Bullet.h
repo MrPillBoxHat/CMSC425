@@ -1,9 +1,12 @@
 #pragma once
+
+#include "X.h"
+
 #include <SOIL.h>
 #include <GL/glut.h>                    // GLUT
 #include <GL/glu.h>                     // GLU
 #include <GL/gl.h>                      // OpenGL
-#include "X.h"
+
 #include "constants.h"
 
 class Z_Bullet

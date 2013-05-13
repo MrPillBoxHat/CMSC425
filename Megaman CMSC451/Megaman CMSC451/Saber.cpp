@@ -1,10 +1,4 @@
-#include <SOIL.h>
-#include <GL/glut.h>                    // GLUT
-#include <GL/glu.h>                     // GLU
-#include <GL/gl.h>                      // OpenGL
 #include "Saber.h"
-#include "constants.h"
-#include "X.h"
 
 // Constructor (missile)
 Saber::Saber(float *position, int inDirection)
