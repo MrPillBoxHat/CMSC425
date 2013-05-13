@@ -41,7 +41,7 @@ void BackGround::drawGround()
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
 }
 
-Rectangle2D & BackGround::getBelow(GLint x, GLint y)
+Rectangle2D * BackGround::getBelow(GLint x, GLint y)
 {
 	Box * ret = nullptr;
 
@@ -52,7 +52,7 @@ Rectangle2D & BackGround::getBelow(GLint x, GLint y)
 				ret = bx;
 	}
 
-	return *ret;
+	return ret;
 }
 
 bool BackGround::canMove(GLint x, GLint y)

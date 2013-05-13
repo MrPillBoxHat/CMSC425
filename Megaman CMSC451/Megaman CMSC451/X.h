@@ -73,7 +73,8 @@ class X {
 		float *getCannon(){return position;}
 		float *getHitBox(){return hit_box;}
 		float getStart() const {return x1; }
-		int middle() const { return hit_box[0] + (hit_box[1] - hit_box[0]) / 2; }
+		int middle() const { return x1 + (x2 - x1) / 2; }
+
 		bool ifInvinciple(){return invinciple;}
 		// setters
 		void setHealth(int number){health += number;}
