@@ -94,5 +94,5 @@ class X {
 		// When x takes damage
 		void depleteHealth(int block_number);
 		void detec_collision(Zero *zero);
-		void move_health(float distanceX, float distanceY);
+		void move_health(float distanceX1, float distanceX2);
 };

@@ -11,10 +11,10 @@ Z_Bullet::Z_Bullet(float *position, int inDirection)
 	y2 = position[3];
 	float xmid = x1 + ((x2-x1)/2);
 	float ymid = y1 + ((y2-y1)/2);
-	hit_box[0] = xmid - 4.0;
-	hit_box[1] = xmid + 4.0;
-	hit_box[2] = ymid - 3.5;
-	hit_box[3] = ymid + 3.5;
+	hit_box[0] = xmid - 35.0;
+	hit_box[1] = xmid + 30.0;
+	hit_box[2] = ymid - 35.0;
+	hit_box[3] = ymid + 35.0;
 	x1_tcoord = 0.0;
 	y2_tcoord = 1.0;
 	damage = -15;

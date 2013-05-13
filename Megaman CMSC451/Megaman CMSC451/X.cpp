@@ -182,18 +182,18 @@ void X::move()
 		if(x1_tcoord < 0.5){
 			if(direction == LEFT){
 				// Check if possible to move left
-				if(bg->canMove(hit_box[0] - CM_DASH, hit_box[3])){
+				//if(bg->canMove(hit_box[0] - CM_DASH, hit_box[3])){
 					run_move(CM_DASH * -1);
-				} else {
-					x1_tcoord = 0.5;
-				}
+			//	} else {
+			//		x1_tcoord = 0.5;
+			//	}
 			} else {
 				// Check if possible to move right
-				if(bg->canMove(hit_box[0] + CM_DASH, hit_box[3])){
+			//	if(bg->canMove(hit_box[0] + CM_DASH, hit_box[3])){
 					run_move(CM_DASH);
-				} else {
-					x1_tcoord = 0.5;
-				}
+			//	} else {
+			//		x1_tcoord = 0.5;
+			//	}
 			}
 		}
 	// Normal movements
@@ -202,14 +202,14 @@ void X::move()
 		if(buttons[RUN]){
 			if(direction == LEFT){
 				// Check if possible to move left
-				if(bg->canMove(hit_box[0] - CM_WALK, hit_box[3])){
+			//	if(bg->canMove(hit_box[0] - CM_WALK, hit_box[3])){
 					run_move(CM_WALK * -1);
-				}
+		//		}
 			} else {
 				// Check if possible to move right
-				if(bg->canMove(hit_box[0] + CM_WALK, hit_box[3])){
+		//		if(bg->canMove(hit_box[0] + CM_WALK, hit_box[3])){
 					run_move(CM_WALK);
-				}
+		//		}
 			}
 		}
 	}
@@ -282,12 +282,12 @@ void X::jump_move()
 	}
 }
 
-void X::move_health(float distanceX, float distanceY)
+void X::move_health(float distanceX1, float distanceX2)
 {
-	health_location[0] = distanceX;
-	health_location[1] = distanceX;
-	health_location[2] = distanceY;
-	health_location[3] = distanceY;
+	health_location[0] = distanceX1 + 30;
+	health_location[1] = distanceX2 + 30;
+	//health_location[2] += distanceY;
+	//health_location[3] += distanceY;
 }
 
 /**************************************************************************************************

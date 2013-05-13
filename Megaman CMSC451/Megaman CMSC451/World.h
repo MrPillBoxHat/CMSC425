@@ -66,7 +66,7 @@ private:
 	void damage(int damage, int health);
 	void initBossRoom();
 	void resetHitBox();
-
+	void World::testTexture();
 public:
 	World(GLdouble w, GLdouble h);
 	World() {}

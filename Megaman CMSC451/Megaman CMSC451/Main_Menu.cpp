@@ -62,9 +62,9 @@ void Main_Menu::draw()
 	glBegin(GL_POLYGON);
 		//real coord
 		glTexCoord2d(0.0, 0.0);  glVertex2d(0.0, 0.0);
-		glTexCoord2d(1.0, 0.0); glVertex2d(800.0, 0.0);
-		glTexCoord2d(1.0, 1.0); glVertex2d(800.0, 400.0);
-		glTexCoord2d(0.0, 1.0); glVertex2d(0.0, 400.0);
+		glTexCoord2d(1.0, 0.0); glVertex2d(1000.0, 0.0);
+		glTexCoord2d(1.0, 1.0); glVertex2d(1000.0, 650.0);
+		glTexCoord2d(0.0, 1.0); glVertex2d(0.0, 650.0);
 	glEnd();
 }
 

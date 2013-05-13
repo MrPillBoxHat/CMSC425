@@ -30,7 +30,7 @@ int main(int argc, char **argv)
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(100, 100);
-	glutInitWindowSize(800, 500);
+	glutInitWindowSize(1000, 650);
 	glutCreateWindow("Megaman CMSC425");
 
 	// register callbacks

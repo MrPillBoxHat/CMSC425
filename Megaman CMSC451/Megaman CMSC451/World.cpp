@@ -97,9 +97,10 @@ void World::update(void)
 	
 	float *x_position = x->getHitBox();
 	// If X reaches boss room
-	if(!initZero && x_position[0] >= 3555.0){
+	if(!initZero && x_position[0] >= 3150.0){
 		initBossRoom();
 	}
+	x->move_health(cmX, 0.0);
 	updateView();
 }
 
@@ -133,16 +134,9 @@ void World::draw_helper()
 		enableTextures();
 		menu->draw();
 	} else {
-		// Hit box for testing
-		float *test = x->getHitBox();
-		glColor4f(255, 255, 0, 1);
-		glRectf(test[0], test[2], test[1], test[3]);
-		/*
-		float *test2 = zero->getHitBox();
-		glColor4f(255, 255, 0, 1);
-		glRectf(test2[0], test2[2], test2[1], test2[3]);*/
+		testTexture();
 		enableTextures();
-//		bg.draw(cmX);
+		//bg.draw(cmX);
 
 		glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
 		if(zero != NULL){
@@ -155,6 +149,53 @@ void World::draw_helper()
 	// disable texturings
 	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D);
+}
+
+void World::testTexture()
+{
+	// X
+	float *test = x->getHitBox();
+	glColor4f(255, 255, 0, 1);
+	glRectf(test[0], test[2], test[1], test[3]);
+		
+	// X Bullets
+	list<X_Bullet>::iterator it = x_bullets.begin();
+	while(it != x_bullets.end()){
+		float *test4 = it->getHitBox();
+		glColor4f(0, 0, 255, 1);
+		glRectf(test4[0], test4[2], test4[1], test4[3]);
+		it++;
+	}
+
+	if(zero != NULL){
+		//zero
+		float *test2 = zero->getHitBox();
+		glColor4f(255, 255, 0, 1);
+		glRectf(test2[0], test2[2], test2[1], test2[3]);
+
+		//zero bullets
+		list<Z_Bullet>::iterator it2 = z_bullets.begin();
+		while(it2 != z_bullets.end()){
+			float *test3 = it2->getHitBox();
+			glColor4f(0, 0, 255, 1);
+			glRectf(test3[0], test3[2], test3[1], test3[3]);
+			it2++;
+		}
+		
+		// Saber
+		if(saber != NULL){
+			float *test5 = saber->getHitBox();
+			glColor4f(0, 0, 255, 1);
+			glRectf(test5[0], test5[2], test5[1], test5[3]);
+		}
+
+		// Missile
+		if(missile != NULL){
+			float *test6 = missile->getHitBox();
+			glColor4f(0, 0, 255, 1);
+			glRectf(test6[0], test6[2], test6[1], test6[3]);
+		}
+	}
 }
 
 void World::setSize(int w, int h) 
@@ -173,6 +214,7 @@ void World::updateView()
 	if(pt >= 0 && pt >= (bg.viewWidth / 2) ) 
 	{
 		cmX = pt - (bg.viewWidth / 2);
+
 	}
 	gluOrtho2D(cmX, cmX + diff, 0, bg.viewHeight);     // one to one
     glMatrixMode(GL_MODELVIEW);
@@ -430,9 +472,9 @@ void World::processAI()
 			sound->zeroPlaySaberSFX();
 			// Adjust based on zero's direction
 			if(zero->getDirection() == LEFT){
-				zero->setPosition(-60.0, 30.0, -7.0, 48.0);
+				zero->setPosition(-100.0, 30.0, -7.0, 70.0);
 			} else {
-				zero->setPosition(-30.0, 60.0, -7.0, 48.0);
+				zero->setPosition(-30.0, 100.0, -7.0, 70.0);
 			}
 			zero->resetTexture();
 			if(action == SABER){

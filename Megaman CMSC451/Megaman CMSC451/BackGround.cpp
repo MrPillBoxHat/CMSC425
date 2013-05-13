@@ -5,7 +5,7 @@
 
 using namespace std;
 
-BackGround::BackGround(void): viewWidth(800), viewHeight(400)
+BackGround::BackGround(void): viewWidth(1000), viewHeight(650)
 {
 }
 

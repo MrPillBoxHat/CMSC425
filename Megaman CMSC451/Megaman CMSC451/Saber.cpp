@@ -5,14 +5,14 @@ Saber::Saber(float *position, int inDirection)
 {
 	x1 = position[0]-70.0;
 	x2 = position[1]-30.0;
-	y1 = position[2];
-	y2 = position[3];
+	y1 = position[2] + 25;
+	y2 = position[3] + 25;
 	float xmid = x1 + ((x2-x1)/2);
 	float ymid = y1 + ((y2-y1)/2);
-	hit_box[0] = xmid - 16.5;
-	hit_box[1] = xmid + 16.5;
-	hit_box[2] = ymid - 16.5;
-	hit_box[3] = ymid + 16.5;
+	hit_box[0] = xmid - 30.0;
+	hit_box[1] = xmid + 30.0;
+	hit_box[2] = ymid - 25.0;
+	hit_box[3] = ymid + 25.0;
 	x1_tcoord = 0.0;
 	y2_tcoord = 1.0;
 	damage = -15;
@@ -30,15 +30,15 @@ Saber::Saber(float *position, int direction, int i)
 	float xmid = x1 + ((x2-x1)/2);
 	float ymid = y1 + ((y2-y1)/2);
 	if(direction == LEFT){
-		hit_box[0] = xmid - 50.0;
-		hit_box[1] = xmid + 8.0;
-		hit_box[2] = ymid - 25.0;
-		hit_box[3] = ymid + 20.0;
+		hit_box[0] = xmid - 80.0;
+		hit_box[1] = xmid + 5.0;
+		hit_box[2] = ymid - 50.0;
+		hit_box[3] = ymid + 50.0;
 	} else {
-		hit_box[0] = xmid + 40.0;
-		hit_box[1] = xmid + 95.0;
-		hit_box[2] = ymid - 30.0;
-		hit_box[3] = ymid + 20.0;
+		hit_box[0] = xmid + 65.0;
+		hit_box[1] = xmid + 105.0;
+		hit_box[2] = ymid - 55.0;
+		hit_box[3] = ymid + 28.0;
 	}
 	x1_tcoord = 0.0;
 	y2_tcoord = 1.0;

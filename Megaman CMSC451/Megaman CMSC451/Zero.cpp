@@ -132,8 +132,8 @@ void Zero::move()
 				hit_box[0] -= CM_DASH;
 				hit_box[1] -= CM_DASH;
 			} else {
-				x1 += 5.0;
-				x2 += 5.0;
+				x1 += CM_DASH;
+				x2 += CM_DASH;
 				cannon_position[0] += CM_DASH;
 				cannon_position[1] += CM_DASH;
 				hit_box[0] += CM_DASH;
@@ -280,7 +280,7 @@ void Zero::entry()
 	glEnd();
 	// Update frame pointers
 	// If Zero has not landed
-	if(y1 > 64.0){
+	if(y1 > 24.0){
 		y1 -= 10.0;
 		y2 -= 10.0;
 	} else {
@@ -504,9 +504,9 @@ void Zero::saber()
 		if(tcoord[0] >= 0.998046875){
 			// Reset texture position
 			if(direction == LEFT){
-				setPosition(60.0, -30.0, 7.0, -48.0);
+				setPosition(100.0, -30.0, 7.0, -70.0);
 			} else {
-				setPosition(30.0, -60.0, 7.0, -48.0);
+				setPosition(30.0, -100.0, 7.0, -70.0);
 			}
 			resetTexture();
 			state = STAND;
