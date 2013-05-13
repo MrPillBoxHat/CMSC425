@@ -35,8 +35,8 @@ Zero::Zero()
 	hit_box[2] = 100.0;
 	hit_box[3] = 145.0;
 	state = ENTRY;
-	x1_tcoord = 0.0;
-	y2_tcoord = 1.0;
+	tcoord[0] = 0.0;
+	tcoord[1] = 1.0;
 	direction = LEFT;
 	counter = 0; // Counter is to keep track of FPS
 	count = 0; // keeps track of frames
@@ -52,21 +52,6 @@ Zero::Zero()
 	}
 	init_health = false;
 	
-}
-
-// Getter for Zero's position
-float *Zero::getHitBox()
-{
-	return hit_box;
-}
-
-// Determine which frame the animation is on
-float *Zero::getTextureCoord()
-{
-	float coord[2];
-	coord[0] = x1_tcoord;
-	coord[1] = y2_tcoord;
-	return coord;
 }
 
 // Adjust Zero's texture box
@@ -138,7 +123,7 @@ void Zero::move()
 	// Dash movement (faster movement)
 	if(buttons[DASH]){
 		// Only move during certain frames
-		if(!(x1_tcoord >= 0.2 && y2_tcoord == 0.5)){
+		if(!(tcoord[0] >= 0.2 && tcoord[1] == 0.5)){
 			if(direction == LEFT){
 				x1 -= CM_DASH;
 				x2 -= CM_DASH;
@@ -180,9 +165,9 @@ void Zero::move()
 	if(buttons[JUMP]){
 		// FPS control
 		if(counter %5 == 0){
-			if(x1_tcoord >= 0.72){
+			if(tcoord[0] >= 0.72){
 			// no change in position
-			} else if(x1_tcoord >= 0.36 && x1_tcoord < 0.72){
+			} else if(tcoord[0] >= 0.36 && tcoord[0] < 0.72){
 			// Zero is falling back down
 				y1 -= 22.0;
 				y2 -= 22.0;
@@ -288,10 +273,10 @@ void Zero::entry()
 	glBindTexture(GL_TEXTURE_2D, textures[ENTRY_TEXUTRE]); // select the active texture
 	glBegin(GL_POLYGON); // draw the object(s)
 		//real coord
-		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset); glVertex2d(x1, y1);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
-		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+		glTexCoord2d(tcoord[0], tcoord[1] - y_offset); glVertex2d(x1, y1);
+		glTexCoord2d(tcoord[0] + x_offset, tcoord[1] - y_offset); glVertex2d(x2, y1);
+		glTexCoord2d(tcoord[0] + x_offset, tcoord[1]); glVertex2d(x2, y2);
+		glTexCoord2d(tcoord[0], tcoord[1]); glVertex2d(x1, y2);
 	glEnd();
 	// Update frame pointers
 	// If Zero has not landed
@@ -301,12 +286,12 @@ void Zero::entry()
 	} else {
 		if(counter % 5 == 0){
 			// go to next frame
-			x1_tcoord += x_offset;
-			if(x1_tcoord >= 1.0){
+			tcoord[0] += x_offset;
+			if(tcoord[0] >= 1.0){
 				// Move down 1 row
-				y2_tcoord -= y_offset;
+				tcoord[1] -= y_offset;
 				// When Finished, load stand
-				if(y2_tcoord <= 0.0){
+				if(tcoord[1] <= 0.0){
 					// Go into standing state
 					state = STAND;
 					// Resets coordinates
@@ -317,7 +302,7 @@ void Zero::entry()
 					resetTexture();
 				} else {
 					// Reset x frame pointer
-					x1_tcoord = 0.0;	
+					tcoord[0] = 0.0;	
 				}
 			}
 		}
@@ -340,18 +325,18 @@ void Zero::stand()
 		// Draw objects
 		glBegin(GL_POLYGON);
 			//real coord
-			glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
-			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
-			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
-			glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+			glTexCoord2d(tcoord[0], tcoord[1] - y_offset);  glVertex2d(x1, y1);
+			glTexCoord2d(tcoord[0] + x_offset, tcoord[1] - y_offset); glVertex2d(x2, y1);
+			glTexCoord2d(tcoord[0] + x_offset, tcoord[1]); glVertex2d(x2, y2);
+			glTexCoord2d(tcoord[0], tcoord[1]); glVertex2d(x1, y2);
 		glEnd();
 	}
 	// Want to draw 5 frames per second
 	if(counter % 15 == 0){
 		//update next frame or reset if reached the end
-		x1_tcoord += x_offset;
-		if(x1_tcoord >= 0.99609375){
-			x1_tcoord = 0.0;
+		tcoord[0] += x_offset;
+		if(tcoord[0] >= 0.99609375){
+			tcoord[0] = 0.0;
 		}
 	}
 }
@@ -377,26 +362,26 @@ void Zero::run(){
 		// Draw objects
 		glBegin(GL_POLYGON);
 			//real coord
-			glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
-			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
-			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
-			glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+			glTexCoord2d(tcoord[0], tcoord[1] - y_offset);  glVertex2d(x1, y1);
+			glTexCoord2d(tcoord[0] + x_offset, tcoord[1] - y_offset); glVertex2d(x2, y1);
+			glTexCoord2d(tcoord[0] + x_offset, tcoord[1]); glVertex2d(x2, y2);
+			glTexCoord2d(tcoord[0], tcoord[1]); glVertex2d(x1, y2);
 		glEnd();
 	}
 	// Update frame pointers
 	if(counter % 5 == 0){
 		// go to next frame
-		x1_tcoord += x_offset;
-		if(x1_tcoord >= 1.0){
+		tcoord[0] += x_offset;
+		if(tcoord[0] >= 1.0){
 			// Reset x frame pointer
-			x1_tcoord = 0.0;
+			tcoord[0] = 0.0;
 			// Move down 1 row
-			y2_tcoord -= y_offset;
+			tcoord[1] -= y_offset;
 			// When animation reaches end
 			// Start on 3rd frame of beginning
-			if(y2_tcoord <= 0.0){
-				y2_tcoord = 1.0;
-				x1_tcoord = 0.25;
+			if(tcoord[1] <= 0.0){
+				tcoord[1] = 1.0;
+				tcoord[0] = 0.25;
 			}
 		}
 	}
@@ -418,25 +403,25 @@ void Zero::jump()
 		// Draw objects
 		glBegin(GL_POLYGON);
 			//real coord
-			glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
-			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
-			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
-			glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+			glTexCoord2d(tcoord[0], tcoord[1] - y_offset);  glVertex2d(x1, y1);
+			glTexCoord2d(tcoord[0] + x_offset, tcoord[1] - y_offset); glVertex2d(x2, y1);
+			glTexCoord2d(tcoord[0] + x_offset, tcoord[1]); glVertex2d(x2, y2);
+			glTexCoord2d(tcoord[0], tcoord[1]); glVertex2d(x1, y2);
 		glEnd();
 	}
 	// Update frame pointers
 	if(counter % 5 == 0){
 		// if max height frame is reached
 		// go to next frame
-		x1_tcoord += x_offset;
+		tcoord[0] += x_offset;
 		// When finished playing
-		if(x1_tcoord >= 1.0){
+		if(tcoord[0] >= 1.0){
 			// Reset state
-			x1_tcoord = 0.0;
+			tcoord[0] = 0.0;
 			if(buttons[RUN]){
 				state = RUN;
-				x1_tcoord = 0.0;
-				y2_tcoord = 0.5;
+				tcoord[0] = 0.0;
+				tcoord[1] = 0.5;
 			} else {
 				state = STAND;
 			}
@@ -463,20 +448,20 @@ void Zero::fire()
 		// Draw objects
 		glBegin(GL_POLYGON);
 			//real coord
-			glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1-20.0, y1);
-			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
-			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
-			glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1-20.0, y2);
+			glTexCoord2d(tcoord[0], tcoord[1] - y_offset);  glVertex2d(x1-20.0, y1);
+			glTexCoord2d(tcoord[0] + x_offset, tcoord[1] - y_offset); glVertex2d(x2, y1);
+			glTexCoord2d(tcoord[0] + x_offset, tcoord[1]); glVertex2d(x2, y2);
+			glTexCoord2d(tcoord[0], tcoord[1]); glVertex2d(x1-20.0, y2);
 		glEnd();
 	}
 	// Want to draw 5 frames per second
 	if(counter % 6 == 0){
 		//update next frame or reset if reached the end
-		x1_tcoord += x_offset;
-		if(x1_tcoord >= 0.99609375){
-			x1_tcoord = 0.0;
-			y2_tcoord -= y_offset;
-			if(y2_tcoord <= 0){
+		tcoord[0] += x_offset;
+		if(tcoord[0] >= 0.99609375){
+			tcoord[0] = 0.0;
+			tcoord[1] -= y_offset;
+			if(tcoord[1] <= 0){
 				// Reset texture coordinates
 				if(direction == LEFT){
 					setPosition(-8.0, -8.0, 0.0, 0.0);
@@ -506,17 +491,17 @@ void Zero::saber()
 		// Draw objects
 		glBegin(GL_POLYGON);
 			//real coord
-			glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
-			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
-			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
-			glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+			glTexCoord2d(tcoord[0], tcoord[1] - y_offset);  glVertex2d(x1, y1);
+			glTexCoord2d(tcoord[0] + x_offset, tcoord[1] - y_offset); glVertex2d(x2, y1);
+			glTexCoord2d(tcoord[0] + x_offset, tcoord[1]); glVertex2d(x2, y2);
+			glTexCoord2d(tcoord[0], tcoord[1]); glVertex2d(x1, y2);
 		glEnd();
 	}
 	// Want to draw 5 frames per second
 	if(counter % 3 == 0){
 		//update next frame or reset if reached the end
-		x1_tcoord += x_offset;
-		if(x1_tcoord >= 0.998046875){
+		tcoord[0] += x_offset;
+		if(tcoord[0] >= 0.998046875){
 			// Reset texture position
 			if(direction == LEFT){
 				setPosition(60.0, -30.0, 7.0, -48.0);
@@ -545,40 +530,40 @@ void Zero::dash()
 		// Draw objects
 		glBegin(GL_POLYGON);
 			//real coord
-			glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
-			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
-			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
-			glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+			glTexCoord2d(tcoord[0], tcoord[1] - y_offset);  glVertex2d(x1, y1);
+			glTexCoord2d(tcoord[0] + x_offset, tcoord[1] - y_offset); glVertex2d(x2, y1);
+			glTexCoord2d(tcoord[0] + x_offset, tcoord[1]); glVertex2d(x2, y2);
+			glTexCoord2d(tcoord[0], tcoord[1]); glVertex2d(x1, y2);
 		glEnd();
 	}
 	// Want to draw 5 frames per second
 	if(counter % 3 == 0){
 		//update next frame or reset if reached the end
-		x1_tcoord += x_offset;
+		tcoord[0] += x_offset;
 		// Resets frame to play again
-		if(x1_tcoord >= 0.2 && y2_tcoord == 0.5 && count < 2){
+		if(tcoord[0] >= 0.2 && tcoord[1] == 0.5 && count < 2){
 			count++;
-			x1_tcoord = 0.8;
-			y2_tcoord = 1.0;
+			tcoord[0] = 0.8;
+			tcoord[1] = 1.0;
 		}
-		if(x1_tcoord >= 1.0){
-			x1_tcoord = 0.0;
-			y2_tcoord -= y_offset;
-			if(y2_tcoord <= 0){
+		if(tcoord[0] >= 1.0){
+			tcoord[0] = 0.0;
+			tcoord[1] -= y_offset;
+			if(tcoord[1] <= 0){
 				// If player is holding move change to run
 				if(buttons[RUN]){
-					x1_tcoord = 0.375;
+					tcoord[0] = 0.375;
 					state = RUN;
 				// If player is not holding move, change to stand
 				} else {
-					y2_tcoord = 1.0;
+					tcoord[1] = 1.0;
 					state = STAND;
 				}
 				count = 0;
 				// Adjust Zero's texture coordinates
 				setPosition(22.5, -22.5, 0.0, 0.0);
 				buttons[DASH] = false;
-				y2_tcoord = 1.0;
+				tcoord[1] = 1.0;
 			}
 		}
 	}
@@ -608,19 +593,19 @@ void Zero::damage()
 	// Draw objects
 	glBegin(GL_POLYGON);
 		//real coord
-		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
-		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+		glTexCoord2d(tcoord[0], tcoord[1] - y_offset);  glVertex2d(x1, y1);
+		glTexCoord2d(tcoord[0] + x_offset, tcoord[1] - y_offset); glVertex2d(x2, y1);
+		glTexCoord2d(tcoord[0] + x_offset, tcoord[1]); glVertex2d(x2, y2);
+		glTexCoord2d(tcoord[0], tcoord[1]); glVertex2d(x1, y2);
 	glEnd();
 	// Want to draw 5 frames per second
 	if(counter % 3 == 0){
 		//update next frame or reset if reached the end
-		x1_tcoord += x_offset;
-		if(x1_tcoord >= 0.99609375){
-			x1_tcoord = 0.0;
-			y2_tcoord -= y_offset;
-			if(y2_tcoord <= 0){
+		tcoord[0] += x_offset;
+		if(tcoord[0] >= 0.99609375){
+			tcoord[0] = 0.0;
+			tcoord[1] -= y_offset;
+			if(tcoord[1] <= 0){
 				resetTexture();
 				state = STAND;
 			}
