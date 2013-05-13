@@ -9,6 +9,7 @@
 #include "Main_Menu.h"
 #include "ZeroAI.h"
 #include "Saber.h"
+#include "Sound.h"
 
 class World
 {
@@ -29,6 +30,7 @@ private:
 	// Misc objects
 	Main_Menu *menu;
 	ZeroAI *zAI;
+	Sound *sound;
 	// Variables to keep track of objects and textures
 	// in the world class
 	std::list<X_Bullet> x_bullets;
