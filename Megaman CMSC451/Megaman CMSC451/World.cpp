@@ -113,6 +113,7 @@ void World::initBossRoom()
 	resetHitBox();
 	x->setState(STAND);
 	x->resetTexture();
+	sound->playMusic("Music/boss.wav");
 }
 
 void World::draw(void) 
@@ -195,6 +196,7 @@ void World::processKeysMenu(unsigned char key)
 	int state = menu->getMenuState();
 	if(state == INTRO || state == INTRO_PRESS){
 		if(key == 13){
+			sound->playSelectSFX();
 			menu->setMenuState(TRAINING);
 		}
 	} else {
@@ -202,6 +204,7 @@ void World::processKeysMenu(unsigned char key)
 		{
 			// Move cursor up
 			case 'w':
+				sound->playCursorSFX();
 				// if cursor is on continue
 				if(state == CONTINUE){
 					menu->setMenuState(NEWGAME);
@@ -219,6 +222,7 @@ void World::processKeysMenu(unsigned char key)
 			
 			// Move cursor down
 			case 's':
+				sound->playCursorSFX();
 				// if cursor is on continue
 				if(state == CONTINUE){
 					menu->setMenuState(OPTION);
@@ -236,6 +240,8 @@ void World::processKeysMenu(unsigned char key)
 			
 			// Select cursor
 			case 13:
+				sound->playSelectSFX();
+				Sleep(250);
 				// if cursor is on continue
 				if(state == CONTINUE){
 					// load save state
@@ -247,6 +253,7 @@ void World::processKeysMenu(unsigned char key)
 				// if cursor is on option
 				} else if(state == TRAINING){
 					sound->playMusic("Music/stage_2.wav");
+					sound->playEntrySFX();
 					// Start game in training mode
 					main_menu = false;
 				// if cursor is on new game
@@ -270,6 +277,8 @@ void World::processKeysGame(unsigned char key)
 			case MOVE_JUMP:
 				// If not already in the air
 				if(hero_state != JUMP){
+					sound->xPlayJumpSFX();
+					sound->playJumpSFX();
 					if(hero_state == DASH){
 						resetHitBox();
 					}
@@ -319,6 +328,7 @@ void World::processKeysGame(unsigned char key)
 			case MOVE_FIRE:
 				// Can only fire max 3 times
 				if(x_bullets.size() < 3){
+					sound->playXBusterSFX();
 					X_Bullet *temp = new X_Bullet(x->getCannon(), x->getDirection());
 					// Create bullet from cannon position
 					x_bullets.push_front(*temp);
@@ -345,6 +355,7 @@ void World::processKeysGame(unsigned char key)
 			case MOVE_DASH:
 				// if X not in the air and not already dashing
 				if(hero_state != JUMP && hero_state != DASH && hero_state != DAMAGE){
+					sound->playDashSFX();
 					// Hit box for X
 					if(x->getDirection() == RIGHT){
 						x->setHitBox(0.0, 8.0, 0.0, -12.0);
@@ -415,6 +426,8 @@ void World::processAI()
 
 		case SABER_MISSILE:
 		case SABER:
+			sound->playSaberSFX();
+			sound->zeroPlaySaberSFX();
 			// Adjust based on zero's direction
 			if(zero->getDirection() == LEFT){
 				zero->setPosition(-60.0, 30.0, -7.0, 48.0);
@@ -430,6 +443,7 @@ void World::processAI()
 			break;
 
 		case DASH:
+			sound->playDashSFX();
 			// Adjust Zero's texture coordinates
 			zero->setPosition(-22.5, 22.5, 0.0, 0.0);
 			zero->resetTexture();
@@ -452,6 +466,8 @@ void World::createMissiles()
 		// If on the correct frame, create bullet
 		float *tempInt = zero->getTextureCoord();
 		if(tempInt[0] >= 0.66 && tempInt[0] < 0.76 && tempInt[1] == 0.5 && create == false){
+			sound->playZBusterSFX();
+			sound->zeroPlayJumpSFX();
 			Z_Bullet *temp = new Z_Bullet(zero->getCannon(), zero->getDirection());
 			z_bullets.push_front(*temp);
 			create = true;
@@ -493,8 +509,11 @@ void World::bullet_draw()
 			// Take damage only if not already in damage state
 			if(it->collision(zero) && !zero->ifInvincible()){
 				if(zero->getState() == STAND){
+					sound->zeroPlayHurtSFX();
 					zero->resetTexture();
 					zero->setState(DAMAGE);
+				} else {
+					sound->playDamageSFX();
 				}
 				zero->setHealth(it->getDamage());
 				zero->depleteHealth(zero->getHealth()/5);
@@ -518,6 +537,7 @@ void World::bullet_draw()
 	while(it2 != z_bullets.end()){
 		// Take damage only if not already in damage animation
 		if(it2->collision(x) && !x->ifInvinciple()){
+			sound->xPlayHurtSFX();
 			if(x_state == DASH){
 				resetHitBox();
 			} else if (x_state == RUN){
@@ -540,6 +560,7 @@ void World::bullet_draw()
 	if(missile != NULL){
 		// Take damage only if not already in damage animation
 		if(missile->collision(x) && !x->ifInvinciple()){
+			sound->xPlayHurtSFX();
 			if(x_state == DASH){
 				resetHitBox();
 			} else if (x_state == RUN){
@@ -558,6 +579,7 @@ void World::bullet_draw()
 	// Detect whether saber hit X
 	if(saber != NULL){
 		if(saber->collision(x) && !x->ifInvinciple()){
+			sound->xPlayHurtSFX();
 			if(x_state == DASH){
 				resetHitBox();
 			} else if (x_state == RUN){

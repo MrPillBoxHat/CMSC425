@@ -48,6 +48,7 @@ Animation:
 	- Health bar needs to stop when reaching end of screen (right side)
 	- Jump hit causes constant jumping
 	- No charge shot
+	- Dash jump implementation messed up
 
 	(Zero)
 	- Zero saber attack needs to dash in front of X, not past X
@@ -66,5 +67,4 @@ Things need to implement:
 ______________________________________________________________
 
 	(Characters)
-	- Music/SFX
 	- Boss areana/stage entrance

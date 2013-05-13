@@ -13,8 +13,10 @@
 #include "X.h" 							// X header file
 #include "Zero.h"
 #include "constants.h"
-
+#include "Sound.h"
 using namespace std;
+Sound *sound = new Sound();
+bool land = false;
 
 // Contructor
 X::X()
@@ -23,8 +25,8 @@ X::X()
 	// Coordinates of entry
 	x1 = 305.0;
 	x2 = 433.0;
-	y1 = 500.0;
-	y2 = 628.0;
+	y1 = 565.0;
+	y2 = 693.0;
 	// Cannon position after entry animation
 	position[0] = 377.4;
 	position[1] = 408.0;
@@ -76,6 +78,7 @@ void X::detec_collision(Zero *zero)
 	bool withinSides = hit_box[1] >= z_hitbox[0] && hit_box[0] <= z_hitbox[1];
 	bool withinTopBottom = hit_box[2] <= z_hitbox[3] && hit_box[3] >= z_hitbox[2];
 	if(withinSides && withinTopBottom){
+		sound->xPlayHurtSFX();
 		// Get out of dash animation and stop moving
 		if(state == DASH){
 			setButtons(DASH, false);
@@ -383,9 +386,9 @@ void X::entry()
 	glEnd();
 	// Update frame pointers
 	// If X has not landed
-	if(y1 != 65.0){
-		y1 -= CM_DASH;
-		y2 -= CM_DASH;
+	if(y1 > 65.0){
+		y1 -= 10.0;
+		y2 -= 10.0;
 	} else {
 		if(counter % 5 == 0){
 			// go to next frame
@@ -520,6 +523,10 @@ void X::jump()
 		// if max height frame is reached
 		// go to next frame
 		x1_tcoord += x_offset;
+		if(x1_tcoord >= 0.81 && land == false){	
+			sound->playLandSFX();
+			land = true;
+		}
 		// When finished playing
 		if(x1_tcoord >= 1.0){
 			// Reset state
@@ -531,6 +538,7 @@ void X::jump()
 			} else {
 				state = STAND;
 			}
+			land = false;
 			buttons[JUMP] = false;
 			buttons[DASH] = false;
 		}

@@ -3,7 +3,6 @@
 *	Contains all function implementations
 *   and actions of the character
 *******************************************************/
-
 #include <iostream>						// input/outout stream
 #include <cstdlib>						// C++ standard definitions
 #include <GL/glut.h>                    // GLUT
@@ -12,7 +11,9 @@
 #include "SOIL.h" 						// Library for loading images
 #include "Zero.h" 						// Zero header file
 #include "constants.h"
+#include "Sound.h"
 using namespace std;
+Sound *sound2 = new Sound();
 
 // Constructor
 Zero::Zero()
@@ -21,8 +22,8 @@ Zero::Zero()
 	// Coordinates of entry
 	x1 = 3803.5;
 	x2 = 3932.5;
-	y1 = 499.0;
-	y2 = 627.0;
+	y1 = 509.0;
+	y2 = 637.0;
 	// Cannon position after entry animation
 	cannon_position[0] = 3877.4;
 	cannon_position[1] = 3908.0;
@@ -244,6 +245,7 @@ void Zero::drawHealth()
 // Draws the animation that fills Zero's health
 void Zero::gainHealth(int block_number)
 {
+	sound2->playHealthSFX();
 	// if last block is drawn, done
 	if(health_blocks[block_number]){
 		init_health = true;
@@ -293,9 +295,9 @@ void Zero::entry()
 	glEnd();
 	// Update frame pointers
 	// If Zero has not landed
-	if(y1 != 64.0){
-		y1 -= 5.0;
-		y2 -= 5.0;
+	if(y1 > 64.0){
+		y1 -= 10.0;
+		y2 -= 10.0;
 	} else {
 		if(counter % 5 == 0){
 			// go to next frame

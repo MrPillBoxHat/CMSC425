@@ -72,7 +72,13 @@ void Sound::playDieSFX()
 
 void Sound::playHealthSFX()
 {
+	engine->stopAllSounds();
 	engine->play2D("Sound Effects/game/text.wav", false);
+}
+
+void Sound::playDamageSFX()
+{
+	engine->play2D("Sound Effects/X/damage2.wav", false);
 }
 
 /**********************************************************************************************************
@@ -88,7 +94,7 @@ void Sound::xPlayJumpSFX()
 void Sound::xPlayHurtSFX()
 {
 	engine->play2D("Sound Effects/X/damage.wav", false);
-	engine->play2D("Sound Effects/X/damage2.wav", false);
+	playDamageSFX();
 }
 
 /**********************************************************************************************************
