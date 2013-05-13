@@ -14,6 +14,7 @@ class Sound{
 	public:
 		Sound();
 		void playMusic(char *music);
+		void playEntrySFX();
 		void playCursorSFX();
 		void playSelectSFX();
 		void playSaberSFX();
