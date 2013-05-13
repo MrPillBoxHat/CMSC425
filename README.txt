@@ -41,20 +41,14 @@ ______________________________________________________________
 Animation:
 
 	(X)
-	- Need to fix animation timings (some frames should
-	  be displayed longer than other frames).
-	- Fire needs to continue until finished firing
 	- Jump -> run needs frame timing fixes.  Doesn't look natural
 	- combination of keys + jump causes flags to screw up
-	- Bullet animation needs to be fixed according to hitting wall
 	- Jump fire animation is bugged, not working at all.  Causing X
 	  to move wrong on the Y plane
-	- Can change direction while in dash animation
-	- character still slides when doing fire and dash animation
-	- jump 
 
 	(Zero)
-	- No Known Bugs
+	- Zero Saber attack needs to dash to front and not past
+	- Zero Saber animation needs sheath animation
 
 	(general)
 	- Fix dash.  Only move when in dash animation (not when stoppin/starting)
@@ -64,3 +58,9 @@ Animation:
 Camera:
 	- Doesn't follow X when jumping
 	- Moves at end of dash
+
+
+Implementations:
+______________________________________________________________
+	- Music/SFX
+	- Boss arena/Room

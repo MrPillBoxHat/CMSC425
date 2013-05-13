@@ -55,7 +55,7 @@ void Z_Bullet::draw(GLuint *texture)
 	}
 	// update next frame or reset if reached the end
 	counter++;
-	if(counter % 7 == 0){
+	if(counter % 5 == 0){
 		x1_tcoord += x_offset;
 		if(x1_tcoord >= 1.0){
 			x1_tcoord = 0.625;

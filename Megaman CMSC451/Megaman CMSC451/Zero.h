@@ -22,7 +22,7 @@ class Zero {
 		float x1_tcoord; // texture x1 coord
 		float y2_tcoord; // texture y2 coord
 		GLuint textures[22]; // stores texture
-		bool buttons[9]; // keeps track of state (buttons pressed)
+		bool buttons[11]; // keeps track of state (buttons pressed)
 		bool init_health;
 		bool invincible;
 
