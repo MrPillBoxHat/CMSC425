@@ -63,6 +63,7 @@ private:
 	void createMissiles();
 	void damage(int damage, int health);
 	void initBossRoom();
+	void resetHitBox();
 
 public:
 	World(GLdouble w, GLdouble h);

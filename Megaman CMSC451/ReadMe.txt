@@ -47,10 +47,12 @@ Animation:
 	  to move wrong on the Y plane
 	- Health bar needs to stop when reaching end of screen (right side)
 	- Jump hit causes constant jumping
+	- No charge shot
 
 	(Zero)
 	- Zero saber attack needs to dash in front of X, not past X
 	- Saber needs to add sword sheath to animation
+	- Zero goes invincible when performing slash missile
 
 	(General)
 	- Fix camera
@@ -64,7 +66,5 @@ Things need to implement:
 ______________________________________________________________
 
 	(Characters)
-	- Invinciple state after damage
 	- Music/SFX
 	- Boss areana/stage entrance
-	- 
