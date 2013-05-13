@@ -9,58 +9,104 @@ Sound::Sound()
 	engine = irrklang::createIrrKlangDevice();
 }
 
-void Sound::playCursorSFX()
-{
-	engine->play2D("Sound Effects/menu_select.wav", false);
-}
-
-void Sound::playSelectSFX()
-{
-	engine->play2D("Sound Effects/menu_select.wav", false);
-}
-
+/**********************************************************************************************************
+*  Game SFX
+*	These functions play the game sound effects.  Things such as actions or mechanics will be played here
+*
+**********************************************************************************************************/
 void Sound::playMusic(char *music)
 {
 	engine->stopAllSounds();
 	engine->play2D(music, true);
 }
 
+void Sound::playCursorSFX()
+{
+	engine->play2D("Sound Effects/game/cursor.wav", false);
+}
+
+void Sound::playSelectSFX()
+{
+	engine->play2D("Sound Effects/game/menu_select.wav", false);
+}
+
 void Sound::playEntrySFX()
 {
-	engine->play2D("Sound Effects/entry.wav", false);
+	engine->play2D("Sound Effects/game/entry.wav", false);
 }
 
 void Sound::playSaberSFX()
 {
-	engine->play2D("Sound Effects/saber.wav", false);
+	engine->play2D("Sound Effects/game/saber.wav", false);
 }
 
 void Sound::playXBusterSFX()
 {
-	engine->play2D("Sound Effects/x_buster.wav", false);
+	engine->play2D("Sound Effects/game/x_buster.wav", false);
 }
 
 void Sound::playZBusterSFX()
 {
-
+	engine->play2D("Sound Effects/game/z_buster.wav", false);
 }
 
 void Sound::playDashSFX()
 {
-	engine->play2D("Sound Effects/dash.wav", false);
+	engine->play2D("Sound Effects/game/dash.wav", false);
 }
 
 void Sound::playJumpSFX()
 {
-	engine->play2D("Sound Effects/jump.wav", false);
+	engine->play2D("Sound Effects/game/jump.wav", false);
 }
 
 void Sound::playLandSFX()
 {
-	engine->play2D("Sound Effects/landing.wav", false);
+	engine->play2D("Sound Effects/game/land.wav", false);
 }
 
-void Sound::playDamageSFX()
+void Sound::playDieSFX()
 {
+	engine->play2D("Sound Effects/game/die.wav", false);
+}
 
+void Sound::playHealthSFX()
+{
+	engine->play2D("Sound Effects/game/text.wav", false);
+}
+
+/**********************************************************************************************************
+*  X SFX
+*	These functions play X's sound effects.  Things such as grunts and other vocals will be played here
+*
+**********************************************************************************************************/
+void Sound::xPlayJumpSFX()
+{
+	engine->play2D("Sound Effects/X/jump.wav", false);
+}
+
+void Sound::xPlayHurtSFX()
+{
+	engine->play2D("Sound Effects/X/damage.wav", false);
+	engine->play2D("Sound Effects/X/damage2.wav", false);
+}
+
+/**********************************************************************************************************
+*  Zero SFX
+*	These functions play X's sound effects.  Things such as grunts and other vocals will be played here
+*
+**********************************************************************************************************/
+void Sound::zeroPlayJumpSFX()
+{
+	engine->play2D("Sound Effects/game/jump.wav", false);
+}
+
+void Sound::zeroPlayHurtSFX()
+{
+	engine->play2D("Sound Effects/Zero/damage.wav", false);
+}
+
+void Sound::zeroPlaySaberSFX()
+{
+	engine->play2D("Sound Effects/Zero/saber.wav", false);
 }

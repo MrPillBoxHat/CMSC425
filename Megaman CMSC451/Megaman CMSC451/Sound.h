@@ -13,6 +13,7 @@ class Sound{
 
 	public:
 		Sound();
+		// game SFX
 		void playMusic(char *music);
 		void playEntrySFX();
 		void playCursorSFX();
@@ -24,4 +25,13 @@ class Sound{
 		void playJumpSFX();
 		void playLandSFX();
 		void playDamageSFX();
+		void playDieSFX();
+		void playHealthSFX();
+		// X SFX
+		void xPlayHurtSFX();
+		void xPlayJumpSFX();
+		// Zero SFX
+		void zeroPlayHurtSFX();
+		void zeroPlayJumpSFX();
+		void zeroPlaySaberSFX();
 };
