@@ -33,13 +33,13 @@ private:
 	Texture * bg;
 
 	Texture * grdTxt;
-	Texture * bossTxt;
+	Texture * bossTxt, * pillarTxt;
 
 	void initTextures();
 	void drawGround();
 	void drawView(GLint cmX);
 	void drawTop();
-	void addBox(GLint x1, GLuint w, GLuint h, Texture * txt, GLuint rlH);
+	void addBox(GLint x1, GLuint w, GLuint h, Texture * txt, GLuint rlH, GLint y1=0);
 };
 
 /*

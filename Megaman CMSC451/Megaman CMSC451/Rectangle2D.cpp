@@ -23,7 +23,7 @@ bool Rectangle2D::intersects(const Point2D &point) const {
 }
 
 bool Rectangle2D::between(int p, int x, int length) const {
-	return x <= p && p <= x + length;
+	return x <= p && p <= (x + length);
 }
 
 bool Rectangle2D::operator <(const Rectangle2D & rec) const {

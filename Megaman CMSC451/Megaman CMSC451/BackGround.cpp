@@ -80,12 +80,12 @@ Rectangle2D * BackGround::getBelow(GLint x, GLint y)
 
 bool BackGround::canMove(GLint x, GLint y) const
 {
-	if(x < 0 || x > width) return false; // out of boundary
+	if(x < 0 || x >= width-75) return false; // out of boundary
 
 	const Point2D pnt = Point2D(x, y);
 
 	for(Rectangle2D * bx : ground)
-		if(bx->intersects(pnt) &&  y != bx->getMaxY())
+		if(bx->intersects(pnt))
 			return false;
 
 	return true;
@@ -132,20 +132,23 @@ void BackGround::initGround()
 
 	// main background
 	view = new Box(0, Tx_H, width/10, height - viewHeight, bg);
+
+	//two pillars
+	addBox(500, 100, 250, pillarTxt, 225, 100);
 }
 
-void BackGround::addBox(GLint x1, GLuint w, GLuint txtH, Texture * txt, GLuint rlH)
+void BackGround::addBox(GLint x1, GLuint w, GLuint txtH, Texture * txt, GLuint rlH, GLint y1)
 {
 	Box * bx = nullptr;
 	if(txt != nullptr)
-		bx = new Box(x1, 0, w, txtH, txt);
+		bx = new Box(x1, y1, w, txtH, txt);
 	else
-		bx = new Box(x1, 0, w, txtH);
+		bx = new Box(x1, y1, w, txtH);
 
 	groundTxtr.push_back(bx);
 
 	// "real" ground
-	ground.push_back( new Rectangle2D(x1, 0, w, rlH) );
+	ground.push_back( new Rectangle2D(x1, y1, w, rlH) );
 }
 
 void BackGround::initTextures()
@@ -159,4 +162,6 @@ void BackGround::initTextures()
 	// background
 	bg = new Texture("Sprites/Background/sky.png");
 	bg->setBoundary(.05, .3, 1, 1);
+
+	pillarTxt = new Texture("Sprites/Background/pillar1.png");
 }
