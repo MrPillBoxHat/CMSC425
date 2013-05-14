@@ -92,6 +92,20 @@ bool BackGround::canMove(GLint x1, GLint y1, GLint x2, GLint y2) const
 	return true;
 }
 
+bool BackGround::canMove(GLint x, GLint y) const
+{
+	if((x < 0 || x >= width)) 
+		return false; // out of boundary
+
+	const Point2D pt(x, y);
+
+	for(Rectangle2D * bx : ground)
+		if(bx->intersects(pt))
+			return false;
+
+	return true;
+}
+
 void BackGround::initGround()
 {
 	// load textures for background

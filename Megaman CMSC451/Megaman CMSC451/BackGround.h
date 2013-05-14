@@ -21,7 +21,8 @@ public:
 	// retrieve the rectangle below this point
 	Rectangle2D * getBelow(GLint x, GLint y);
 	bool canMove(GLint x1, GLint y1, GLint x2, GLint y2) const;
-	
+	bool canMove(GLint x, GLint y) const;
+
 	const GLdouble viewWidth, viewHeight;
 
 private:

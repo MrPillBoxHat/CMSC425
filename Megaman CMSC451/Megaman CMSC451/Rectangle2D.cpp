@@ -23,10 +23,10 @@ bool Rectangle2D::intersects(const Point2D &point) const {
 }
 
 bool Rectangle2D::intersects(const Rectangle2D &rect) const {
-	return getMinX() <= rect.getMaxX() &&
-		   getMaxX() >= rect.getMinX() &&
-		   getMinY() <= rect.getMaxY() &&
-		   getMaxY() >= rect.getMinY();
+	return getMinX() < rect.getMaxX() &&
+		   getMaxX() > rect.getMinX() &&
+		   getMinY() < rect.getMaxY() &&
+		   getMaxY() > rect.getMinY();
 }
 
 bool Rectangle2D::between(int p, int x, int length) const {
