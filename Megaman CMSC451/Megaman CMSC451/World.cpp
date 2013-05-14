@@ -329,7 +329,7 @@ void World::processKeysGame(unsigned char key)
 {
 	const int old = cmX;
 	int hero_state = x->getState();
-	if(hero_state != ENTRY && hero_state != DAMAGE && (zero == NULL || zero->getInit())){
+	if(hero_state != ENTRY && hero_state != DAMAGE && hero_state != JUMP_OUT && (zero == NULL || zero->getInit())){
 		switch(key)
 		{
 			// Jump
@@ -339,6 +339,16 @@ void World::processKeysGame(unsigned char key)
 					sound->xPlayJumpSFX();
 					sound->playJumpSFX();
 					x->resetTexture();
+					// Reset texture/hit Box
+					if(x->getDirection() == LEFT){
+						x->setHitBox(20.0, 20.0, 0.0, 0.0);
+						x->setPosition(20.0, 20.0, 0.0, 0.0);
+					} else {
+						x->setHitBox(-20.0, -20.0, 0.0, 0.0);
+						x->setPosition(-20.0, -20.0, 0.0, 0.0);
+					}
+					x->setButtons(JUMP, false);
+					x->setState(JUMP_OUT);
 				// If not already in the air
 				} else if(hero_state != JUMP){
 					sound->xPlayJumpSFX();
@@ -453,21 +463,24 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 			case 's': // Kneel
 			case MOVE_LEFT: // Move Left
 			case MOVE_RIGHT: // Move Right
-				if(hero_state != STAND && hero_state != JUMP && hero_state != ENTRY && hero_state != SLIDE
-					&& hero_state != DASH && hero_state != DAMAGE && (zero == NULL || zero->getInit())){
-					// Reset state
-					x->setState(STAND);
-					x->resetTexture();
-				} else if (hero_state == SLIDE) {
-					if(x->getDirection() == LEFT){
-						x->setHitBox(20.0, 20.0, 0.0, 0.0);
-						x->setPosition(20.0, 20.0, 0.0, 0.0);
-					} else {
-						x->setHitBox(-20.0, -20.0, 0.0, 0.0);
-						x->setPosition(-20.0, -20.0, 0.0, 0.0);
+				if(hero_state != JUMP_OUT){
+					if(hero_state != STAND && hero_state != JUMP && hero_state != ENTRY && hero_state != SLIDE
+						&& hero_state != DASH && hero_state != DAMAGE && (zero == NULL || zero->getInit())){
+						// Reset state
+							x->setState(STAND);
+						x->resetTexture();
+					// Fall off the wall
+					} else if (hero_state == SLIDE) {
+						if(x->getDirection() == LEFT){
+							x->setHitBox(20.0, 20.0, 0.0, 0.0);
+							x->setPosition(20.0, 20.0, 0.0, 0.0);
+						} else {
+							x->setHitBox(-20.0, -20.0, 0.0, 0.0);
+							x->setPosition(-20.0, -20.0, 0.0, 0.0);
+						}
+						x->setState(JUMP);
+						x->setFalling();
 					}
-					x->setState(JUMP);
-					x->setFalling();
 				}
 				x->setButtons(RUN, false);
 					break;

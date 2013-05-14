@@ -117,14 +117,14 @@ void X::move()
 		if(x1_tcoord < 0.5 || state == JUMP){
 			if(direction == LEFT){
 				// Check if possible to move left
-				if(bg->canMove(hit_box[0], hit_box[2], (hit_box[1] ), hit_box[3])){
+				if(bg->canMove(hit_box[0] - CM_DASH, hit_box[3])){
 					move_horizontal(CM_DASH * -1);
 				} else {
 					x1_tcoord = 0.5;
 				}
 			} else {
 				// Check if possible to move right
-				if(bg->canMove(hit_box[0] , hit_box[2], (hit_box[1] ), hit_box[3])){
+				if(bg->canMove(hit_box[1] + CM_DASH, hit_box[3])){
 					move_horizontal(CM_DASH);
 				} else {
 					x1_tcoord = 0.5;
@@ -133,11 +133,20 @@ void X::move()
 		}
 	// Normal movements
 	} else {
-		// Move X horizontally
-		if(buttons[RUN]){
+		 if (state == JUMP_OUT){
+			if(direction == LEFT){
+				//move out right
+				move_horizontal(CM_WALK);
+			} else {
+				//move out left
+				move_horizontal(CM_WALK * -1);
+			}
+			move_vertical(10.0);
+		 // Move X horizontally
+		 } else if(buttons[RUN]){
 			if(direction == LEFT){
 				// Check if possible to move left
-				if(bg->canMove(hit_box[0], hit_box[2], (hit_box[1] ), hit_box[3])){
+				if(bg->canMove(hit_box[0] - CM_WALK, hit_box[3])){
 					move_horizontal(CM_WALK * -1);
 				// change state to wall slide
 				} else if (state != SLIDE && state == JUMP && !onGround) {
@@ -150,7 +159,7 @@ void X::move()
 				}
 			} else {
 				// Check if possible to move right
-				if(bg->canMove(hit_box[0] , hit_box[2], (hit_box[1] ), hit_box[3])){
+				if(bg->canMove(hit_box[1] + CM_WALK, hit_box[3])){
 					move_horizontal(CM_WALK);
 				// change state to wall slide
 				} else if (state != SLIDE && state == JUMP && !onGround) {
@@ -369,6 +378,9 @@ void X::draw()
 			break;
 		case JUMP:
 			jump();
+			break;
+		case JUMP_OUT:
+			jumpOut();
 			break;
 		case SLIDE:
 			slide();
@@ -604,6 +616,51 @@ void X::jump()
 			buttons[JUMP] = false;
 			buttons[DASH] = false;
 		}
+	}
+}
+
+void X::jumpOut()
+{
+	// How many frames to jump
+	float x_offset;
+	if(x1_tcoord == 0.0){
+		x_offset = 0.25;
+	} else {
+		x_offset = 0.090909090909090909;
+	}
+	float y_offset = 1.0;
+	// Draws the frame
+	if(direction == RIGHT){
+		if(x1_tcoord == 0.0){
+			glBindTexture(GL_TEXTURE_2D, textures[SLIDE_RIGHT]); // select the active texture
+		} else {
+			glBindTexture(GL_TEXTURE_2D, textures[JUMP_RIGHT]); // select the active texture
+		}
+	} else {
+		if(x1_tcoord == 0.0){
+			glBindTexture(GL_TEXTURE_2D, textures[SLIDE_LEFT]); // select the active texture
+		} else {
+			glBindTexture(GL_TEXTURE_2D, textures[JUMP_LEFT]); // select the active texture
+		}
+	}
+	//create flicker effect
+	if(count2 % 2 == 0){
+		// Draw objects
+		glBegin(GL_POLYGON);
+			//real coord
+			glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
+			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
+			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
+			glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+		glEnd();
+	}
+	// Want to draw 5 frames per second
+	x_offset = 0.090909090909090909;
+	//update next frame or reset if reached the end
+	x1_tcoord += x_offset;
+	if(x1_tcoord >= 0.54 && x1_tcoord < 0.81){
+		falling = true;
+		state = JUMP;
 	}
 }
 

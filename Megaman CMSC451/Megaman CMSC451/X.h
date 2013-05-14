@@ -52,6 +52,7 @@ class X {
 		void stand();
 		void run();
 		void jump();
+		void jumpOut();
 		void slide();
 		void air_fire();
 		void ground_fire();
