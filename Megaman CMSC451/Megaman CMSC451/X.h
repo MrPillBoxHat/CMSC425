@@ -29,6 +29,7 @@ class X {
 		bool buttons[9]; // keeps track of state (buttons pressed)
 		bool falling; // Check if X is falling
 		bool onGround;
+		bool dashed; // Whether x already dashed
 		int frame_count;
 		bool play_3frame;
 		BackGround *bg; // keeps track of environment
@@ -84,6 +85,7 @@ class X {
 		float getStart() const {return x1; }
 		int middle() const { return x1 + (x2 - x1) / 2; }
 		bool ifInvinciple(){return invinciple;}
+		bool getDashed(){return dashed;}
 		// setters
 		void setHealth(int number){health += number;}
 		void setState(int inState){state = inState; buttons[inState] = true;}
@@ -95,6 +97,7 @@ class X {
 		void setPosition(float xx1, float xx2, float yy1, float yy2);
 		void setFalling(){falling = true; x1_tcoord = 0.63;}
 		void setOffGround(){onGround = false;}
+		void setDash(){dashed = true;}
 		// Draw X
 		void draw();
 		// Loads all textures

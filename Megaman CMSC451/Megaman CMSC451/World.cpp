@@ -430,6 +430,11 @@ void World::processKeysGame(unsigned char key)
 					x->resetTexture();
 					x->setState(DASH);
 					//x->setPosition(-20.0, 20.0, 0.0, -10.0);
+				} else if (hero_state == JUMP && !x->getDashed()){
+					x->resetTexture();
+					x->setState(DASH);
+					x->setButtons(JUMP, false);
+					x->setDash();
 				}
 				break;
 		}

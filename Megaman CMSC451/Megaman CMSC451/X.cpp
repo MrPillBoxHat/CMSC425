@@ -51,6 +51,7 @@ X::X(BackGround *inBG)
 	bg = inBG;
 	falling = false; // X is not falling
 	onGround = true;
+	dashed = false;
 	// Initialize health blocks and buttons pressed
 	for(int i = 0; i < 9; i++){
 		buttons[i] = false;
@@ -116,14 +117,14 @@ void X::move()
 		if(x1_tcoord < 0.5 || state == JUMP){
 			if(direction == LEFT){
 				// Check if possible to move left
-				if(bg->canMove(hit_box[0] - CM_DASH, hit_box[2])){
+				if(bg->canMove(hit_box[0] - CM_DASH, hit_box[3])){
 					move_horizontal(CM_DASH * -1);
 				} else {
 					x1_tcoord = 0.5;
 				}
 			} else {
 				// Check if possible to move right
-				if(bg->canMove(hit_box[1] + CM_DASH, hit_box[2])){
+				if(bg->canMove(hit_box[1] + CM_DASH, hit_box[3])){
 					move_horizontal(CM_DASH);
 				} else {
 					x1_tcoord = 0.5;
@@ -264,6 +265,7 @@ void X::ifLand(float groundY)
 		position[3] += difference;
 		y1 += difference;
 		y2 += difference;
+		dashed = false;
 	}
 }
 
@@ -780,7 +782,13 @@ void X::dash()
 			} else {
 				setHitBox(8.0, 0.0, 0.0, 12.0);
 			}
+			if(!onGround){
+				state = JUMP;
+				buttons[JUMP] = true;
+				setFalling();
+			}
 			buttons[DASH] = false;
+			// if X is still in the air, make him fall
 			//setPosition(20.0, -20.0, 0.0, 10.0);
 		}
 	}
