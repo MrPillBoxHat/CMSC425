@@ -14,7 +14,7 @@
 #include "Sound.h"
 using namespace std;
 Sound *sound = new Sound();
-bool land = false;
+bool ifPlayed = false;
 
 // Contructor
 X::X(BackGround *inBG)
@@ -33,12 +33,12 @@ X::X(BackGround *inBG)
 	// Hit box for X
 	hit_box[0] = 325.0;
 	hit_box[1] = 407.2;
-	hit_box[2] = 74.0;
-	hit_box[3] = 153.0;
+	hit_box[2] = 76.0;
+	hit_box[3] = 155.0;
 	health_location[0] = 28.0;
 	health_location[1] = 100.0;
-	health_location[2] = 229.0;
-	health_location[3] = 605.0;
+	health_location[2] = 231.0;
+	health_location[3] = 607.0;
 	// Initialize X's state
 	state = ENTRY;
 	x1_tcoord = 0.0;
@@ -50,6 +50,7 @@ X::X(BackGround *inBG)
 	invinciple = false; // Determine whether X can take damage
 	bg = inBG;
 	falling = false; // X is not falling
+	onGround = true;
 	// Initialize health blocks and buttons pressed
 	for(int i = 0; i < 9; i++){
 		buttons[i] = false;
@@ -138,7 +139,7 @@ void X::move()
 				if(bg->canMove(hit_box[0] - CM_WALK, hit_box[3])){
 					move_horizontal(CM_WALK * -1);
 				// change state to wall slide
-				} else if (state != SLIDE && state == JUMP) {
+				} else if (state != SLIDE && state == JUMP && !onGround) {
 					state = SLIDE;
 					resetTexture();
 				}
@@ -147,7 +148,7 @@ void X::move()
 				if(bg->canMove(hit_box[0] + CM_WALK, hit_box[3])){
 					move_horizontal(CM_WALK);
 				// change state to wall slide
-				} else if (state != SLIDE && state == JUMP) {
+				} else if (state != SLIDE && state == JUMP && !onGround) {
 					// change state to wall slide
 					state = SLIDE;
 					resetTexture();
@@ -157,58 +158,38 @@ void X::move()
 	}
 	// check if there is still ground underneath
 	Rectangle2D *temp;
+	float groundY = 0.0;
 	detec_ground(&temp);
 	// If nothing was returned, X will fall
 	if(temp == nullptr){
 		setFalling();
+		onGround = false;
 		setState(JUMP);
+	} else {
+		groundY = temp->getMaxY();
 	}
 	//if Sliding down a wall
 	if (state == SLIDE) {
 		move_vertical(-0.7);
+		ifLand(groundY);
 	// Move X vertically
 	} else if(buttons[JUMP]){
-		jump_move(temp);
+		jump_move(groundY);
 	}
 }
 
 //helper function to move x while in jump state
-void X::jump_move(Rectangle2D *temp)
+void X::jump_move(float groundY)
 {
 	// If firing in the air
 	if(buttons[FIRE]){
-		if(x1_tcoord >= .27 && y2_tcoord == 0.5){
-			// no change in position
-		} else if ((y2_tcoord == 0.5 && x1_tcoord < .27) || 
-				   (y2_tcoord == 1.0 && x1_tcoord >= .27)){
-			// X is falling back down
-			move_vertical(-6.5);
-		} else {
-		// Move X up
-			move_vertical(6.5);
-		}
+		
 	// If normal jump
 	} else {
 		if(falling){
-			// Check if left/right foot hit a platform
-			// If nothing below
-			if(temp == nullptr){
-				move_vertical(-6.5);
-			} else {
-				float groundY = temp->getMaxY();
-				// If landed
-				if(groundY >= hit_box[2]){
-					x1_tcoord = 0.81;
-					falling = false;
-					state = JUMP;
-					hit_box[2] += (groundY - hit_box[2]);
-					hit_box[3] += (groundY - hit_box[2]);
-				} else {
-					// Keep dropping
-					move_vertical(-6.5);
-				}
-			}
-		} else if(x1_tcoord < 0.62) {
+			move_vertical(-6.5);
+			ifLand(groundY);
+		} else if(!onGround) {
 			// Move X up if not on landing frame
 			move_vertical(6.5);
 		}	
@@ -252,6 +233,23 @@ void X::move_health(float distanceX, float distanceY)
 	health_location[1] = distanceX + 100;
 	//health_location[2] += distanceY;
 	//health_location[3] += distanceY;
+}
+
+void X::ifLand(float groundY)
+{
+	if(y1 <= groundY){
+		float difference = (groundY - y1);
+		x1_tcoord = 0.81;
+		falling = false;
+		onGround = true;
+		state = JUMP;
+		hit_box[2] += difference;
+		hit_box[3] += difference;
+		position[2] += difference;
+		position[3] += difference;
+		y1 += difference;
+		y2 += difference;
+	}
 }
 
 /**************************************************************************************************
@@ -445,8 +443,8 @@ void X::entry()
 					// Resets coordinates
 					x1 = 317.0;
 					x2 = 418.2;
-					y1 = 72.0;
-					y2 = 186.0;
+					y1 = 74.0;
+					y2 = 188.0;
 					resetTexture();
 				}
 			}
@@ -565,9 +563,10 @@ void X::jump()
 			x1_tcoord += x_offset;
 		}
 		//if on land frame play sound
-		if(x1_tcoord >= 0.81 && land == false){	
+		if(x1_tcoord >= 0.81 && ifPlayed == false){	
 			sound->playLandSFX();
-			land = true;
+			onGround = true;
+			ifPlayed = true;
 			falling = false;
 		// If X reaches a certain frame, he begins falling
 		} else if(x1_tcoord >= 0.54 && x1_tcoord < 0.81){
@@ -584,7 +583,7 @@ void X::jump()
 				x1_tcoord = 0.0;
 				state = STAND;
 			}
-			land = false;
+			ifPlayed = false;
 			buttons[JUMP] = false;
 			buttons[DASH] = false;
 		}

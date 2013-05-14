@@ -28,6 +28,7 @@ class X {
 		GLuint textures[24]; // stores texture
 		bool buttons[9]; // keeps track of state (buttons pressed)
 		bool falling; // Check if X is falling
+		bool onGround;
 		int frame_count;
 		bool play_3frame;
 		BackGround *bg; // keeps track of environment
@@ -61,10 +62,11 @@ class X {
 		// Move X's coordinates
 		void move();
 		// helper function to control movement
-		void jump_move(Rectangle2D *temp);
+		void jump_move(float groundY);
 		void move_horizontal(float distance);
 		void move_vertical(float distance);
 		void detec_ground(Rectangle2D **temp);
+		void ifLand(float groundY);
 		// Draw X's health bar
 		void drawHealth();
 		void gainHealth(int block_number);
@@ -93,6 +95,7 @@ class X {
 		void setHitBox(float xx1, float xx2, float yy1, float yy2);
 		void setPosition(float xx1, float xx2, float yy1, float yy2);
 		void setFalling(){falling = true; x1_tcoord = 0.63;}
+		void setOffGround(){onGround = false;}
 		// Draw X
 		void draw();
 		// Loads all textures

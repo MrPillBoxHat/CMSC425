@@ -334,6 +334,7 @@ void World::processKeysGame(unsigned char key)
 					if(hero_state == DASH){
 						resetHitBox();
 					}
+					x->setOffGround();
 					x->resetTexture();
 					x->setState(JUMP);
 				} 
