@@ -157,14 +157,17 @@ void X::move()
 	}
 	// check if there is still ground underneath
 	Rectangle2D *temp;
-	detec_ground(&temp);
+//	detec_ground(&temp);
 	// If nothing was returned, X will fall
-	if(temp == nullptr){
-		setFalling();
-		setState(JUMP);
-	}
+//	if(temp == nullptr){
+//		setFalling();
+//		setState(JUMP);
+//	}
+	//if Sliding down a wall
+	if (state == SLIDE) {
+		move_vertical(-0.7);
 	// Move X vertically
-	if(buttons[JUMP]){
+	} else if(buttons[JUMP]){
 		jump_move();
 	}
 }
@@ -179,14 +182,11 @@ void X::jump_move()
 		} else if ((y2_tcoord == 0.5 && x1_tcoord < .27) || 
 				   (y2_tcoord == 1.0 && x1_tcoord >= .27)){
 			// X is falling back down
-			move_vertical(-7.0);
+			move_vertical(-6.5);
 		} else {
 		// Move X up
-			move_vertical(7.0);
+			move_vertical(6.5);
 		}
-	//if Sliding down a wall
-	} else if (state == SLIDE) {
-		move_vertical(-1.0);
 	// If normal jump
 	} else {
 		if(falling){
@@ -195,23 +195,24 @@ void X::jump_move()
 			detec_ground(&temp);
 			// If nothing below
 			if(temp == nullptr){
-				move_vertical(-7.0);
+				move_vertical(-6.5);
 			} else {
 				float groundY = temp->getMaxY();
 				// If landed
 				if(groundY >= hit_box[2]){
 					x1_tcoord = 0.81;
 					falling = false;
+					state = JUMP;
 					hit_box[2] += (groundY - hit_box[2]);
 					hit_box[3] += (groundY - hit_box[2]);
 				} else {
 					// Keep dropping
-					move_vertical(-7.0);
+					move_vertical(-6.5);
 				}
 			}
 		} else if(x1_tcoord < 0.62) {
 			// Move X up if not on landing frame
-			move_vertical(7.0);
+			move_vertical(6.5);
 		}	
 	}
 }
@@ -571,7 +572,7 @@ void X::jump()
 			land = true;
 			falling = false;
 		// If X reaches a certain frame, he begins falling
-		} else if(x1_tcoord >= 0.54){
+		} else if(x1_tcoord >= 0.54 && x1_tcoord < 0.81){
 			falling = true;
 		}
 		// When finished playing

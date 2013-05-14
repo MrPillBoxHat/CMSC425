@@ -317,8 +317,13 @@ void World::processKeysGame(unsigned char key)
 		{
 			// Jump
 			case MOVE_JUMP:
+				// If sliding down the wall, jump again
+				if(hero_state == SLIDE){
+					sound->xPlayJumpSFX();
+					sound->playJumpSFX();
+					x->resetTexture();
 				// If not already in the air
-				if(hero_state != JUMP){
+				} else if(hero_state != JUMP){
 					sound->xPlayJumpSFX();
 					sound->playJumpSFX();
 					if(hero_state == DASH){
@@ -327,10 +332,6 @@ void World::processKeysGame(unsigned char key)
 					x->resetTexture();
 					x->setState(JUMP);
 				} 
-				// If sliding down the wall, jump again
-				if(hero_state == SLIDE){
-
-				}
 				break;
 
 			// Kneel
