@@ -63,7 +63,7 @@ void BackGround::drawView(GLint cmX)
 	Box b(cmX, Y, W, H, bg);
 	b.draw();
 }
-Rectangle2D * BackGround::getBelow(GLint x, GLint y)
+Rectangle2D * BackGround::getBelow(float x, float y)
 {
 	Rectangle2D * ret = nullptr;
 
@@ -76,6 +76,7 @@ Rectangle2D * BackGround::getBelow(GLint x, GLint y)
 
 	return ret;
 }
+
 
 bool BackGround::canMove(GLint x, GLint y) const
 {

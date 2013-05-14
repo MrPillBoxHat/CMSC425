@@ -33,7 +33,7 @@ Zero::Zero()
 	hit_box[0] = 3826.0;
 	hit_box[1] = 3909.2;
 	hit_box[2] = 75.0;
-	hit_box[3] = 170.0;
+	hit_box[3] = 160.0;
 	state = ENTRY;
 	tcoord[0] = 0.0;
 	tcoord[1] = 1.0;
@@ -504,9 +504,9 @@ void Zero::saber()
 		if(tcoord[0] >= 0.998046875){
 			// Reset texture position
 			if(direction == LEFT){
-				setPosition(100.0, -30.0, 7.0, -70.0);
+				setPosition(130.0, -50.0, 12.0, -90.0);
 			} else {
-				setPosition(30.0, -100.0, 7.0, -70.0);
+				setPosition(50.0, -130.0, 12.0, -90.0);
 			}
 			resetTexture();
 			state = STAND;

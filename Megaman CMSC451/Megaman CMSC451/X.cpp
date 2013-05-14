@@ -3,7 +3,6 @@
 *	Contains all function implementations
 *   and actions of the character
 *******************************************************/
-
 #include <iostream>						// input/outout stream
 #include <cstdlib>						// C++ standard definitions
 #include <GL/glut.h>                    // GLUT
@@ -38,8 +37,8 @@ X::X(BackGround *inBG)
 	hit_box[3] = 153.0;
 	health_location[0] = 28.0;
 	health_location[1] = 100.0;
-	health_location[2] = 194.0;
-	health_location[3] = 383.0;
+	health_location[2] = 229.0;
+	health_location[3] = 605.0;
 	// Initialize X's state
 	state = ENTRY;
 	x1_tcoord = 0.0;
@@ -50,6 +49,7 @@ X::X(BackGround *inBG)
 	count2 = 0; // Invincibility Time
 	invinciple = false; // Determine whether X can take damage
 	bg = inBG;
+	falling = false; // X is not falling
 	// Initialize health blocks and buttons pressed
 	for(int i = 0; i < 9; i++){
 		buttons[i] = false;
@@ -69,6 +69,15 @@ void X::setHitBox(float xx1, float xx2, float yy1, float yy2)
 	hit_box[1] += xx2;
 	hit_box[2] += yy1;
 	hit_box[3] += yy2;
+}
+
+// Sets up texture box
+void X::setPosition(float xx1, float xx2, float yy1, float yy2)
+{
+	x1 += xx1;
+	x2 += xx2;
+	y1 += yy1;
+	y2 += yy2;
 }
 
 // Detecs collision with enemy
@@ -97,6 +106,226 @@ void X::detec_collision(Zero *zero)
 	}
 }
 
+// Moves X in the world
+void X::move()
+{
+	// Dash movement (faster movement)
+	if(buttons[DASH]){
+		// Move only if at the correct frame
+		if(x1_tcoord < 0.5){
+			if(direction == LEFT){
+				// Check if possible to move left
+				if(bg->canMove(hit_box[0] - CM_DASH, hit_box[3])){
+					move_horizontal(CM_DASH * -1);
+				} else {
+					x1_tcoord = 0.5;
+				}
+			} else {
+				// Check if possible to move right
+				if(bg->canMove(hit_box[0] + CM_DASH, hit_box[3])){
+					move_horizontal(CM_DASH);
+				} else {
+					x1_tcoord = 0.5;
+				}
+			}
+		}
+	// Normal movements
+	} else {
+		// Move X horizontally
+		if(buttons[RUN]){
+			if(direction == LEFT){
+				// Check if possible to move left
+				if(bg->canMove(hit_box[0] - CM_WALK, hit_box[3])){
+					move_horizontal(CM_WALK * -1);
+				// change state to wall slide
+				} else if (state != SLIDE && state == JUMP) {
+					state = SLIDE;
+					resetTexture();
+				}
+			} else {
+				// Check if possible to move right
+				if(bg->canMove(hit_box[0] + CM_WALK, hit_box[3])){
+					move_horizontal(CM_WALK);
+				// change state to wall slide
+				} else if (state != SLIDE && state == JUMP) {
+					// change state to wall slide
+					state = SLIDE;
+					resetTexture();
+				}
+			}
+		}
+	}
+	// check if there is still ground underneath
+	Rectangle2D *temp;
+//	detec_ground(&temp);
+	// If nothing was returned, X will fall
+//	if(temp == nullptr){
+//		setFalling();
+//		setState(JUMP);
+//	}
+	//if Sliding down a wall
+	if (state == SLIDE) {
+		move_vertical(-0.7);
+	// Move X vertically
+	} else if(buttons[JUMP]){
+		jump_move();
+	}
+}
+
+//helper function to move x while in jump state
+void X::jump_move()
+{
+	// If firing in the air
+	if(buttons[FIRE]){
+		if(x1_tcoord >= .27 && y2_tcoord == 0.5){
+			// no change in position
+		} else if ((y2_tcoord == 0.5 && x1_tcoord < .27) || 
+				   (y2_tcoord == 1.0 && x1_tcoord >= .27)){
+			// X is falling back down
+			move_vertical(-6.5);
+		} else {
+		// Move X up
+			move_vertical(6.5);
+		}
+	// If normal jump
+	} else {
+		if(falling){
+			// Check if left/right foot hit a platform
+			Rectangle2D *temp;
+			detec_ground(&temp);
+			// If nothing below
+			if(temp == nullptr){
+				move_vertical(-6.5);
+			} else {
+				float groundY = temp->getMaxY();
+				// If landed
+				if(groundY >= hit_box[2]){
+					x1_tcoord = 0.81;
+					falling = false;
+					state = JUMP;
+					hit_box[2] += (groundY - hit_box[2]);
+					hit_box[3] += (groundY - hit_box[2]);
+				} else {
+					// Keep dropping
+					move_vertical(-6.5);
+				}
+			}
+		} else if(x1_tcoord < 0.62) {
+			// Move X up if not on landing frame
+			move_vertical(6.5);
+		}	
+	}
+}
+
+void X::move_horizontal(float distance)
+{
+
+	x1 += distance;
+	x2 += distance;
+	position[0] += distance;
+	position[1] += distance;
+	hit_box[0] += distance;
+	hit_box[1] += distance;
+}
+
+void X::move_vertical(float distance)
+{
+
+	y1 += distance;
+	y2 += distance;
+	position[2] += distance;
+	position[3] += distance;
+	hit_box[2] += distance;
+	hit_box[3] += distance;
+}
+
+void X::detec_ground(Rectangle2D **temp)
+{
+	if(direction == LEFT){
+		*temp = bg->getBelow(hit_box[1],hit_box[2]);
+	} else {
+		*temp = bg->getBelow(hit_box[0], hit_box[2]);
+	}
+}
+
+void X::move_health(float distanceX, float distanceY)
+{
+	health_location[0] = distanceX + 28;
+	health_location[1] = distanceX + 100;
+	//health_location[2] += distanceY;
+	//health_location[3] += distanceY;
+}
+
+/**************************************************************************************************
+* Draw health() functions
+*	Draw X's life.  Increase and decrease base on damage taken
+*   and items retrived
+**************************************************************************************************/
+// Draws Zero's Health bar
+void X::drawHealth()
+{
+	// Draw the bar
+	glBindTexture(GL_TEXTURE_2D, textures[HEALTH_BAR]); // select the active texture
+	glBegin(GL_POLYGON);
+		//real coord
+		glTexCoord2d(0.0, 0.0); glVertex2d(health_location[0], health_location[2]);
+		glTexCoord2d(1.0, 0.0); glVertex2d(health_location[1], health_location[2]);
+		glTexCoord2d(1.0, 1.0); glVertex2d(health_location[1], health_location[3]);
+		glTexCoord2d(0.0, 1.0); glVertex2d(health_location[0], health_location[3]);
+	glEnd();
+	// Draw the blocks
+	glBindTexture(GL_TEXTURE_2D, textures[HEALTH_BLOCK]); // select the active texture
+	// position of health blocks
+	float xx1 = health_location[0] + 12.0;
+	float xx2 = health_location[1] - 17.0;
+	float yy1 = health_location[2] + 101.0;
+	float yy2 = health_location[2] + 116.0;
+	int i = 0; // counter to iterate through health_blocks
+	// iterate through the blocks and draw them
+	while(i < 28 && health_blocks[i]){
+		glBegin(GL_POLYGON);
+			//real coord
+			glTexCoord2d(0.0, 0.0); glVertex2d(xx1, yy1);
+			glTexCoord2d(1.0, 0.0); glVertex2d(xx2, yy1);
+			glTexCoord2d(1.0, 1.0); glVertex2d(xx2, yy2);
+			glTexCoord2d(0.0, 1.0); glVertex2d(xx1, yy2);
+		glEnd();
+		yy1 += 8.0;
+		yy2 += 8.0;
+		i++; // increment count
+	}
+}
+
+// Draws the animation that fills Zero's health
+void X::gainHealth(int block_number)
+{
+	// iterate through health bar
+	for(int i = 0; i < 28; i++){
+		// if the bar is not there
+		if(!health_blocks[i]){
+			// draw the bar
+			health_blocks[i] = true;
+			break;
+		}
+	}
+}
+
+// Decreases the amount of health blocks
+void X::depleteHealth(int block_number)
+{
+	if(!invinciple){
+		// start at the end of the array
+		int i = 27;
+		// sets all health blocks to false
+		while(i >= block_number){
+			if(health_blocks[i]){
+				health_blocks[i] = false;
+			}
+			i--;
+		}
+	}
+}
+
 /***************************************************************************************************
 * Draw function
 *	draws the main character X depending on his state
@@ -106,7 +335,9 @@ void X::detec_collision(Zero *zero)
 void X::draw()
 {
 	// Move X in the world
-	move();
+	if(state != ENTRY && state != DAMAGE){
+		move();
+	}
 	// Draws X's health
 	if(state != ENTRY){
 		drawHealth();
@@ -125,6 +356,9 @@ void X::draw()
 			break;
 		case JUMP:
 			jump();
+			break;
+		case SLIDE:
+			slide();
 			break;
 		case FIRE:
 			// if in the air
@@ -173,193 +407,6 @@ void X::draw()
 	}
 }
 
-// Moves X in the world
-void X::move()
-{
-	// Dash movement (faster movement)
-	if(buttons[DASH]){
-		// Move only if at the correct frame
-		if(x1_tcoord < 0.5){
-			if(direction == LEFT){
-				// Check if possible to move left
-				//if(bg->canMove(hit_box[0] - CM_DASH, hit_box[3])){
-					run_move(CM_DASH * -1);
-			//	} else {
-			//		x1_tcoord = 0.5;
-			//	}
-			} else {
-				// Check if possible to move right
-			//	if(bg->canMove(hit_box[0] + CM_DASH, hit_box[3])){
-					run_move(CM_DASH);
-			//	} else {
-			//		x1_tcoord = 0.5;
-			//	}
-			}
-		}
-	// Normal movements
-	} else {
-		// Move X horizontally
-		if(buttons[RUN]){
-			if(direction == LEFT){
-				// Check if possible to move left
-			//	if(bg->canMove(hit_box[0] - CM_WALK, hit_box[3])){
-					run_move(CM_WALK * -1);
-		//		}
-			} else {
-				// Check if possible to move right
-		//		if(bg->canMove(hit_box[0] + CM_WALK, hit_box[3])){
-					run_move(CM_WALK);
-		//		}
-			}
-		}
-	}
-	// Move X vertically
-	if(buttons[JUMP]){
-		jump_move();
-	}
-}
-
-void X::run_move(float distance)
-{
-
-	x1 += distance;
-	x2 += distance;
-	position[0] += distance;
-	position[1] += distance;
-	hit_box[0] += distance;
-	hit_box[1] += distance;
-}
-
-//helper function to move x while in jump state
-void X::jump_move()
-{
-	// FPS control
-	if(counter %5 == 0){
-	// If firing in the air
-		if(buttons[FIRE] && buttons[JUMP]){
-			if(x1_tcoord >= .27 && y2_tcoord == 0.5){
-				// no change in position
-			} else if ((y2_tcoord == 0.5 && x1_tcoord < .27) || 
-					   (y2_tcoord == 1.0 && x1_tcoord >= .27)){
-				// X is falling back down
-				y1 -= 22.0;
-				y2 -= 22.0;
-				position[2] -= 22.0;
-				position[3] -= 22.0;
-				hit_box[2] -= 22.0;
-				hit_box[3] -= 22.0;
-			} else {
-			// Move X up
-				y1 += 22.0;
-				y2 += 22.0;
-				position[2] += 22.0;
-				position[3] += 22.0;
-				hit_box[2] += 22.0;
-				hit_box[3] += 22.0;
-			}
-			// If normal jump
-		} else {
-			if(x1_tcoord >= 0.72){
-			// no change in position
-			} else if(x1_tcoord >= 0.36 && x1_tcoord < 0.72){
-			// X is falling back down
-				y1 -= 22.0;
-				y2 -= 22.0;
-				position[2] -= 22.0;
-				position[3] -= 22.0;
-				hit_box[2] -= 22.0;
-				hit_box[3] -= 22.0;
-			} else {
-				// Move X up
-				y1 += 22.0;
-				y2 += 22.0;
-				position[2] += 22.0;
-				position[3] += 22.0;
-				hit_box[2] += 22.0;
-				hit_box[3] += 22.0;
-			}	
-		}
-	}
-}
-
-void X::move_health(float distanceX1, float distanceX2)
-{
-	health_location[0] = distanceX1;
-	health_location[1] = distanceX2;
-	//health_location[2] += distanceY;
-	//health_location[3] += distanceY;
-}
-
-/**************************************************************************************************
-* Draw health() functions
-*	Draw X's life.  Increase and decrease base on damage taken
-*   and items retrived
-**************************************************************************************************/
-// Draws Zero's Health bar
-void X::drawHealth()
-{
-	// Draw the bar
-	glBindTexture(GL_TEXTURE_2D, textures[HEALTH_BAR]); // select the active texture
-	glBegin(GL_POLYGON);
-		//real coord
-		glTexCoord2d(0.0, 0.0); glVertex2d(health_location[0], health_location[2]);
-		glTexCoord2d(1.0, 0.0); glVertex2d(health_location[1], health_location[2]);
-		glTexCoord2d(1.0, 1.0); glVertex2d(health_location[1], health_location[3]);
-		glTexCoord2d(0.0, 1.0); glVertex2d(health_location[0], health_location[3]);
-	glEnd();
-	// Draw the blocks
-	glBindTexture(GL_TEXTURE_2D, textures[HEALTH_BLOCK]); // select the active texture
-	// position of health blocks
-	float xx1 = health_location[0] + 9.0;
-	float xx2 = health_location[1] - 13.0;
-	float yy1 = health_location[2] + 51.0;
-	float yy2 = health_location[3] - 130.0;
-	int i = 0; // counter to iterate through health_blocks
-	// iterate through the blocks and draw them
-	while(i < 28 && health_blocks[i]){
-		glBegin(GL_POLYGON);
-			//real coord
-			glTexCoord2d(0.0, 0.0); glVertex2d(xx1, yy1);
-			glTexCoord2d(1.0, 0.0); glVertex2d(xx2, yy1);
-			glTexCoord2d(1.0, 1.0); glVertex2d(xx2, yy2);
-			glTexCoord2d(0.0, 1.0); glVertex2d(xx1, yy2);
-		glEnd();
-		yy1 += 4.0;
-		yy2 += 4.0;
-		i++; // increment count
-	}
-}
-
-// Draws the animation that fills Zero's health
-void X::gainHealth(int block_number)
-{
-	// iterate through health bar
-	for(int i = 0; i < 28; i++){
-		// if the bar is not there
-		if(!health_blocks[i]){
-			// draw the bar
-			health_blocks[i] = true;
-			break;
-		}
-	}
-}
-
-// Decreases the amount of health blocks
-void X::depleteHealth(int block_number)
-{
-	if(!invinciple){
-		// start at the end of the array
-		int i = 27;
-		// sets all health blocks to false
-		while(i >= block_number){
-			if(health_blocks[i]){
-				health_blocks[i] = false;
-			}
-			i--;
-		}
-	}
-}
-
 /*************************************************************************************************
 *  All helper functions that draw X's actions based on his state
 *
@@ -382,8 +429,8 @@ void X::entry()
 	// Update frame pointers
 	// If X has not landed
 	if(y1 > 10.0){
-		y1 -= 10.0;
-		y2 -= 10.0;
+		y1 -= 13.0;
+		y2 -= 13.0;
 	} else {
 		if(counter % 5 == 0){
 			// go to next frame
@@ -452,13 +499,13 @@ void X::run()
 	if(direction == RIGHT){
 		glBindTexture(GL_TEXTURE_2D, textures[RUN_RIGHT]); // select the active texture
 		// Readjust cannon position
-		position[0] = x2 - 21.8;
-		position[1] = x2 + 8.8;
+		position[0] = x2 - 25.0;
+		position[1] = x2 + 50.0;
 	} else {
 		glBindTexture(GL_TEXTURE_2D, textures[RUN_LEFT]); // select the active texture
 		// Readjust cannon position
-		position[0] = x1 - 8.8;
-		position[1] = x1 + 21.8;
+		position[0] = x1 - 50.0;
+		position[1] = x1 + 25.0;
 	}
 	//create flicker effect
 	if(count2 % 2 == 0){
@@ -515,27 +562,66 @@ void X::jump()
 	}
 	// Update frame pointers
 	if(counter % 5 == 0){
-		// if max height frame is reached
-		// go to next frame
-		x1_tcoord += x_offset;
+		// increment offset if not in fall frame
+		if(x1_tcoord < 0.62 || x1_tcoord >= 0.81) {
+			x1_tcoord += x_offset;
+		}
+		//if on land frame play sound
 		if(x1_tcoord >= 0.81 && land == false){	
 			sound->playLandSFX();
 			land = true;
+			falling = false;
+		// If X reaches a certain frame, he begins falling
+		} else if(x1_tcoord >= 0.54 && x1_tcoord < 0.81){
+			falling = true;
 		}
 		// When finished playing
 		if(x1_tcoord >= 1.0){
-			// Reset state
-			x1_tcoord = 0.0;
 			if(buttons[RUN]){
 				state = RUN;
 				x1_tcoord = 0.0;
 				y2_tcoord = 0.5;
 			} else {
+				// Reset state
+				x1_tcoord = 0.0;
 				state = STAND;
 			}
 			land = false;
 			buttons[JUMP] = false;
 			buttons[DASH] = false;
+		}
+	}
+}
+
+// Draws X sliding down a wall
+void X::slide()
+{
+	// How many frames to jump
+	float x_offset = 0.25;
+	float y_offset = 1.0;
+	// Draws the frame
+	if(direction == RIGHT){
+		glBindTexture(GL_TEXTURE_2D, textures[SLIDE_RIGHT]); // select the active texture
+	} else {
+		glBindTexture(GL_TEXTURE_2D, textures[SLIDE_LEFT]); // select the active texture
+	}
+	//create flicker effect
+	if(count2 % 2 == 0){
+		// Draw objects
+		glBegin(GL_POLYGON);
+			//real coord
+			glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
+			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
+			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
+			glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+		glEnd();
+	}
+	// Want to draw 5 frames per second
+	if(counter % 5 == 0){
+		//update next frame or reset if reached the end
+		x1_tcoord += x_offset;
+		if(x1_tcoord >= 0.99609375){
+			x1_tcoord = 0.75;
 		}
 	}
 }
@@ -683,6 +769,7 @@ void X::dash()
 				setHitBox(8.0, 0.0, 0.0, 12.0);
 			}
 			buttons[DASH] = false;
+			//setPosition(20.0, -20.0, 0.0, 10.0);
 		}
 	}
 }
@@ -720,8 +807,13 @@ void X::damage()
 		//update next frame or reset if reached the end
 		x1_tcoord += x_offset;
 		if(x1_tcoord >= 1.0){
-			resetTexture();
-			state = STAND;
+			if (buttons[JUMP]){
+				state = JUMP;
+				setFalling();
+			} else {
+				resetTexture();
+				state = STAND;
+			}
 		}
 	}
 }
@@ -744,6 +836,7 @@ void X::loadTextures()
 	loadStand();
 	loadMove();
 	loadJump();
+	loadSlide();
 	loadFire();
 	loadCharge();
 	loadDash();
@@ -960,6 +1053,66 @@ void X::loadJump()
 	cout << "textureID: " << textureID << endl;
 
 	textures[JUMP_LEFT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+}
+
+// Loads sliding images
+void X::loadSlide()
+{
+	/* loads jump right image directly as a new OpenGL texture */
+	GLuint textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/slide/slide_right.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "XtextureID: " << textureID << endl;
+
+	textures[SLIDE_RIGHT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads jump left image directly as a new OpenGL texture */
+	textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/slide/slide_left.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "textureID: " << textureID << endl;
+
+	textures[SLIDE_LEFT] = textureID; // Assign it to the texture array
 	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	// repeat texture

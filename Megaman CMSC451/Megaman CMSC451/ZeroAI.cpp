@@ -57,7 +57,7 @@ int ZeroAI::runAI()
 	if(last_action == Z_SABER || last_action == TACKLE){
 		last_action = MOVE_AWAY;
 		return dashAway();
-	} else if (last_action == SABER_MISSILE){
+	} else if (last_action == SABERBUSTER){
 		last_action = THINK;
 		return dashFoward();
 	}else if (distance <= 50) {
@@ -116,7 +116,7 @@ int ZeroAI::buster_saber_combo()
 	} else {
 		combo = 0;
 		state = THINK;
-		last_action = SABER_MISSILE;
+		last_action = SABERBUSTER;
 		return SABER_MISSILE;
 	}
 }
@@ -144,6 +144,7 @@ int ZeroAI::saber()
 		// reset combo
 		combo = 0;
 		state = THINK;
+		last_action = Z_SABER;
 		counter = 50;
 		return SABER;
 	} else {

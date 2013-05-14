@@ -101,7 +101,7 @@ void World::update(void)
 		initBossRoom();
 	}
 	updateView();
-	x->move_health(cmX, cmX + 72);
+	x->move_health(cmX, 0.0);
 }
 
 void World::initBossRoom()
@@ -134,7 +134,7 @@ void World::draw_helper()
 		enableTextures();
 		menu->draw();
 	} else {
-		testTexture();
+		//testTexture();
 		enableTextures();
 		bg.draw(cmX);
 
@@ -322,8 +322,13 @@ void World::processKeysGame(unsigned char key)
 		{
 			// Jump
 			case MOVE_JUMP:
+				// If sliding down the wall, jump again
+				if(hero_state == SLIDE){
+					sound->xPlayJumpSFX();
+					sound->playJumpSFX();
+					x->resetTexture();
 				// If not already in the air
-				if(hero_state != JUMP){
+				} else if(hero_state != JUMP){
 					sound->xPlayJumpSFX();
 					sound->playJumpSFX();
 					if(hero_state == DASH){
@@ -331,7 +336,7 @@ void World::processKeysGame(unsigned char key)
 					}
 					x->resetTexture();
 					x->setState(JUMP);
-				} // else do nothing
+				} 
 				break;
 
 			// Kneel
@@ -411,6 +416,7 @@ void World::processKeysGame(unsigned char key)
 					}
 					x->resetTexture();
 					x->setState(DASH);
+					//x->setPosition(-20.0, 20.0, 0.0, -10.0);
 				}
 				break;
 		}
@@ -429,11 +435,14 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 			case 's': // Kneel
 			case MOVE_LEFT: // Move Left
 			case MOVE_RIGHT: // Move Right
-				if(hero_state != STAND && hero_state != JUMP && hero_state != ENTRY 
+				if(hero_state != STAND && hero_state != JUMP && hero_state != ENTRY && hero_state != SLIDE
 					&& hero_state != DASH && hero_state != DAMAGE && (zero == NULL || zero->getInit())){
 					// Reset state
 					x->setState(STAND);
 					x->resetTexture();
+				} else if (hero_state == SLIDE) {
+					x->setState(JUMP);
+					x->setFalling();
 				}
 				x->setButtons(RUN, false);
 					break;
@@ -477,9 +486,9 @@ void World::processAI()
 			sound->zeroPlaySaberSFX();
 			// Adjust based on zero's direction
 			if(zero->getDirection() == LEFT){
-				zero->setPosition(-100.0, 30.0, -7.0, 70.0);
+				zero->setPosition(-130.0, 50.0, -12.0, 90.0);
 			} else {
-				zero->setPosition(-30.0, 100.0, -7.0, 70.0);
+				zero->setPosition(-50.0, 130.0, -12.0, 90.0);
 			}
 			zero->resetTexture();
 			if(action == SABER){
@@ -589,7 +598,7 @@ void World::bullet_draw()
 				resetHitBox();
 			} else if (x_state == RUN){
 				x->setButtons(RUN, false);
-			}
+			} 
 			damage(it2->getDamage(), x->getHealth()/5);
 		}
 		// draw bullet
@@ -612,7 +621,7 @@ void World::bullet_draw()
 				resetHitBox();
 			} else if (x_state == RUN){
 				x->setButtons(RUN, false);
-			}
+			} 
 			damage(missile->getDamage(), x->getHealth()/5);
 		}
 		missile->draw(textures);
@@ -631,7 +640,7 @@ void World::bullet_draw()
 				resetHitBox();
 			} else if (x_state == RUN){
 				x->setButtons(RUN, false);
-			}
+			} 
 			damage(saber->getDamage(), x->getHealth()/5);
 		}
 	}

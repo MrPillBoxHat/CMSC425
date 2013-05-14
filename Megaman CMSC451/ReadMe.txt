@@ -45,21 +45,22 @@ Animation:
 	- combination of keys + jump causes flags to screw up
 	- Jump fire animation is bugged, not working at all.  Causing X
 	  to move wrong on the Y plane
-	- Health bar needs to stop when reaching end of screen (right side)
 	- Jump hit causes constant jumping
 	- No charge shot
 	- Dash jump implementation messed up
 	- bullet splat is messed up
+	- Dash animation not scaled properly
+	- Jump, when hitting the floor is buggy
+
 
 	(Zero)
 	- Zero saber attack needs to dash in front of X, not past X
 	- Saber needs to add sword sheath to animation
-	- Zero goes invincible when performing slash missile
+	- saber animation got screwed up
 
 	(General)
 	- Fix camera
 	- Add in more implementations
-	- Health bar too big
 
 Camera:
 
@@ -68,4 +69,7 @@ Things need to implement:
 ______________________________________________________________
 
 	(Characters)
+	- Talking/text
 	- Boss areana/stage entrance
+	- More stages/abilities/items
+	- Implement character Deaths

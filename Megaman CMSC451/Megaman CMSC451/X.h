@@ -25,8 +25,9 @@ class X {
 		int count2; // Invincibility time
 		float x1_tcoord; // texture x1 coord
 		float y2_tcoord; // texture y2 coord
-		GLuint textures[22]; // stores texture
+		GLuint textures[24]; // stores texture
 		bool buttons[9]; // keeps track of state (buttons pressed)
+		bool falling; // Check if X is falling
 		int frame_count;
 		bool play_3frame;
 		BackGround *bg; // keeps track of environment
@@ -37,6 +38,7 @@ class X {
 		void loadStand();
 		void loadMove();
 		void loadJump();
+		void loadSlide();
 		void loadFire();
 		void loadCharge();
 		void loadDash();
@@ -48,6 +50,7 @@ class X {
 		void stand();
 		void run();
 		void jump();
+		void slide();
 		void air_fire();
 		void ground_fire();
 		void charge();
@@ -59,7 +62,9 @@ class X {
 		void move();
 		// helper function to control movement
 		void jump_move();
-		void run_move(float distance);
+		void move_horizontal(float distance);
+		void move_vertical(float distance);
+		void detec_ground(Rectangle2D **temp);
 		// Draw X's health bar
 		void drawHealth();
 		void gainHealth(int block_number);
@@ -82,11 +87,12 @@ class X {
 		void setHealth(int number){health += number;}
 		void setState(int inState){state = inState; buttons[inState] = true;}
 		void setDirection(int inDirection){direction = inDirection;}
-		void setXPosition(float inx1, float inx2){x1 += inx1; x2 += inx2;}
 		void setButtons(int button, bool boolean){buttons[button] = boolean;}
 		void resetTexture(){x1_tcoord = 0.0; y2_tcoord = 1.0;}
 		void setFrameOn(){play_3frame = true; frame_count = 1;}
 		void setHitBox(float xx1, float xx2, float yy1, float yy2);
+		void setPosition(float xx1, float xx2, float yy1, float yy2);
+		void setFalling(){falling = true; x1_tcoord = 0.63;}
 		// Draw X
 		void draw();
 		// Loads all textures

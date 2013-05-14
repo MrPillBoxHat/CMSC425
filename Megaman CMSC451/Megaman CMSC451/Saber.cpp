@@ -30,15 +30,15 @@ Saber::Saber(float *position, int direction, int i)
 	float xmid = x1 + ((x2-x1)/2);
 	float ymid = y1 + ((y2-y1)/2);
 	if(direction == LEFT){
-		hit_box[0] = xmid - 80.0;
-		hit_box[1] = xmid + 5.0;
+		hit_box[0] = xmid - 130.0;
+		hit_box[1] = xmid - 10.0;
 		hit_box[2] = ymid - 50.0;
-		hit_box[3] = ymid + 50.0;
+		hit_box[3] = ymid + 40.0;
 	} else {
-		hit_box[0] = xmid + 65.0;
-		hit_box[1] = xmid + 105.0;
+		hit_box[0] = xmid + 75.0;
+		hit_box[1] = xmid + 173.0;
 		hit_box[2] = ymid - 55.0;
-		hit_box[3] = ymid + 28.0;
+		hit_box[3] = ymid + 60.0;
 	}
 	x1_tcoord = 0.0;
 	y2_tcoord = 1.0;
