@@ -100,8 +100,8 @@ void World::update(void)
 	if(!initZero && x_position[0] >= 3150.0){
 		initBossRoom();
 	}
-	x->move_health(cmX, 0.0);
 	updateView();
+	x->move_health(cmX, 0.0);
 }
 
 void World::initBossRoom()

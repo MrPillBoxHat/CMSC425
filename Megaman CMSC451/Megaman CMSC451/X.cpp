@@ -37,8 +37,8 @@ X::X(BackGround *inBG)
 	hit_box[3] = 153.0;
 	health_location[0] = 28.0;
 	health_location[1] = 100.0;
-	health_location[2] = 194.0;
-	health_location[3] = 383.0;
+	health_location[2] = 229.0;
+	health_location[3] = 605.0;
 	// Initialize X's state
 	state = ENTRY;
 	x1_tcoord = 0.0;
@@ -209,10 +209,10 @@ void X::move_vertical(float distance)
 	hit_box[3] += distance;
 }
 
-void X::move_health(float distanceX1, float distanceX2)
+void X::move_health(float distanceX, float distanceY)
 {
-	health_location[0] = distanceX1 + 28;
-	health_location[1] = distanceX2 + 100;
+	health_location[0] = distanceX + 28;
+	health_location[1] = distanceX + 100;
 	//health_location[2] += distanceY;
 	//health_location[3] += distanceY;
 }
@@ -245,10 +245,10 @@ void X::drawHealth()
 	// Draw the blocks
 	glBindTexture(GL_TEXTURE_2D, textures[HEALTH_BLOCK]); // select the active texture
 	// position of health blocks
-	float xx1 = health_location[0] + 9.0;
-	float xx2 = health_location[1] - 13.0;
-	float yy1 = health_location[2] + 51.0;
-	float yy2 = health_location[3] - 130.0;
+	float xx1 = health_location[0] + 12.0;
+	float xx2 = health_location[1] - 17.0;
+	float yy1 = health_location[2] + 101.0;
+	float yy2 = health_location[2] + 116.0;
 	int i = 0; // counter to iterate through health_blocks
 	// iterate through the blocks and draw them
 	while(i < 28 && health_blocks[i]){
@@ -259,8 +259,8 @@ void X::drawHealth()
 			glTexCoord2d(1.0, 1.0); glVertex2d(xx2, yy2);
 			glTexCoord2d(0.0, 1.0); glVertex2d(xx1, yy2);
 		glEnd();
-		yy1 += 4.0;
-		yy2 += 4.0;
+		yy1 += 8.0;
+		yy2 += 8.0;
 		i++; // increment count
 	}
 }
@@ -469,13 +469,13 @@ void X::run()
 	if(direction == RIGHT){
 		glBindTexture(GL_TEXTURE_2D, textures[RUN_RIGHT]); // select the active texture
 		// Readjust cannon position
-		position[0] = x2 - 21.8;
-		position[1] = x2 + 8.8;
+		position[0] = x2 - 25.0;
+		position[1] = x2 + 50.0;
 	} else {
 		glBindTexture(GL_TEXTURE_2D, textures[RUN_LEFT]); // select the active texture
 		// Readjust cannon position
-		position[0] = x1 - 8.8;
-		position[1] = x1 + 21.8;
+		position[0] = x1 - 50.0;
+		position[1] = x1 + 25.0;
 	}
 	//create flicker effect
 	if(count2 % 2 == 0){
