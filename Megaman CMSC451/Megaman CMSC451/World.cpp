@@ -454,8 +454,13 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 					x->setState(STAND);
 					x->resetTexture();
 				} else if (hero_state == SLIDE) {
-					x->setHitBox(20.0, 20.0, 0.0, 0.0);
-					x->setPosition(20.0, 20.0, 0.0, 0.0);
+					if(x->getDirection() == LEFT){
+						x->setHitBox(20.0, 20.0, 0.0, 0.0);
+						x->setPosition(20.0, 20.0, 0.0, 0.0);
+					} else {
+						x->setHitBox(-20.0, -20.0, 0.0, 0.0);
+						x->setPosition(-20.0, -20.0, 0.0, 0.0);
+					}
 					x->setState(JUMP);
 					x->setFalling();
 				}

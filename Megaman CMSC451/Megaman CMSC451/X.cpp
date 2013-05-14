@@ -123,7 +123,7 @@ void X::move()
 				}
 			} else {
 				// Check if possible to move right
-				if(bg->canMove(hit_box[0] + CM_DASH, hit_box[2])){
+				if(bg->canMove(hit_box[1] + CM_DASH, hit_box[2])){
 					move_horizontal(CM_DASH);
 				} else {
 					x1_tcoord = 0.5;
@@ -141,20 +141,22 @@ void X::move()
 				// change state to wall slide
 				} else if (state != SLIDE && state == JUMP && !onGround) {
 					state = SLIDE;
-					setHitBox(-20.0, -20.0, 0.0, 0.0);
-					setPosition(-20.0, -20.0, 0.0, 0.0);
+					if(direction == LEFT){
+						setHitBox(-20.0, -20.0, 0.0, 0.0);
+						setPosition(-20.0, -20.0, 0.0, 0.0);
+					}
 					resetTexture();
 				}
 			} else {
 				// Check if possible to move right
-				if(bg->canMove(hit_box[0] + CM_WALK, hit_box[3])){
+				if(bg->canMove(hit_box[1] + CM_WALK, hit_box[3])){
 					move_horizontal(CM_WALK);
 				// change state to wall slide
 				} else if (state != SLIDE && state == JUMP && !onGround) {
 					// change state to wall slide
 					state = SLIDE;
-					setHitBox(-20.0, -20.0, 0.0, 0.0);
-					setPosition(-20.0, -20.0, 0.0, 0.0);
+					setHitBox(20.0, 20.0, 0.0, 0.0);
+					setPosition(20.0, 20.0, 0.0, 0.0);
 					resetTexture();
 				}
 			}
@@ -247,8 +249,13 @@ void X::ifLand(float groundY)
 		falling = false;
 		onGround = true;
 		if(state == SLIDE){
-			setHitBox(20.0, 20.0, 0.0, 0.0);
-			setPosition(20.0, 20.0, 0.0, 0.0);
+			if(direction == LEFT){
+				setHitBox(20.0, 20.0, 0.0, 0.0);
+				setPosition(20.0, 20.0, 0.0, 0.0);
+			} else {
+				setHitBox(-20.0, -20.0, 0.0, 0.0);
+				setPosition(-20.0, -20.0, 0.0, 0.0);
+			}
 		}
 		state = JUMP;
 		hit_box[2] += difference;
