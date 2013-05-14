@@ -66,10 +66,10 @@ void BackGround::drawView(GLint cmX)
 Rectangle2D * BackGround::getBelow(GLint x, GLint y)
 {
 	Rectangle2D * ret = nullptr;
-
+	cout << "y" << y << endl;
 	for(Rectangle2D * bx : ground)
 	{
-		if(bx->betweenX(x) && y >= bx->getMaxY())
+		if(bx->betweenX(x))
 			if(ret == nullptr || bx->getMaxY() > ret->getMaxY())
 				ret = bx;
 	}
@@ -80,17 +80,16 @@ Rectangle2D * BackGround::getBelow(GLint x, GLint y)
 
 bool BackGround::canMove(GLint x, GLint y) const
 {
-	/*if(x < 0 || x > width) return false; // out of boundary
+	if(x < 0 || x > width) return false; // out of boundary
 
 	const Point2D pnt = Point2D(x, y);
 
-	for(Box * bx : ground)
-		if( bx->intersects(pnt) )
+	for(Rectangle2D * bx : ground)
+		if(bx->intersects(pnt) &&  y != bx->getMaxY())
 			return false;
 
 	return true;
-	*/
-	return ! (x < 0 || x > width);
+
 }
 
 void BackGround::initGround()
