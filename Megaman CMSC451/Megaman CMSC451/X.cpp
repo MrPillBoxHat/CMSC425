@@ -157,12 +157,12 @@ void X::move()
 	}
 	// check if there is still ground underneath
 	Rectangle2D *temp;
-	//detec_ground(&temp);
+	detec_ground(&temp);
 	// If nothing was returned, X will fall
-//	if(temp == nullptr){
-//		setFalling();
-//		setState(JUMP);
-//	}
+	if(temp == nullptr){
+		setFalling();
+		setState(JUMP);
+	}
 	// Move X vertically
 	if(buttons[JUMP]){
 		jump_move();
@@ -194,7 +194,7 @@ void X::jump_move()
 			Rectangle2D *temp;
 			detec_ground(&temp);
 			// If nothing below
-			if(temp != nullptr){
+			if(temp == nullptr){
 				move_vertical(-7.0);
 			} else {
 				float groundY = temp->getMaxY();
