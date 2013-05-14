@@ -49,6 +49,7 @@ X::X(BackGround *inBG)
 	count2 = 0; // Invincibility Time
 	invinciple = false; // Determine whether X can take damage
 	bg = inBG;
+	falling = false; // X is not falling
 	// Initialize health blocks and buttons pressed
 	for(int i = 0; i < 9; i++){
 		buttons[i] = false;
@@ -105,13 +106,6 @@ void X::detec_collision(Zero *zero)
 	}
 }
 
-
-
-
-
-
-
-
 // Moves X in the world
 void X::move()
 {
@@ -143,17 +137,34 @@ void X::move()
 				// Check if possible to move left
 				if(bg->canMove(hit_box[0] - CM_WALK, hit_box[3])){
 					move_horizontal(CM_WALK * -1);
+				// change state to wall slide
+				} else if (state != SLIDE && state == JUMP) {
+					state = SLIDE;
+					resetTexture();
 				}
 			} else {
 				// Check if possible to move right
 				if(bg->canMove(hit_box[0] + CM_WALK, hit_box[3])){
 					move_horizontal(CM_WALK);
+				// change state to wall slide
+				} else if (state != SLIDE && state == JUMP) {
+					// change state to wall slide
+					state = SLIDE;
+					resetTexture();
 				}
 			}
 		}
 	}
+	// check if there is still ground underneath
+	Rectangle2D *temp;
+	//detec_ground(&temp);
+	// If nothing was returned, X will fall
+//	if(temp == nullptr){
+//		setFalling();
+//		setState(JUMP);
+//	}
 	// Move X vertically
-	if(buttons[JUMP] && counter % 5 == 0){
+	if(buttons[JUMP]){
 		jump_move();
 	}
 }
@@ -168,21 +179,38 @@ void X::jump_move()
 		} else if ((y2_tcoord == 0.5 && x1_tcoord < .27) || 
 				   (y2_tcoord == 1.0 && x1_tcoord >= .27)){
 			// X is falling back down
-			move_vertical(-22.0);
+			move_vertical(-7.0);
 		} else {
 		// Move X up
-			move_vertical(22.0);
+			move_vertical(7.0);
 		}
+	//if Sliding down a wall
+	} else if (state == SLIDE) {
+		move_vertical(-1.0);
 	// If normal jump
 	} else {
-		if(x1_tcoord >= 0.72){
-		// no change in position
-		} else if(x1_tcoord >= 0.36 && x1_tcoord < 0.72){
-			// X is falling back down
-			move_vertical(-22.0);
+		if(falling){
+			// Check if left/right foot hit a platform
+			Rectangle2D *temp;
+			detec_ground(&temp);
+			// If nothing below
+			if(temp != nullptr){
+				move_vertical(-7.0);
+			} else {
+				float groundY = temp->getMaxY();
+				// If landed
+				if(groundY >= hit_box[2]){
+					x1_tcoord = 0.81;
+					hit_box[2] += (groundY - hit_box[2]);
+					hit_box[3] += (groundY - hit_box[2]);
+				} else {
+					// Keep dropping
+					move_vertical(-7.0);
+				}
+			}
 		} else {
 			// Move X up
-			move_vertical(22.0);
+			move_vertical(7.0);
 		}	
 	}
 }
@@ -209,6 +237,15 @@ void X::move_vertical(float distance)
 	hit_box[3] += distance;
 }
 
+void X::detec_ground(Rectangle2D **temp)
+{
+	if(direction == LEFT){
+		*temp = bg->getBelow(hit_box[1],hit_box[2]);
+	} else {
+		*temp = bg->getBelow(hit_box[0], hit_box[2]);
+	}
+}
+
 void X::move_health(float distanceX, float distanceY)
 {
 	health_location[0] = distanceX + 28;
@@ -216,14 +253,6 @@ void X::move_health(float distanceX, float distanceY)
 	//health_location[2] += distanceY;
 	//health_location[3] += distanceY;
 }
-
-
-
-
-
-
-
-
 
 /**************************************************************************************************
 * Draw health() functions
@@ -295,12 +324,6 @@ void X::depleteHealth(int block_number)
 	}
 }
 
-
-
-
-
-
-
 /***************************************************************************************************
 * Draw function
 *	draws the main character X depending on his state
@@ -310,7 +333,9 @@ void X::depleteHealth(int block_number)
 void X::draw()
 {
 	// Move X in the world
-	move();
+	if(state != ENTRY && state != DAMAGE){
+		move();
+	}
 	// Draws X's health
 	if(state != ENTRY){
 		drawHealth();
@@ -329,6 +354,9 @@ void X::draw()
 			break;
 		case JUMP:
 			jump();
+			break;
+		case SLIDE:
+			slide();
 			break;
 		case FIRE:
 			// if in the air
@@ -399,8 +427,8 @@ void X::entry()
 	// Update frame pointers
 	// If X has not landed
 	if(y1 > 10.0){
-		y1 -= 10.0;
-		y2 -= 10.0;
+		y1 -= 13.0;
+		y2 -= 13.0;
 	} else {
 		if(counter % 5 == 0){
 			// go to next frame
@@ -532,27 +560,66 @@ void X::jump()
 	}
 	// Update frame pointers
 	if(counter % 5 == 0){
-		// if max height frame is reached
-		// go to next frame
-		x1_tcoord += x_offset;
+		// increment offset if not in land frame
+		if(x1_tcoord < 0.62) {
+			x1_tcoord += x_offset;
+		}
+		//if on land frame play sound
 		if(x1_tcoord >= 0.81 && land == false){	
 			sound->playLandSFX();
 			land = true;
+			falling = false;
+		// If X reaches a certain frame, he begins falling
+		} else if(x1_tcoord >= 0.54){
+			falling = true;
 		}
 		// When finished playing
 		if(x1_tcoord >= 1.0){
-			// Reset state
-			x1_tcoord = 0.0;
 			if(buttons[RUN]){
 				state = RUN;
 				x1_tcoord = 0.0;
 				y2_tcoord = 0.5;
 			} else {
+				// Reset state
+				x1_tcoord = 0.0;
 				state = STAND;
 			}
 			land = false;
 			buttons[JUMP] = false;
 			buttons[DASH] = false;
+		}
+	}
+}
+
+// Draws X sliding down a wall
+void X::slide()
+{
+	// How many frames to jump
+	float x_offset = 0.25;
+	float y_offset = 1.0;
+	// Draws the frame
+	if(direction == RIGHT){
+		glBindTexture(GL_TEXTURE_2D, textures[SLIDE_RIGHT]); // select the active texture
+	} else {
+		glBindTexture(GL_TEXTURE_2D, textures[SLIDE_LEFT]); // select the active texture
+	}
+	//create flicker effect
+	if(count2 % 2 == 0){
+		// Draw objects
+		glBegin(GL_POLYGON);
+			//real coord
+			glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
+			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
+			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
+			glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+		glEnd();
+	}
+	// Want to draw 5 frames per second
+	if(counter % 5 == 0){
+		//update next frame or reset if reached the end
+		x1_tcoord += x_offset;
+		if(x1_tcoord >= 0.99609375){
+			x1_tcoord = 0.75;
 		}
 	}
 }
@@ -738,8 +805,13 @@ void X::damage()
 		//update next frame or reset if reached the end
 		x1_tcoord += x_offset;
 		if(x1_tcoord >= 1.0){
-			resetTexture();
-			state = STAND;
+			if (buttons[JUMP]){
+				state = JUMP;
+				setFalling();
+			} else {
+				resetTexture();
+				state = STAND;
+			}
 		}
 	}
 }
@@ -748,18 +820,6 @@ void X::die()
 {
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 /***********************************************************************************************
 * loadTextures()
@@ -774,6 +834,7 @@ void X::loadTextures()
 	loadStand();
 	loadMove();
 	loadJump();
+	loadSlide();
 	loadFire();
 	loadCharge();
 	loadDash();
@@ -990,6 +1051,66 @@ void X::loadJump()
 	cout << "textureID: " << textureID << endl;
 
 	textures[JUMP_LEFT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+}
+
+// Loads sliding images
+void X::loadSlide()
+{
+	/* loads jump right image directly as a new OpenGL texture */
+	GLuint textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/slide/slide_right.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "XtextureID: " << textureID << endl;
+
+	textures[SLIDE_RIGHT] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads jump left image directly as a new OpenGL texture */
+	textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/slide/slide_left.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "textureID: " << textureID << endl;
+
+	textures[SLIDE_LEFT] = textureID; // Assign it to the texture array
 	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	// repeat texture

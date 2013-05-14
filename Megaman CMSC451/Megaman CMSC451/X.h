@@ -25,8 +25,9 @@ class X {
 		int count2; // Invincibility time
 		float x1_tcoord; // texture x1 coord
 		float y2_tcoord; // texture y2 coord
-		GLuint textures[22]; // stores texture
+		GLuint textures[24]; // stores texture
 		bool buttons[9]; // keeps track of state (buttons pressed)
+		bool falling; // Check if X is falling
 		int frame_count;
 		bool play_3frame;
 		BackGround *bg; // keeps track of environment
@@ -37,6 +38,7 @@ class X {
 		void loadStand();
 		void loadMove();
 		void loadJump();
+		void loadSlide();
 		void loadFire();
 		void loadCharge();
 		void loadDash();
@@ -48,6 +50,7 @@ class X {
 		void stand();
 		void run();
 		void jump();
+		void slide();
 		void air_fire();
 		void ground_fire();
 		void charge();
@@ -61,6 +64,7 @@ class X {
 		void jump_move();
 		void move_horizontal(float distance);
 		void move_vertical(float distance);
+		void detec_ground(Rectangle2D **temp);
 		// Draw X's health bar
 		void drawHealth();
 		void gainHealth(int block_number);
@@ -88,6 +92,7 @@ class X {
 		void setFrameOn(){play_3frame = true; frame_count = 1;}
 		void setHitBox(float xx1, float xx2, float yy1, float yy2);
 		void setPosition(float xx1, float xx2, float yy1, float yy2);
+		void setFalling(){falling = true; x1_tcoord = 0.63;}
 		// Draw X
 		void draw();
 		// Loads all textures

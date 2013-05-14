@@ -19,8 +19,8 @@ public:
 	// Create the boxes for the ground
 	void initGround();
 	// retrieve the rectangle below this point
-	Rectangle2D * getBelow(GLint x, GLint y);
-	bool canMove(GLint x, GLint y);
+	Rectangle2D * getBelow(float x, float y);
+	bool canMove(float x, float y);
 
 	const GLdouble viewWidth, viewHeight;
 

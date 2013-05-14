@@ -134,9 +134,9 @@ void World::draw_helper()
 		enableTextures();
 		menu->draw();
 	} else {
-		testTexture();
+		//testTexture();
 		enableTextures();
-		//bg.draw(cmX);
+		bg.draw(cmX);
 
 		glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
 		if(zero != NULL){
@@ -425,11 +425,14 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 			case 's': // Kneel
 			case MOVE_LEFT: // Move Left
 			case MOVE_RIGHT: // Move Right
-				if(hero_state != STAND && hero_state != JUMP && hero_state != ENTRY 
+				if(hero_state != STAND && hero_state != JUMP && hero_state != ENTRY && hero_state != SLIDE
 					&& hero_state != DASH && hero_state != DAMAGE && (zero == NULL || zero->getInit())){
 					// Reset state
 					x->setState(STAND);
 					x->resetTexture();
+				} else if (hero_state == SLIDE) {
+					x->setState(JUMP);
+					x->setFalling();
 				}
 				x->setButtons(RUN, false);
 					break;
@@ -585,7 +588,7 @@ void World::bullet_draw()
 				resetHitBox();
 			} else if (x_state == RUN){
 				x->setButtons(RUN, false);
-			}
+			} 
 			damage(it2->getDamage(), x->getHealth()/5);
 		}
 		// draw bullet
@@ -608,7 +611,7 @@ void World::bullet_draw()
 				resetHitBox();
 			} else if (x_state == RUN){
 				x->setButtons(RUN, false);
-			}
+			} 
 			damage(missile->getDamage(), x->getHealth()/5);
 		}
 		missile->draw(textures);
@@ -627,7 +630,7 @@ void World::bullet_draw()
 				resetHitBox();
 			} else if (x_state == RUN){
 				x->setButtons(RUN, false);
-			}
+			} 
 			damage(saber->getDamage(), x->getHealth()/5);
 		}
 	}
