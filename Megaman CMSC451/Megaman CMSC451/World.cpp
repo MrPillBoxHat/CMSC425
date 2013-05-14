@@ -472,9 +472,9 @@ void World::processAI()
 			sound->zeroPlaySaberSFX();
 			// Adjust based on zero's direction
 			if(zero->getDirection() == LEFT){
-				zero->setPosition(-100.0, 30.0, -7.0, 70.0);
+				zero->setPosition(-130.0, 50.0, -12.0, 90.0);
 			} else {
-				zero->setPosition(-30.0, 100.0, -7.0, 70.0);
+				zero->setPosition(-50.0, 130.0, -12.0, 90.0);
 			}
 			zero->resetTexture();
 			if(action == SABER){

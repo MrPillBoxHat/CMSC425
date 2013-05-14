@@ -46,10 +46,12 @@ Animation:
 	- combination of keys + jump causes flags to screw up
 	- Jump fire animation is bugged, not working at all.  Causing X
 	  to move wrong on the Y plane
+	- X fire messed up when running
 
 	(Zero)
 	- Zero Saber attack needs to dash to front and not past
 	- Zero Saber animation needs sheath animation
+	- AI goes blank
 
 	(general)
 	- Fix dash.  Only move when in dash animation (not when stoppin/starting)
