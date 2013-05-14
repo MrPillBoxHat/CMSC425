@@ -157,23 +157,23 @@ void X::move()
 	}
 	// check if there is still ground underneath
 	Rectangle2D *temp;
-//	detec_ground(&temp);
+	detec_ground(&temp);
 	// If nothing was returned, X will fall
-//	if(temp == nullptr){
-//		setFalling();
-//		setState(JUMP);
-//	}
+	if(temp == nullptr){
+		setFalling();
+		setState(JUMP);
+	}
 	//if Sliding down a wall
 	if (state == SLIDE) {
 		move_vertical(-0.7);
 	// Move X vertically
 	} else if(buttons[JUMP]){
-		jump_move();
+		jump_move(temp);
 	}
 }
 
 //helper function to move x while in jump state
-void X::jump_move()
+void X::jump_move(Rectangle2D *temp)
 {
 	// If firing in the air
 	if(buttons[FIRE]){
@@ -191,8 +191,6 @@ void X::jump_move()
 	} else {
 		if(falling){
 			// Check if left/right foot hit a platform
-			Rectangle2D *temp;
-			detec_ground(&temp);
 			// If nothing below
 			if(temp == nullptr){
 				move_vertical(-6.5);
@@ -576,7 +574,7 @@ void X::jump()
 			falling = true;
 		}
 		// When finished playing
-		if(x1_tcoord >= 1.0){
+		if(x1_tcoord >= 0.99){
 			if(buttons[RUN]){
 				state = RUN;
 				x1_tcoord = 0.0;

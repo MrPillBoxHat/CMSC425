@@ -61,7 +61,7 @@ class X {
 		// Move X's coordinates
 		void move();
 		// helper function to control movement
-		void jump_move();
+		void jump_move(Rectangle2D *temp);
 		void move_horizontal(float distance);
 		void move_vertical(float distance);
 		void detec_ground(Rectangle2D **temp);
