@@ -14,6 +14,11 @@ Sound::Sound()
 *	These functions play the game sound effects.  Things such as actions or mechanics will be played here
 *
 **********************************************************************************************************/
+void Sound::stopSound()
+{
+	engine->stopAllSounds();
+}
+
 void Sound::playMusic(char *music)
 {
 	engine->stopAllSounds();
@@ -27,6 +32,7 @@ void Sound::playCursorSFX()
 
 void Sound::playSelectSFX()
 {
+	engine->stopAllSounds();
 	engine->play2D("Sound Effects/game/menu_select.wav", false);
 }
 

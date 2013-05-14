@@ -455,7 +455,7 @@ void Zero::fire()
 		glEnd();
 	}
 	// Want to draw 5 frames per second
-	if(counter % 6 == 0){
+	if(counter % 3 == 0){
 		//update next frame or reset if reached the end
 		tcoord[0] += x_offset;
 		if(tcoord[0] >= 0.99609375){

@@ -66,20 +66,20 @@ void Saber::draw(GLuint *texture)
 	glEnd();
 	if(direction == 0){
 		// Move bullet
-		x1 -= 5.0;
-		x2 -= 5.0;
-		hit_box[0] -= 5.0;
-		hit_box[1] -= 5.0;
+		x1 -= 11.5;
+		x2 -= 11.5;
+		hit_box[0] -= 11.5;
+		hit_box[1] -= 11.5;
 	} else {
-		x1 += 5.0;
-		x2 += 5.0;
-		hit_box[0] += 5.0;
-		hit_box[1] += 5.0;
+		x1 += 11.5;
+		x2 += 11.5;
+		hit_box[0] += 11.5;
+		hit_box[1] += 11.5;
 	}
-	y1 += 1.0;
-	y2 += 1.0;
-	hit_box[2] += 1.0;
-	hit_box[3] += 1.0;
+	y1 += 5.0;
+	y2 += 5.0;
+	hit_box[2] += 5.0;
+	hit_box[3] += 5.0;
 	// update next frame or reset if reached the end
 	x1_tcoord += x_offset;
 	if(x1_tcoord >= 1.0){
