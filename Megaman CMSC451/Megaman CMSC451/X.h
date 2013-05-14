@@ -59,7 +59,8 @@ class X {
 		void move();
 		// helper function to control movement
 		void jump_move();
-		void run_move(float distance);
+		void move_horizontal(float distance);
+		void move_vertical(float distance);
 		// Draw X's health bar
 		void drawHealth();
 		void gainHealth(int block_number);

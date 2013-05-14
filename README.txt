@@ -52,7 +52,8 @@ Animation:
 	(Zero)
 	- Zero Saber attack needs to dash to front and not past
 	- Zero Saber animation needs sheath animation
-	- AI goes blank
+	- AI goes blank (fixed?)
+	- Zero needs to not pass walls and etc
 
 	(general)
 	- Fix dash.  Only move when in dash animation (not when stoppin/starting)

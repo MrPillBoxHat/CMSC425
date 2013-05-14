@@ -3,7 +3,6 @@
 *	Contains all function implementations
 *   and actions of the character
 *******************************************************/
-
 #include <iostream>						// input/outout stream
 #include <cstdlib>						// C++ standard definitions
 #include <GL/glut.h>                    // GLUT
@@ -71,6 +70,7 @@ void X::setHitBox(float xx1, float xx2, float yy1, float yy2)
 	hit_box[3] += yy2;
 }
 
+// Sets up texture box
 void X::setPosition(float xx1, float xx2, float yy1, float yy2)
 {
 	x1 += xx1;
@@ -104,6 +104,202 @@ void X::detec_collision(Zero *zero)
 		depleteHealth(health/5);
 	}
 }
+
+
+
+
+
+
+
+
+// Moves X in the world
+void X::move()
+{
+	// Dash movement (faster movement)
+	if(buttons[DASH]){
+		// Move only if at the correct frame
+		if(x1_tcoord < 0.5){
+			if(direction == LEFT){
+				// Check if possible to move left
+				if(bg->canMove(hit_box[0] - CM_DASH, hit_box[3])){
+					move_horizontal(CM_DASH * -1);
+				} else {
+					x1_tcoord = 0.5;
+				}
+			} else {
+				// Check if possible to move right
+				if(bg->canMove(hit_box[0] + CM_DASH, hit_box[3])){
+					move_horizontal(CM_DASH);
+				} else {
+					x1_tcoord = 0.5;
+				}
+			}
+		}
+	// Normal movements
+	} else {
+		// Move X horizontally
+		if(buttons[RUN]){
+			if(direction == LEFT){
+				// Check if possible to move left
+				if(bg->canMove(hit_box[0] - CM_WALK, hit_box[3])){
+					move_horizontal(CM_WALK * -1);
+				}
+			} else {
+				// Check if possible to move right
+				if(bg->canMove(hit_box[0] + CM_WALK, hit_box[3])){
+					move_horizontal(CM_WALK);
+				}
+			}
+		}
+	}
+	// Move X vertically
+	if(buttons[JUMP] && counter % 5 == 0){
+		jump_move();
+	}
+}
+
+//helper function to move x while in jump state
+void X::jump_move()
+{
+	// If firing in the air
+	if(buttons[FIRE]){
+		if(x1_tcoord >= .27 && y2_tcoord == 0.5){
+			// no change in position
+		} else if ((y2_tcoord == 0.5 && x1_tcoord < .27) || 
+				   (y2_tcoord == 1.0 && x1_tcoord >= .27)){
+			// X is falling back down
+			move_vertical(-22.0);
+		} else {
+		// Move X up
+			move_vertical(22.0);
+		}
+	// If normal jump
+	} else {
+		if(x1_tcoord >= 0.72){
+		// no change in position
+		} else if(x1_tcoord >= 0.36 && x1_tcoord < 0.72){
+			// X is falling back down
+			move_vertical(-22.0);
+		} else {
+			// Move X up
+			move_vertical(22.0);
+		}	
+	}
+}
+
+void X::move_horizontal(float distance)
+{
+
+	x1 += distance;
+	x2 += distance;
+	position[0] += distance;
+	position[1] += distance;
+	hit_box[0] += distance;
+	hit_box[1] += distance;
+}
+
+void X::move_vertical(float distance)
+{
+
+	y1 += distance;
+	y2 += distance;
+	position[2] += distance;
+	position[3] += distance;
+	hit_box[2] += distance;
+	hit_box[3] += distance;
+}
+
+void X::move_health(float distanceX1, float distanceX2)
+{
+	health_location[0] = distanceX1 + 28;
+	health_location[1] = distanceX2 + 100;
+	//health_location[2] += distanceY;
+	//health_location[3] += distanceY;
+}
+
+
+
+
+
+
+
+
+
+/**************************************************************************************************
+* Draw health() functions
+*	Draw X's life.  Increase and decrease base on damage taken
+*   and items retrived
+**************************************************************************************************/
+// Draws Zero's Health bar
+void X::drawHealth()
+{
+	// Draw the bar
+	glBindTexture(GL_TEXTURE_2D, textures[HEALTH_BAR]); // select the active texture
+	glBegin(GL_POLYGON);
+		//real coord
+		glTexCoord2d(0.0, 0.0); glVertex2d(health_location[0], health_location[2]);
+		glTexCoord2d(1.0, 0.0); glVertex2d(health_location[1], health_location[2]);
+		glTexCoord2d(1.0, 1.0); glVertex2d(health_location[1], health_location[3]);
+		glTexCoord2d(0.0, 1.0); glVertex2d(health_location[0], health_location[3]);
+	glEnd();
+	// Draw the blocks
+	glBindTexture(GL_TEXTURE_2D, textures[HEALTH_BLOCK]); // select the active texture
+	// position of health blocks
+	float xx1 = health_location[0] + 9.0;
+	float xx2 = health_location[1] - 13.0;
+	float yy1 = health_location[2] + 51.0;
+	float yy2 = health_location[3] - 130.0;
+	int i = 0; // counter to iterate through health_blocks
+	// iterate through the blocks and draw them
+	while(i < 28 && health_blocks[i]){
+		glBegin(GL_POLYGON);
+			//real coord
+			glTexCoord2d(0.0, 0.0); glVertex2d(xx1, yy1);
+			glTexCoord2d(1.0, 0.0); glVertex2d(xx2, yy1);
+			glTexCoord2d(1.0, 1.0); glVertex2d(xx2, yy2);
+			glTexCoord2d(0.0, 1.0); glVertex2d(xx1, yy2);
+		glEnd();
+		yy1 += 4.0;
+		yy2 += 4.0;
+		i++; // increment count
+	}
+}
+
+// Draws the animation that fills Zero's health
+void X::gainHealth(int block_number)
+{
+	// iterate through health bar
+	for(int i = 0; i < 28; i++){
+		// if the bar is not there
+		if(!health_blocks[i]){
+			// draw the bar
+			health_blocks[i] = true;
+			break;
+		}
+	}
+}
+
+// Decreases the amount of health blocks
+void X::depleteHealth(int block_number)
+{
+	if(!invinciple){
+		// start at the end of the array
+		int i = 27;
+		// sets all health blocks to false
+		while(i >= block_number){
+			if(health_blocks[i]){
+				health_blocks[i] = false;
+			}
+			i--;
+		}
+	}
+}
+
+
+
+
+
+
 
 /***************************************************************************************************
 * Draw function
@@ -177,193 +373,6 @@ void X::draw()
 		if(count2++ == 110){
 			count2 = 0;
 			invinciple = false;
-		}
-	}
-}
-
-// Moves X in the world
-void X::move()
-{
-	// Dash movement (faster movement)
-	if(buttons[DASH]){
-		// Move only if at the correct frame
-		if(x1_tcoord < 0.5){
-			if(direction == LEFT){
-				// Check if possible to move left
-				//if(bg->canMove(hit_box[0] - CM_DASH, hit_box[3])){
-					run_move(CM_DASH * -1);
-			//	} else {
-			//		x1_tcoord = 0.5;
-			//	}
-			} else {
-				// Check if possible to move right
-			//	if(bg->canMove(hit_box[0] + CM_DASH, hit_box[3])){
-					run_move(CM_DASH);
-			//	} else {
-			//		x1_tcoord = 0.5;
-			//	}
-			}
-		}
-	// Normal movements
-	} else {
-		// Move X horizontally
-		if(buttons[RUN]){
-			if(direction == LEFT){
-				// Check if possible to move left
-			//	if(bg->canMove(hit_box[0] - CM_WALK, hit_box[3])){
-					run_move(CM_WALK * -1);
-		//		}
-			} else {
-				// Check if possible to move right
-		//		if(bg->canMove(hit_box[0] + CM_WALK, hit_box[3])){
-					run_move(CM_WALK);
-		//		}
-			}
-		}
-	}
-	// Move X vertically
-	if(buttons[JUMP]){
-		jump_move();
-	}
-}
-
-void X::run_move(float distance)
-{
-
-	x1 += distance;
-	x2 += distance;
-	position[0] += distance;
-	position[1] += distance;
-	hit_box[0] += distance;
-	hit_box[1] += distance;
-}
-
-//helper function to move x while in jump state
-void X::jump_move()
-{
-	// FPS control
-	if(counter %5 == 0){
-	// If firing in the air
-		if(buttons[FIRE] && buttons[JUMP]){
-			if(x1_tcoord >= .27 && y2_tcoord == 0.5){
-				// no change in position
-			} else if ((y2_tcoord == 0.5 && x1_tcoord < .27) || 
-					   (y2_tcoord == 1.0 && x1_tcoord >= .27)){
-				// X is falling back down
-				y1 -= 22.0;
-				y2 -= 22.0;
-				position[2] -= 22.0;
-				position[3] -= 22.0;
-				hit_box[2] -= 22.0;
-				hit_box[3] -= 22.0;
-			} else {
-			// Move X up
-				y1 += 22.0;
-				y2 += 22.0;
-				position[2] += 22.0;
-				position[3] += 22.0;
-				hit_box[2] += 22.0;
-				hit_box[3] += 22.0;
-			}
-			// If normal jump
-		} else {
-			if(x1_tcoord >= 0.72){
-			// no change in position
-			} else if(x1_tcoord >= 0.36 && x1_tcoord < 0.72){
-			// X is falling back down
-				y1 -= 22.0;
-				y2 -= 22.0;
-				position[2] -= 22.0;
-				position[3] -= 22.0;
-				hit_box[2] -= 22.0;
-				hit_box[3] -= 22.0;
-			} else {
-				// Move X up
-				y1 += 22.0;
-				y2 += 22.0;
-				position[2] += 22.0;
-				position[3] += 22.0;
-				hit_box[2] += 22.0;
-				hit_box[3] += 22.0;
-			}	
-		}
-	}
-}
-
-void X::move_health(float distanceX1, float distanceX2)
-{
-	health_location[0] = distanceX1 + 30;
-	health_location[1] = distanceX2 + 30;
-	//health_location[2] += distanceY;
-	//health_location[3] += distanceY;
-}
-
-/**************************************************************************************************
-* Draw health() functions
-*	Draw X's life.  Increase and decrease base on damage taken
-*   and items retrived
-**************************************************************************************************/
-// Draws Zero's Health bar
-void X::drawHealth()
-{
-	// Draw the bar
-	glBindTexture(GL_TEXTURE_2D, textures[HEALTH_BAR]); // select the active texture
-	glBegin(GL_POLYGON);
-		//real coord
-		glTexCoord2d(0.0, 0.0); glVertex2d(health_location[0], health_location[2]);
-		glTexCoord2d(1.0, 0.0); glVertex2d(health_location[1], health_location[2]);
-		glTexCoord2d(1.0, 1.0); glVertex2d(health_location[1], health_location[3]);
-		glTexCoord2d(0.0, 1.0); glVertex2d(health_location[0], health_location[3]);
-	glEnd();
-	// Draw the blocks
-	glBindTexture(GL_TEXTURE_2D, textures[HEALTH_BLOCK]); // select the active texture
-	// position of health blocks
-	float xx1 = health_location[0] + 9.0;
-	float xx2 = health_location[1] - 13.0;
-	float yy1 = health_location[2] + 51.0;
-	float yy2 = health_location[3] - 130.0;
-	int i = 0; // counter to iterate through health_blocks
-	// iterate through the blocks and draw them
-	while(i < 28 && health_blocks[i]){
-		glBegin(GL_POLYGON);
-			//real coord
-			glTexCoord2d(0.0, 0.0); glVertex2d(xx1, yy1);
-			glTexCoord2d(1.0, 0.0); glVertex2d(xx2, yy1);
-			glTexCoord2d(1.0, 1.0); glVertex2d(xx2, yy2);
-			glTexCoord2d(0.0, 1.0); glVertex2d(xx1, yy2);
-		glEnd();
-		yy1 += 4.0;
-		yy2 += 4.0;
-		i++; // increment count
-	}
-}
-
-// Draws the animation that fills Zero's health
-void X::gainHealth(int block_number)
-{
-	// iterate through health bar
-	for(int i = 0; i < 28; i++){
-		// if the bar is not there
-		if(!health_blocks[i]){
-			// draw the bar
-			health_blocks[i] = true;
-			break;
-		}
-	}
-}
-
-// Decreases the amount of health blocks
-void X::depleteHealth(int block_number)
-{
-	if(!invinciple){
-		// start at the end of the array
-		int i = 27;
-		// sets all health blocks to false
-		while(i >= block_number){
-			if(health_blocks[i]){
-				health_blocks[i] = false;
-			}
-			i--;
 		}
 	}
 }
@@ -739,6 +748,18 @@ void X::die()
 {
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 /***********************************************************************************************
 * loadTextures()
