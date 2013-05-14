@@ -26,6 +26,7 @@ public:
 	bool betweenX(int x) const { return between(x, origin.getX(), width); }
 
 	bool intersects(const Point2D &point) const;
+	bool intersects(const Rectangle2D &rect) const;
 	bool operator < (const Rectangle2D &) const;
 	bool operator == (const Rectangle2D &) const;
 };

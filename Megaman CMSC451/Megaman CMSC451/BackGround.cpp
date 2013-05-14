@@ -78,18 +78,18 @@ Rectangle2D * BackGround::getBelow(GLint x, GLint y)
 }
 
 
-bool BackGround::canMove(GLint x, GLint y) const
+bool BackGround::canMove(GLint x1, GLint y1, GLint x2, GLint y2) const
 {
-	if(x < 0 || x >= width-75) return false; // out of boundary
+	if((x1 < 0 || x1 >= width) || (x2 < 0 || x2 >= width)) 
+		return false; // out of boundary
 
-	const Point2D pnt = Point2D(x, y);
+	const Rectangle2D rect(x1, y1, y2-y1, x2-x1);
 
 	for(Rectangle2D * bx : ground)
-		if(bx->intersects(pnt))
+		if(bx->intersects(rect))
 			return false;
 
 	return true;
-
 }
 
 void BackGround::initGround()
