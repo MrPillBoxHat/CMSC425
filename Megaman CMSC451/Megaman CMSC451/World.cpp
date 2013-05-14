@@ -100,8 +100,8 @@ void World::update(void)
 	if(!initZero && x_position[0] >= 3150.0){
 		initBossRoom();
 	}
-	x->move_health(cmX, 0.0);
 	updateView();
+	x->move_health(cmX, cmX + 72);
 }
 
 void World::initBossRoom()
@@ -136,7 +136,7 @@ void World::draw_helper()
 	} else {
 		testTexture();
 		enableTextures();
-		//bg.draw(cmX);
+		bg.draw(cmX);
 
 		glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
 		if(zero != NULL){
@@ -209,13 +209,18 @@ void World::updateView()
 	glMatrixMode(GL_PROJECTION);                // update projection
     glLoadIdentity();
 	// position at X
-	const int pt = x->middle();	
+	const int pt = x->middle(), end = width - bg.viewWidth / 2;	
 	GLdouble diff = bg.viewWidth;
-	if(pt >= 0 && pt >= (bg.viewWidth / 2) ) 
+	if(pt >= 0 && pt >= (bg.viewWidth / 2) && pt < end) 
 	{
 		cmX = pt - (bg.viewWidth / 2);
 
+	} else if(pt >= end) // the end
+	{
+		cout << "end" << endl; 
+		cmX = width - bg.viewWidth;
 	}
+
 	gluOrtho2D(cmX, cmX + diff, 0, bg.viewHeight);     // one to one
     glMatrixMode(GL_MODELVIEW);
 

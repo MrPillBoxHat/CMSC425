@@ -284,8 +284,8 @@ void X::jump_move()
 
 void X::move_health(float distanceX1, float distanceX2)
 {
-	health_location[0] = distanceX1 + 30;
-	health_location[1] = distanceX2 + 30;
+	health_location[0] = distanceX1;
+	health_location[1] = distanceX2;
 	//health_location[2] += distanceY;
 	//health_location[3] += distanceY;
 }

@@ -20,13 +20,15 @@ public:
 	void initGround();
 	// retrieve the rectangle below this point
 	Rectangle2D * getBelow(GLint x, GLint y);
-	bool canMove(GLint x, GLint y);
+	bool canMove(GLint x, GLint y) const;
 
 	const GLdouble viewWidth, viewHeight;
 
 private:
 	GLdouble width, height;	
-	std::vector<Box *> ground;
+	std::vector<Box *> groundTxtr;
+	std::vector<Rectangle2D *> ground;
+
 	Box * view;
 	Texture * bg;
 
@@ -37,6 +39,7 @@ private:
 	void drawGround();
 	void drawView(GLint cmX);
 	void drawTop();
+	void addBox(GLint x1, GLuint w, GLuint h, Texture * txt, GLuint rlH);
 };
 
 /*

@@ -23,7 +23,7 @@ void BackGround::draw(GLint cmX)
 
 void BackGround::drawGround() 
 {
-	for(Box * bx : ground) // draw each box
+	for(Box * bx : groundTxtr) // draw each box
 	{
 		glColor3f(1, 1, 1);
 		bx->draw();
@@ -58,18 +58,18 @@ void BackGround::drawView(GLint cmX)
 	}
 	*/
 	const UINT Y = 100;
-	const UINT H = height - viewHeight;
+	const UINT H = viewHeight - Y;
 	const UINT W = viewWidth;
 	Box b(cmX, Y, W, H, bg);
 	b.draw();
 }
 Rectangle2D * BackGround::getBelow(GLint x, GLint y)
 {
-	Box * ret = nullptr;
+	Rectangle2D * ret = nullptr;
 
-	for(Box * bx : ground)
+	for(Rectangle2D * bx : ground)
 	{
-		if(bx->betweenX(x) && y >= bx->getMaxY() )
+		if(bx->betweenX(x) && y >= bx->getMaxY())
 			if(ret == nullptr || bx->getMaxY() > ret->getMaxY())
 				ret = bx;
 	}
@@ -77,9 +77,9 @@ Rectangle2D * BackGround::getBelow(GLint x, GLint y)
 	return ret;
 }
 
-bool BackGround::canMove(GLint x, GLint y)
+bool BackGround::canMove(GLint x, GLint y) const
 {
-	if(x < 0 || x > width) return false; // out of boundary
+	/*if(x < 0 || x > width) return false; // out of boundary
 
 	const Point2D pnt = Point2D(x, y);
 
@@ -88,36 +88,34 @@ bool BackGround::canMove(GLint x, GLint y)
 			return false;
 
 	return true;
+	*/
+	return ! (x < 0 || x > width);
 }
 
 void BackGround::initGround()
 {
 	// load textures for background
 	initTextures(); 
-	const UINT H = 100;
+	const UINT Tx_H = 100; // texture height
+	const UINT mm_h = 72; // megaman height
 
-	Box * bx = new Box(0, 0, 400, H, grdTxt); // yellow box
-	ground.push_back(bx);
+	addBox(0, 400, Tx_H, grdTxt, mm_h);
 
-	bx = new Box(400, 0, 400, H, grdTxt);	// red box
-	ground.push_back(bx);
+	addBox(400, 400, Tx_H, grdTxt, mm_h);
 
-	bx = new Box(800, 0, 400, H, grdTxt); // green box
-	ground.push_back(bx);
+	addBox(800, 400, Tx_H, grdTxt, mm_h);
 
-	bx = new Box(1200, 0, 100, H/4); // pit
-	ground.push_back(bx);
+	addBox(1200, 100, Tx_H/4, nullptr, Tx_H/5);
 
-	bx = new Box(1300, 0, 300, H, grdTxt); // space, then another block
-	ground.push_back(bx);
+	addBox(1300, 300, Tx_H, grdTxt, mm_h);
 
 	for(UINT x = 1600; x < width; x += 400) 
 	{
-		bx = new Box(x, 0, 400, H, grdTxt);  // rest of the floor
-		ground.push_back(bx);
+		addBox(x, 400, Tx_H, grdTxt, mm_h);
 	}
 
 
+	/*
 	// small box on top
 	bx = new Box(500, H, 200, H/5);
 	bx->setColor(50, 50, 150);
@@ -127,12 +125,27 @@ void BackGround::initGround()
 	bx = new Box(1400, H, 200, H/5);
 	bx->setColor(150, 50, 150);
 	ground.push_back(bx);
+	*/
 
-	bx = new Box(3400, H, width-3400, height - viewHeight, bossTxt);
-	ground.push_back(bx);
+	//bx = new Box(3200, 50, width-3200, viewHeight-50, bossTxt);
+	//ground.push_back(bx);
 
 	// main background
-	view = new Box(0, H, width/10, height - viewHeight, bg);
+	view = new Box(0, Tx_H, width/10, height - viewHeight, bg);
+}
+
+void BackGround::addBox(GLint x1, GLuint w, GLuint txtH, Texture * txt, GLuint rlH)
+{
+	Box * bx = nullptr;
+	if(txt != nullptr)
+		bx = new Box(x1, 0, w, txtH, txt);
+	else
+		bx = new Box(x1, 0, w, txtH);
+
+	groundTxtr.push_back(bx);
+
+	// "real" ground
+	ground.push_back( new Rectangle2D(x1, 0, w, rlH) );
 }
 
 void BackGround::initTextures()
