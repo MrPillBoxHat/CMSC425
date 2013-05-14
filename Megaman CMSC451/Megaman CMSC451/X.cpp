@@ -71,6 +71,14 @@ void X::setHitBox(float xx1, float xx2, float yy1, float yy2)
 	hit_box[3] += yy2;
 }
 
+void X::setPosition(float xx1, float xx2, float yy1, float yy2)
+{
+	x1 += xx1;
+	x2 += xx2;
+	y1 += yy1;
+	y2 += yy2;
+}
+
 // Detecs collision with enemy
 void X::detec_collision(Zero *zero)
 {
@@ -683,6 +691,7 @@ void X::dash()
 				setHitBox(8.0, 0.0, 0.0, 12.0);
 			}
 			buttons[DASH] = false;
+			//setPosition(20.0, -20.0, 0.0, 10.0);
 		}
 	}
 }

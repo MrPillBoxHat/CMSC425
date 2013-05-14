@@ -47,6 +47,7 @@ Animation:
 	- Jump fire animation is bugged, not working at all.  Causing X
 	  to move wrong on the Y plane
 	- X fire messed up when running
+	- Dash animation not scaled properly
 
 	(Zero)
 	- Zero Saber attack needs to dash to front and not past

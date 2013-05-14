@@ -82,11 +82,11 @@ class X {
 		void setHealth(int number){health += number;}
 		void setState(int inState){state = inState; buttons[inState] = true;}
 		void setDirection(int inDirection){direction = inDirection;}
-		void setXPosition(float inx1, float inx2){x1 += inx1; x2 += inx2;}
 		void setButtons(int button, bool boolean){buttons[button] = boolean;}
 		void resetTexture(){x1_tcoord = 0.0; y2_tcoord = 1.0;}
 		void setFrameOn(){play_3frame = true; frame_count = 1;}
 		void setHitBox(float xx1, float xx2, float yy1, float yy2);
+		void setPosition(float xx1, float xx2, float yy1, float yy2);
 		// Draw X
 		void draw();
 		// Loads all textures

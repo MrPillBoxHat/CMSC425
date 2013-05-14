@@ -406,6 +406,7 @@ void World::processKeysGame(unsigned char key)
 					}
 					x->resetTexture();
 					x->setState(DASH);
+					//x->setPosition(-20.0, 20.0, 0.0, -10.0);
 				}
 				break;
 		}
