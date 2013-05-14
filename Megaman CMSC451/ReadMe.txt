@@ -51,7 +51,10 @@ Animation:
 	- jump and turn and fire screws up cannon location
 	- perfrom mid-air jumps when pressing left, right, jump and fire
 	  jump, right, and fire key cause x to "fly"
+	- dash to wall jump is messed up
 
+	- Possible future bugs
+		- slide hit, need to resize hitbox and texture box
 
 	(Zero)
 	- Zero saber attack needs to dash in front of X, not past X

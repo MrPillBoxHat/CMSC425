@@ -141,6 +141,8 @@ void X::move()
 				// change state to wall slide
 				} else if (state != SLIDE && state == JUMP && !onGround) {
 					state = SLIDE;
+					setHitBox(-20.0, -20.0, 0.0, 0.0);
+					setPosition(-20.0, -20.0, 0.0, 0.0);
 					resetTexture();
 				}
 			} else {
@@ -151,6 +153,8 @@ void X::move()
 				} else if (state != SLIDE && state == JUMP && !onGround) {
 					// change state to wall slide
 					state = SLIDE;
+					setHitBox(-20.0, -20.0, 0.0, 0.0);
+					setPosition(-20.0, -20.0, 0.0, 0.0);
 					resetTexture();
 				}
 			}
@@ -242,6 +246,10 @@ void X::ifLand(float groundY)
 		x1_tcoord = 0.81;
 		falling = false;
 		onGround = true;
+		if(state == SLIDE){
+			setHitBox(20.0, 20.0, 0.0, 0.0);
+			setPosition(20.0, 20.0, 0.0, 0.0);
+		}
 		state = JUMP;
 		hit_box[2] += difference;
 		hit_box[3] += difference;
