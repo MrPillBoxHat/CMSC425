@@ -50,13 +50,15 @@ Animation:
 	- Dash jump implementation messed up
 	- bullet splat is messed up
 	- Dash animation not scaled properly
-	- Jump, when hitting the floor is buggy
+	- no wall jump
+	- Health bar goes upside down for some reason
+	- jump and turn and fire screws up cannon location
 
 
 	(Zero)
 	- Zero saber attack needs to dash in front of X, not past X
 	- Saber needs to add sword sheath to animation
-	- saber animation got screwed up
+	- left saber animation got screwed up
 
 	(General)
 	- Fix camera

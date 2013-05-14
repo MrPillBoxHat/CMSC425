@@ -17,7 +17,6 @@ Saber::Saber(float *position, int inDirection)
 	y2_tcoord = 1.0;
 	damage = -15;
 	direction = inDirection;
-	counter = 0;
 }
 
 // Constructor (saber)
@@ -43,7 +42,6 @@ Saber::Saber(float *position, int direction, int i)
 	x1_tcoord = 0.0;
 	y2_tcoord = 1.0;
 	damage = -25;
-	counter = 0;
 }
 
 // Draw saber missile
@@ -83,12 +81,9 @@ void Saber::draw(GLuint *texture)
 	hit_box[2] += 1.0;
 	hit_box[3] += 1.0;
 	// update next frame or reset if reached the end
-	counter++;
-	if(counter % 3 == 0){
-		x1_tcoord += x_offset;
-		if(x1_tcoord >= 1.0){
-			x1_tcoord = 0.0;
-		}
+	x1_tcoord += x_offset;
+	if(x1_tcoord >= 1.0){
+		x1_tcoord = 0.0;
 	}
 }
 

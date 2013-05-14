@@ -7,14 +7,20 @@ Z_Bullet::Z_Bullet(float *position, int inDirection)
 {
 	x1 = position[0]-60.0;
 	x2 = position[1]-20.0;
-	y1 = position[2];
-	y2 = position[3];
+	y1 = position[2] + 20.0;
+	y2 = position[3] - 20.0;
 	float xmid = x1 + ((x2-x1)/2);
 	float ymid = y1 + ((y2-y1)/2);
-	hit_box[0] = xmid - 35.0;
-	hit_box[1] = xmid + 30.0;
-	hit_box[2] = ymid - 35.0;
-	hit_box[3] = ymid + 35.0;
+	if(inDirection == LEFT){
+		hit_box[0] = xmid - 50.0;
+		hit_box[1] = xmid + 30.0;
+		
+	} else {
+		hit_box[0] = xmid - 30.0;
+		hit_box[1] = xmid + 50.0;
+	}
+	hit_box[2] = ymid - 22.0;
+	hit_box[3] = ymid + 22.0;
 	x1_tcoord = 0.0;
 	y2_tcoord = 1.0;
 	damage = -15;
@@ -41,7 +47,7 @@ void Z_Bullet::draw(GLuint *texture)
 		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
 		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
 	glEnd();
-	if(direction == 0){
+	if(direction == LEFT){
 		// Move bullet
 		x1 -= 5.0;
 		x2 -= 5.0;

@@ -182,18 +182,18 @@ void X::move()
 void X::jump_move(float groundY)
 {
 	// If firing in the air
-	if(buttons[FIRE]){
+	//if(buttons[FIRE]){
 		
 	// If normal jump
-	} else {
+	//} else {
 		if(falling){
-			move_vertical(-6.5);
+			move_vertical(-5.0);
 			ifLand(groundY);
 		} else if(!onGround) {
 			// Move X up if not on landing frame
-			move_vertical(6.5);
+			move_vertical(5.0);
 		}	
-	}
+	//}
 }
 
 void X::move_horizontal(float distance)
