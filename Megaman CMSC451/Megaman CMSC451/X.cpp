@@ -201,6 +201,7 @@ void X::jump_move()
 				// If landed
 				if(groundY >= hit_box[2]){
 					x1_tcoord = 0.81;
+					falling = false;
 					hit_box[2] += (groundY - hit_box[2]);
 					hit_box[3] += (groundY - hit_box[2]);
 				} else {
@@ -208,8 +209,8 @@ void X::jump_move()
 					move_vertical(-7.0);
 				}
 			}
-		} else {
-			// Move X up
+		} else if(x1_tcoord < 0.62) {
+			// Move X up if not on landing frame
 			move_vertical(7.0);
 		}	
 	}
@@ -560,8 +561,8 @@ void X::jump()
 	}
 	// Update frame pointers
 	if(counter % 5 == 0){
-		// increment offset if not in land frame
-		if(x1_tcoord < 0.62) {
+		// increment offset if not in fall frame
+		if(x1_tcoord < 0.62 || x1_tcoord >= 0.81) {
 			x1_tcoord += x_offset;
 		}
 		//if on land frame play sound

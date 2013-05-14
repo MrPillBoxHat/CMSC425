@@ -326,7 +326,11 @@ void World::processKeysGame(unsigned char key)
 					}
 					x->resetTexture();
 					x->setState(JUMP);
-				} // else do nothing
+				} 
+				// If sliding down the wall, jump again
+				if(hero_state == SLIDE){
+
+				}
 				break;
 
 			// Kneel
