@@ -13,6 +13,7 @@ class Sound{
 
 	public:
 		Sound();
+		void stopSound();
 		// game SFX
 		void playMusic(char *music);
 		void playEntrySFX();

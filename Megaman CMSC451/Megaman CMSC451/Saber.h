@@ -14,7 +14,6 @@ class Saber{
 		float x1_tcoord, y2_tcoord;
 		int damage;
 		int direction;
-		int counter;
 
 	public:
 		// Constructor

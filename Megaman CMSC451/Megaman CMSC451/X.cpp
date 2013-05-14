@@ -89,9 +89,9 @@ void X::detec_collision(Zero *zero)
 	bool withinTopBottom = hit_box[2] <= z_hitbox[3] && hit_box[3] >= z_hitbox[2];
 	if(withinSides && withinTopBottom){
 		sound->xPlayHurtSFX();
+		setButtons(DASH, false);
 		// Get out of dash animation and stop moving
 		if(state == DASH){
-			setButtons(DASH, false);
 			if(direction == RIGHT){
 				setHitBox(0.0, -8.0, 0.0, 12.0);
 			} else {
@@ -112,18 +112,18 @@ void X::move()
 {
 	// Dash movement (faster movement)
 	if(buttons[DASH]){
-		// Move only if at the correct frame
-		if(x1_tcoord < 0.5){
+		// Move only if at the correct frame or if state is jump
+		if(x1_tcoord < 0.5 || state == JUMP){
 			if(direction == LEFT){
 				// Check if possible to move left
-				if(bg->canMove(hit_box[0] - CM_DASH, hit_box[3])){
+				if(bg->canMove(hit_box[0] - CM_DASH, hit_box[2])){
 					move_horizontal(CM_DASH * -1);
 				} else {
 					x1_tcoord = 0.5;
 				}
 			} else {
 				// Check if possible to move right
-				if(bg->canMove(hit_box[0] + CM_DASH, hit_box[3])){
+				if(bg->canMove(hit_box[0] + CM_DASH, hit_box[2])){
 					move_horizontal(CM_DASH);
 				} else {
 					x1_tcoord = 0.5;
@@ -182,18 +182,18 @@ void X::move()
 void X::jump_move(float groundY)
 {
 	// If firing in the air
-	if(buttons[FIRE]){
+	//if(buttons[FIRE]){
 		
 	// If normal jump
-	} else {
+	//} else {
 		if(falling){
-			move_vertical(-6.5);
+			move_vertical(-5.0);
 			ifLand(groundY);
 		} else if(!onGround) {
 			// Move X up if not on landing frame
-			move_vertical(6.5);
+			move_vertical(5.0);
 		}	
-	}
+	//}
 }
 
 void X::move_horizontal(float distance)

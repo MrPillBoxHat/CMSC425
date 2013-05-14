@@ -22,6 +22,7 @@ void done(unsigned char key, int x, int y);
 void noDraw() {};
 
 using namespace std;
+bool land = false;
 
 // Constructor for the World class
 World::World(GLdouble w, GLdouble h) 
@@ -106,15 +107,26 @@ void World::update(void)
 
 void World::initBossRoom()
 {
-	initZero = true;
-	zero = new Zero();
-	zero->loadTextures();
-	zAI = new ZeroAI(zero, x);
-	x->setButtons(RUN, false);
-	resetHitBox();
-	x->setState(STAND);
-	x->resetTexture();
-	sound->playMusic("Music/boss.wav");
+	// have X land
+	if(x->getState() == JUMP && !land){
+		x->setButtons(RUN, false);
+		x->setButtons(DASH, false);
+		x->setFalling();
+		land = true;
+	} else {
+		if(x->getState() != JUMP){
+			initZero = true;
+			zero = new Zero();
+			zero->loadTextures();
+			zAI = new ZeroAI(zero, x);
+			x->setButtons(RUN, false);
+			x->setButtons(DASH, false);
+			resetHitBox();
+			x->setState(STAND);
+			x->resetTexture();
+			sound->playMusic("Music/boss.wav");
+		}
+	}
 }
 
 void World::draw(void) 
@@ -594,6 +606,7 @@ void World::bullet_draw()
 	while(it2 != z_bullets.end()){
 		// Take damage only if not already in damage animation
 		if(it2->collision(x) && !x->ifInvinciple()){
+			x->setButtons(DASH, false);
 			sound->xPlayHurtSFX();
 			if(x_state == DASH){
 				resetHitBox();
@@ -618,6 +631,7 @@ void World::bullet_draw()
 		// Take damage only if not already in damage animation
 		if(missile->collision(x) && !x->ifInvinciple()){
 			sound->xPlayHurtSFX();
+			x->setButtons(DASH, false);
 			if(x_state == DASH){
 				resetHitBox();
 			} else if (x_state == RUN){
@@ -637,6 +651,7 @@ void World::bullet_draw()
 	if(saber != NULL){
 		if(saber->collision(x) && !x->ifInvinciple()){
 			sound->xPlayHurtSFX();
+			x->setButtons(DASH, false);
 			if(x_state == DASH){
 				resetHitBox();
 			} else if (x_state == RUN){
@@ -849,7 +864,6 @@ void World::enableTextures()
 void World::resetHitBox()
 {
 	// Get out of dash animation and stop moving
-	x->setButtons(DASH, false);
 	if(x->getDirection() == RIGHT){
 		x->setHitBox(0.0, -8.0, 0.0, 12.0);
 	} else {
