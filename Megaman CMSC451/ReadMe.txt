@@ -52,6 +52,8 @@ Animation:
 	- perfrom mid-air jumps when pressing left, right, jump and fire
 	  jump, right, and fire key cause x to "fly"
 	- dash to wall jump is messed up
+	- can shoot through walls
+	- sometimes dash abruptly ends
 
 	- Possible future bugs
 		- slide hit, need to resize hitbox and texture box
