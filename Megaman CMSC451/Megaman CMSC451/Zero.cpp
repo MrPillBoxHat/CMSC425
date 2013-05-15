@@ -262,6 +262,8 @@ void Zero::depleteHealth(int block_number)
 		i--;
 	}
 	if(health_blocks[0] == false){
+		buttons[DASH] = false;
+		resetTexture();
 		state = DIE_STATE;
 	}
 }
@@ -639,12 +641,15 @@ void Zero::die()
 		glTexCoord2d(tcoord[0], tcoord[1]); glVertex2d(x1, y2);
 	glEnd();
 	// Want to draw 5 frames per second
-	if(counter % 8 == 0){
+	if(counter % 15 == 0){
+		sound2->playDestructionSFX();
 		//update next frame or reset if reached the end
 		tcoord[0] += x_offset;
 		if(tcoord[0] >= 1.0){
 			glDisable(GL_BLEND);
 			glDisable(GL_TEXTURE_2D);
+			glClear(GL_COLOR_BUFFER_BIT);
+			glutSwapBuffers();
 			Sleep(3000);
 			exit(0);
 		}

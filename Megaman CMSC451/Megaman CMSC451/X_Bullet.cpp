@@ -47,15 +47,15 @@ void X_Bullet::draw(GLuint *textures)
 	if(state != DIE){
 		if(direction == 0){
 			// Move bullet
-			x1 -= 9.0;
-			x2 -= 9.0;
-			hit_box[0] -= 9.0;
-			hit_box[1] -= 9.0;
+			x1 -= 12.0;
+			x2 -= 12.0;
+			hit_box[0] -= 12.0;
+			hit_box[1] -= 12.0;
 		} else {
-			x1 += 9.0;
-			x2 += 9.0;
-			hit_box[0] += 9.0;
-			hit_box[1] += 9.0;
+			x1 += 12.0;
+			x2 += 12.0;
+			hit_box[0] += 12.0;
+			hit_box[1] += 12.0;
 		}
 	}
 	// update next frame or reset if reached the end

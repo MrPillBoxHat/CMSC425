@@ -36,6 +36,11 @@ void Sound::playSelectSFX()
 	engine->play2D("Sound Effects/game/menu_select.wav", false);
 }
 
+void Sound::playDestructionSFX()
+{
+	engine->play2D("Sound Effects/game/destruction.wav", false);
+}
+
 void Sound::playEntrySFX()
 {
 	engine->play2D("Sound Effects/game/entry.wav", false);

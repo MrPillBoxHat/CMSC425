@@ -68,6 +68,7 @@ Animation:
 	(General)
 	- Fix camera
 	- Add in more implementations
+	- move during boss intro animation
 
 Camera:
 

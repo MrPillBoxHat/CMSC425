@@ -19,6 +19,7 @@ class Sound{
 		void playEntrySFX();
 		void playCursorSFX();
 		void playSelectSFX();
+		void playDestructionSFX();
 		void playSaberSFX();
 		void playXBusterSFX();
 		void playZBusterSFX();
