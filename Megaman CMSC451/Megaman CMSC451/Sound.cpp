@@ -4,7 +4,7 @@
 #pragma comment(lib, "irrklang.lib")
 using namespace irrklang;
 
-Sound::Sound()
+Sound::Sound() : play(false)
 {
 	engine = irrklang::createIrrKlangDevice();
 }
@@ -22,78 +22,93 @@ void Sound::stopSound()
 void Sound::playMusic(char *music)
 {
 	engine->stopAllSounds();
-	engine->play2D(music, true);
+	if(play)
+		engine->play2D(music, true);
 }
 
 void Sound::playCursorSFX()
 {
-	engine->play2D("Sound Effects/game/cursor.wav", false);
+	if(play)
+		engine->play2D("Sound Effects/game/cursor.wav", false);
 }
 
 void Sound::playSelectSFX()
 {
-	engine->play2D("Sound Effects/game/menu_select.wav", false);
+	if(play)
+		engine->play2D("Sound Effects/game/menu_select.wav", false);
 }
 
 void Sound::playDestructionSFX()
 {
-	engine->play2D("Sound Effects/game/destruction.wav", false);
+	if(play)
+		engine->play2D("Sound Effects/game/destruction.wav", false);
 }
 
 void Sound::playBossDesturctionSFX()
 {
-	engine->play2D("Sound Effects/game/Boss_Destruction.wav", false);
+	if(play)
+		engine->play2D("Sound Effects/game/Boss_Destruction.wav", false);
 }
 
 void Sound::playEntrySFX()
 {
-	engine->play2D("Sound Effects/game/entry.wav", false);
+	if(play)
+		engine->play2D("Sound Effects/game/entry.wav", false);
 }
 
 void Sound::playSaberSFX()
 {
-	engine->play2D("Sound Effects/game/saber.wav", false);
+	if(play)
+		engine->play2D("Sound Effects/game/saber.wav", false);
 }
 
 void Sound::playXBusterSFX()
 {
-	engine->play2D("Sound Effects/game/x_buster.wav", false);
+	if(play)
+		engine->play2D("Sound Effects/game/x_buster.wav", false);
 }
 
 void Sound::playZBusterSFX()
 {
-	engine->play2D("Sound Effects/game/z_buster.wav", false);
+	if(play)
+		engine->play2D("Sound Effects/game/z_buster.wav", false);
 }
 
 void Sound::playDashSFX()
 {
-	engine->play2D("Sound Effects/game/dash.wav", false);
+	if(play)
+		engine->play2D("Sound Effects/game/dash.wav", false);
 }
 
 void Sound::playJumpSFX()
 {
-	engine->play2D("Sound Effects/game/jump.wav", false);
+	if(play)
+		engine->play2D("Sound Effects/game/jump.wav", false);
 }
 
 void Sound::playLandSFX()
 {
-	engine->play2D("Sound Effects/game/land.wav", false);
+	if(play)
+		engine->play2D("Sound Effects/game/land.wav", false);
 }
 
 void Sound::playDieSFX()
 {
-	engine->play2D("Sound Effects/game/die.wav", false);
+	if(play)
+		engine->play2D("Sound Effects/game/die.wav", false);
 }
 
 void Sound::playHealthSFX()
 {
 	engine->stopAllSounds();
-	engine->play2D("Sound Effects/game/text.wav", false);
+	if(play)
+		engine->play2D("Sound Effects/game/text.wav", false);
 }
 
 void Sound::playDamageSFX()
 {
-	engine->play2D("Sound Effects/X/damage2.wav", false);
+	if(play)
+		engine->play2D("Sound Effects/X/damage2.wav", false);
 }
 
 /**********************************************************************************************************
@@ -103,18 +118,23 @@ void Sound::playDamageSFX()
 **********************************************************************************************************/
 void Sound::xPlayJumpSFX()
 {
-	engine->play2D("Sound Effects/X/jump.wav", false);
+	if(play)
+		engine->play2D("Sound Effects/X/jump.wav", false);
 }
 
 void Sound::xPlayHurtSFX()
 {
-	engine->play2D("Sound Effects/X/damage.wav", false);
-	playDamageSFX();
+	if(play)
+	{
+		engine->play2D("Sound Effects/X/damage.wav", false);
+		playDamageSFX();
+	}
 }
 
 void Sound::playChargeShotSFX()
 {
-	engine->play2D("Sound Effects/X/charge.wav", false);
+	if(play)
+		engine->play2D("Sound Effects/X/charge.wav", false);
 }
 
 /**********************************************************************************************************
@@ -124,15 +144,18 @@ void Sound::playChargeShotSFX()
 **********************************************************************************************************/
 void Sound::zeroPlayJumpSFX()
 {
-	engine->play2D("Sound Effects/game/jump.wav", false);
+	if(play)
+		engine->play2D("Sound Effects/game/jump.wav", false);
 }
 
 void Sound::zeroPlayHurtSFX()
 {
-	engine->play2D("Sound Effects/Zero/damage.wav", false);
+	if(play)
+		engine->play2D("Sound Effects/Zero/damage.wav", false);
 }
 
 void Sound::zeroPlaySaberSFX()
 {
-	engine->play2D("Sound Effects/Zero/saber.wav", false);
+	if(play)
+		engine->play2D("Sound Effects/Zero/saber.wav", false);
 }

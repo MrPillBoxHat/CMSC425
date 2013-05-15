@@ -10,7 +10,7 @@ using namespace irrklang;
 class Sound{
 	private:
 		ISoundEngine* engine;
-
+		const bool play;
 	public:
 		Sound();
 		void stopSound();

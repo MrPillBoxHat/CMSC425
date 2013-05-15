@@ -154,6 +154,8 @@ void World::draw_helper()
 	} else {
 		//testTexture();
 		enableTextures();
+		if(zero != NULL)  //  load boss room
+			bg.loadBossRoom();
 		bg.draw(cmX);
 
 		glColor4f(1.0, 1.0, 1.0, 1.0); // Set color

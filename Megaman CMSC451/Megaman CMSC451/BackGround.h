@@ -19,16 +19,19 @@ public:
 	void setStart(GLdouble x) { this->x1 = x; }
 	// Create the boxes for the ground
 	void initGround();
+	void loadBossRoom();
 	// retrieve the rectangle below this point
 	Rectangle2D * getBelow(GLdouble x, GLdouble y);
 	bool canMove(GLdouble x, GLdouble y) const;
 	bool canMove(GLdouble x1, GLdouble y1, GLdouble x2, GLdouble y2) const;
+	bool validY(GLdouble y) const { return y >= 0 && y < viewHeight;}
 
 	const GLdouble viewWidth, viewHeight;
 
 private:
 	GLdouble width, height;	
 	GLdouble x1;
+	bool bossRm;
 
 	std::vector<Box *> groundTxtr;
 	std::vector<Rectangle2D *> ground;

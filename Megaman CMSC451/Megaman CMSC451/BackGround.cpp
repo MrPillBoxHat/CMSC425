@@ -8,6 +8,7 @@ using namespace std;
 BackGround::BackGround(void): viewWidth(1000), viewHeight(650)
 {
 	x1 = 0.0;
+	bossRm = false;
 }
 
 
@@ -54,6 +55,24 @@ void BackGround::drawGround()
 	string str = "The End";
 	for(char c : str)
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
+}
+
+void BackGround::loadBossRoom()
+{
+	if(!bossRm)
+	{
+		bossRm = true;
+		const double h = 250;
+		// load two walls
+		addBox(2950, 100, h, pillarTxt, h-25, 60);
+		addBox(2950, 100, h, pillarTxt, h-25, h-15);
+		addBox(2950, 100, h, pillarTxt, h-25, 2*(h-28) );
+
+		addBox(3950, 100, h, pillarTxt, h-25, 60);
+		addBox(3950, 100, h, pillarTxt, h-25, h-15);
+		addBox(3950, 100, h, pillarTxt, h-25, 2*(h-28) );
+
+	}
 }
 
 void BackGround::drawView(GLint cmX)
@@ -104,7 +123,7 @@ bool BackGround::canMove(double x1, double y1, double x2, double y2) const
 
 bool BackGround::canMove(double x, double y) const
 {
-	if((x < this->x1 || x >= width-25)) 
+	if((x < this->x1 || x >= width-80)) 
 		return false; // out of boundary
 
 	const Point2D pt(x, y);
@@ -137,22 +156,6 @@ void BackGround::initGround()
 	{
 		addBox(x, 400, Tx_H, grdTxt, mm_h);
 	}
-
-
-	/*
-	// small box on top
-	bx = new Box(500, H, 200, H/5);
-	bx->setColor(50, 50, 150);
-	ground.push_back(bx);
-
-		// small box on top
-	bx = new Box(1400, H, 200, H/5);
-	bx->setColor(150, 50, 150);
-	ground.push_back(bx);
-	*/
-
-	//bx = new Box(3200, 50, width-3200, viewHeight-50, bossTxt);
-	//ground.push_back(bx);
 
 	// main background
 	view = new Box(0, Tx_H, width/10, height - viewHeight, bg);
