@@ -125,6 +125,8 @@ void World::initBossRoom()
 			x->setState(STAND);
 			x->resetTexture();
 			sound->playMusic("Music/boss.wav");
+
+			bg.setStart( width - bg.viewWidth );
 		}
 	}
 }
@@ -223,11 +225,11 @@ void World::updateView()
 	// position at X
 	const int pt = x->middle(), end = width - bg.viewWidth / 2;	
 	GLdouble diff = bg.viewWidth;
-	if(pt >= 0 && pt >= (bg.viewWidth / 2) && pt < end) 
+	if(pt >= 0 && pt >= (bg.viewWidth / 2) && pt < end && zero == NULL) 
 	{
 		cmX = pt - (bg.viewWidth / 2);
 
-	} else if(pt >= end) // the end
+	} else if(pt >= end || zero != NULL) // the end
 	{
 		cout << "end" << endl; 
 		cmX = width - bg.viewWidth;

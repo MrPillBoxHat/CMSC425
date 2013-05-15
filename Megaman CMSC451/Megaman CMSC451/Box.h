@@ -9,8 +9,8 @@
 class Box : public Rectangle2D
 {
 public:
-	Box(int x, int y, UINT w, UINT h);
-	Box(int x, int y, UINT w, UINT h, Texture * tex);
+	Box(double x, double y, double w, double h);
+	Box(double x, double y, double w, double h, Texture * tex);
 	~Box(void);
 
 	void draw();

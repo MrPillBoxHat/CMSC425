@@ -7,11 +7,22 @@ using namespace std;
 
 BackGround::BackGround(void): viewWidth(1000), viewHeight(650)
 {
+	x1 = 0.0;
 }
 
 
 BackGround::~BackGround(void)
 {
+	for(Box *bx : groundTxtr)
+		delete bx;
+	for(Rectangle2D *r : ground)
+		delete r;
+
+	delete view;
+	delete bg;
+	delete grdTxt;
+	delete bossTxt;
+	delete pillarTxt;
 }
 
 void BackGround::draw(GLint cmX) 
@@ -63,24 +74,24 @@ void BackGround::drawView(GLint cmX)
 	Box b(cmX, Y, W, H, bg);
 	b.draw();
 }
-Rectangle2D * BackGround::getBelow(GLint x, GLint y)
+Rectangle2D * BackGround::getBelow(GLdouble x, GLdouble y)
 {
 	Rectangle2D * ret = nullptr;
-	cout << "y" << y << endl;
+
 	for(Rectangle2D * bx : ground)
 	{
 		if(bx->betweenX(x))
 			if(ret == nullptr || bx->getMaxY() > ret->getMaxY())
 				ret = bx;
 	}
-
+	cout << "ret" << ret << ", (x,y): (" << x << ", " << y << ")" << endl;
 	return ret;
 }
 
 
-bool BackGround::canMove(GLint x1, GLint y1, GLint x2, GLint y2) const
+bool BackGround::canMove(GLdouble x1, GLdouble y1, GLdouble x2, GLdouble y2) const
 {
-	if((x1 < 0 || x1 >= width) || (x2 < 0 || x2 >= width)) 
+	if((x1 < this->x1 || x1 >= width) || (x2 < this->x1  || x2 >= width)) 
 		return false; // out of boundary
 
 	const Rectangle2D rect(x1, y1, y2-y1, x2-x1);
@@ -92,9 +103,9 @@ bool BackGround::canMove(GLint x1, GLint y1, GLint x2, GLint y2) const
 	return true;
 }
 
-bool BackGround::canMove(GLint x, GLint y) const
+bool BackGround::canMove(GLdouble x, GLdouble y) const
 {
-	if((x < 0 || x >= width)) 
+	if((x < x1 || x >= width)) 
 		return false; // out of boundary
 
 	const Point2D pt(x, y);
@@ -110,8 +121,8 @@ void BackGround::initGround()
 {
 	// load textures for background
 	initTextures(); 
-	const UINT Tx_H = 100; // texture height
-	const UINT mm_h = 72; // megaman height
+	const double Tx_H = 100; // texture height
+	const double mm_h = 72; // megaman height
 
 	addBox(0, 400, Tx_H, grdTxt, mm_h);
 
@@ -148,10 +159,11 @@ void BackGround::initGround()
 	view = new Box(0, Tx_H, width/10, height - viewHeight, bg);
 
 	//two pillars
-	addBox(500, 100, 250, pillarTxt, 225, 100);
+	const GLdouble h = 250;
+	addBox(500, 120, h, pillarTxt, h-25, 100);
 }
 
-void BackGround::addBox(GLint x1, GLuint w, GLuint txtH, Texture * txt, GLuint rlH, GLint y1)
+void BackGround::addBox(GLdouble x1, GLdouble w, GLdouble txtH, Texture * txt, GLdouble rlH, GLdouble y1)
 {
 	Box * bx = nullptr;
 	if(txt != nullptr)

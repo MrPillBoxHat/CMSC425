@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-Box::Box(int x, int y, UINT w, UINT h) : Rectangle2D(x, y, w , h)
+Box::Box(double x, double y, double w, double h) : Rectangle2D(x, y, w , h)
 {
 	clr[0] = 235;
 	clr[1] = 100;
@@ -10,7 +10,7 @@ Box::Box(int x, int y, UINT w, UINT h) : Rectangle2D(x, y, w , h)
 	txtr = nullptr;
 }
 
-Box::Box(int x, int y, UINT w, UINT h, Texture * texture) : Rectangle2D(x, y, w, h)
+Box::Box(double x, double y, double w, double h, Texture * texture) : Rectangle2D(x, y, w, h)
 {
 	txtr = texture;
 

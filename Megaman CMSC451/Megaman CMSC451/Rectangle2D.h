@@ -7,23 +7,23 @@ class Rectangle2D
 {
 protected:
 	Point2D origin;
-	UINT width;
-	UINT height;
+	double width;
+	double height;
 
-	bool between(int p, int x, int length) const;
+	bool between(double p, double x, double length) const;
 public:
 	Rectangle2D(void);
-	Rectangle2D(int x, int y, UINT w, UINT h);
+	Rectangle2D(double x, double y, double w, double h);
 	~Rectangle2D(void);
 
 	Point2D getOrigin() const { return origin;}
-	UINT getWidth() const { return width; }
-	int getMaxX() const { return origin.getX() + width; }
-	int getMaxY() const { return origin.getY() + height; }
-	int getMinY() const { return origin.getY(); }
-	int getMinX() const { return origin.getX(); }
+	double getWidth() const { return width; }
+	double getMaxX() const { return origin.getX() + width; }
+	double getMaxY() const { return origin.getY() + height; }
+	double getMinY() const { return origin.getY(); }
+	double getMinX() const { return origin.getX(); }
 
-	bool betweenX(int x) const { return between(x, origin.getX(), width); }
+	bool betweenX(double x) const { return between(x, origin.getX(), width); }
 
 	bool intersects(const Point2D &point) const;
 	bool intersects(const Rectangle2D &rect) const;
