@@ -639,15 +639,11 @@ void World::bullet_draw()
 			zero->setHealth(chargeShot->getDamage());
 			zero->depleteHealth(zero->getHealth()/5);
 			zero->setInvincibility();
-			chargeShot->setX1Coord(0.0);
 		}
-		if(x->getDirection() == LEFT){
-			chargeShot->draw();
-		} else {
-			chargeShot->draw();
-		}
+		chargeShot->drawCharge(textures);
 		if(chargeShot->getX1() <= cmX-20 || chargeShot->getX2() >= bg.viewWidth+cmX+20){
 			delete(chargeShot);
+			chargeShot = NULL;
 		}
 	}
 

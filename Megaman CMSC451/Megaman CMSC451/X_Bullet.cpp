@@ -110,6 +110,53 @@ void X_Bullet::draw(GLuint *textures)
 	}
 }
 
+void X_Bullet::drawCharge(GLuint *texture)
+{
+	// How many frames to jump
+	float x_offset = 0.25;
+	float y_offset = 1.0;
+	// Draws the frame
+	if(direction == RIGHT){
+		glBindTexture(GL_TEXTURE_2D, textures[XCHARGE_RIGHT]); // select the active texture
+	} else {
+		glBindTexture(GL_TEXTURE_2D, textures[XCHARGE_LEFT]); // select the active texture
+	}
+	// Draw objects
+	glBegin(GL_POLYGON);
+		//real coord
+		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
+		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+	glEnd();
+	if(state != DIE){
+		if(direction == 0){
+			// Move bullet
+			x1 -= 12.0;
+			x2 -= 12.0;
+			hit_box[0] -= 12.0;
+			hit_box[1] -= 12.0;
+		} else {
+			x1 += 12.0;
+			x2 += 12.0;
+			hit_box[0] += 12.0;
+			hit_box[1] += 12.0;
+		}
+	}
+	// update next frame or reset if reached the end
+	// Control FPS
+	x1_tcoord += x_offset;
+	if(state == DIE){
+		// Move bullet to where it will be deleted
+		x1 = -100;
+		x2 = -100;
+	} else {
+		if(x1_tcoord >= 0.9){
+			x1_tcoord = 0.0;
+		}
+	}
+}
+
 bool X_Bullet::collision(Zero *zero)
 {
 	// Get Zero's Position

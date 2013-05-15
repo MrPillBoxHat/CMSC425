@@ -35,4 +35,5 @@ class X_Bullet
 		// public functions
 		bool collision(Zero *zero);
 		void draw(GLuint *textures);
+		void drawCharge(GLuint *texture);
 };

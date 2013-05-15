@@ -39,7 +39,7 @@ private:
 	Saber *saber;
 	X_Bullet *chargeShot;
 	BackGround bg;
-	GLuint textures[6];
+	GLuint textures[8];
 	// if in main menu
 	bool main_menu;
 	// checks if a missile was created
