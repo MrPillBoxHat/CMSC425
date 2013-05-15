@@ -158,7 +158,14 @@ void BackGround::initGround()
 	view = new Box(0, Tx_H, width/10, height - viewHeight, bg);
 
 	//two pillars
-	addBox(500, 100, 250, pillarTxt, 225, 100);
+	addBox(500, 100, 250, pillarTxt, 225, 60);
+	for(int x1 = 700; x1 <= 900; x1 += 100)
+		addBox(x1, 100, 250, pillarTxt, 225, 60);
+	addBox(1000, 100, 150, pillarTxt, 125, 60);
+
+	// stairs
+	for(int x1 = 1500, h = 150; x1 <= 2200; x1 += 100, h += 50)
+		addBox(x1, 100, h, pillarTxt, h-25, 60);
 }
 
 void BackGround::addBox(double x1, double w, double txtH, Texture * txt, double rlH, double y1)
