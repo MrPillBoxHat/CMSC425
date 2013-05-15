@@ -78,18 +78,12 @@ void BackGround::drawView(GLint cmX)
 Rectangle2D * BackGround::getBelow(double x, double y)
 {
 	Rectangle2D * ret = nullptr;
-	int count = 0;
 	for(Rectangle2D * bx : ground)
 	{
 		if(bx->betweenX(x)) 
-		{
-			count++;
 			if(ret == nullptr || bx->getMaxY() > ret->getMaxY())
 				ret = bx;
-		}
 	}
-
-	cout << "count: " << count << endl;
 	return ret;
 }
 
