@@ -84,7 +84,8 @@ class X {
 		float *getCannon(){return position;}
 		float *getHitBox(){return hit_box;}
 		float getStart() const {return x1; }
-		int middle() const { return x1 + (x2 - x1) / 2; }
+		float middle() const { return x1 + (x2 - x1) / 2; }
+		float lowY() const { return y1 + (y2 - y1) / 3; }
 		bool ifInvinciple(){return invinciple;}
 		bool getDashed(){return dashed;}
 		// setters

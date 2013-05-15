@@ -20,9 +20,9 @@ public:
 	// Create the boxes for the ground
 	void initGround();
 	// retrieve the rectangle below this point
-	Rectangle2D * getBelow(GLint x, GLint y);
-	bool canMove(GLint x, GLint y) const;
-	bool canMove(GLint x1, GLint y1, GLint x2, GLint y2) const;
+	Rectangle2D * getBelow(GLdouble x, GLdouble y);
+	bool canMove(GLdouble x, GLdouble y) const;
+	bool canMove(GLdouble x1, GLdouble y1, GLdouble x2, GLdouble y2) const;
 
 	const GLdouble viewWidth, viewHeight;
 
@@ -43,7 +43,7 @@ private:
 	void drawGround();
 	void drawView(GLint cmX);
 	void drawTop();
-	void addBox(GLint x1, GLuint w, GLuint h, Texture * txt, GLuint rlH, GLint y1=0);
+	void addBox(double x1, double w, double h, Texture * txt, double rlH, double y1=0);
 };
 
 /*

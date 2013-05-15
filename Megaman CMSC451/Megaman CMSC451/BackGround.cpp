@@ -75,22 +75,26 @@ void BackGround::drawView(GLint cmX)
 	Box b(cmX, Y, W, H, bg);
 	b.draw();
 }
-Rectangle2D * BackGround::getBelow(GLint x, GLint y)
+Rectangle2D * BackGround::getBelow(double x, double y)
 {
 	Rectangle2D * ret = nullptr;
-	cout << "y" << y << endl;
+	int count = 0;
 	for(Rectangle2D * bx : ground)
 	{
-		if(bx->betweenX(x))
+		if(bx->betweenX(x)) 
+		{
+			count++;
 			if(ret == nullptr || bx->getMaxY() > ret->getMaxY())
 				ret = bx;
+		}
 	}
 
+	cout << "count: " << count << endl;
 	return ret;
 }
 
 
-bool BackGround::canMove(GLint x1, GLint y1, GLint x2, GLint y2) const
+bool BackGround::canMove(double x1, double y1, double x2, double y2) const
 {
 	if((x1 < this->x1 || x1 >= width) || (x2 < this->x1 || x2 >= width)) 
 		return false; // out of boundary
@@ -104,7 +108,7 @@ bool BackGround::canMove(GLint x1, GLint y1, GLint x2, GLint y2) const
 	return true;
 }
 
-bool BackGround::canMove(GLint x, GLint y) const
+bool BackGround::canMove(double x, double y) const
 {
 	if((x < this->x1 || x >= width)) 
 		return false; // out of boundary
@@ -163,7 +167,7 @@ void BackGround::initGround()
 	addBox(500, 100, 250, pillarTxt, 225, 100);
 }
 
-void BackGround::addBox(GLint x1, GLuint w, GLuint txtH, Texture * txt, GLuint rlH, GLint y1)
+void BackGround::addBox(double x1, double w, double txtH, Texture * txt, double rlH, double y1)
 {
 	Box * bx = nullptr;
 	if(txt != nullptr)
