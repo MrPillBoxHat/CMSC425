@@ -17,7 +17,7 @@ using namespace std;
 Sound *sound2 = new Sound();
 
 // Constructor
-Zero::Zero()
+Zero::Zero(BackGround *inBG)
 {
 	health = 140;
 	// Coordinates of entry
@@ -39,6 +39,7 @@ Zero::Zero()
 	tcoord[0] = 0.0;
 	tcoord[1] = 1.0;
 	direction = LEFT;
+	bg = inBG;
 	counter = 0; // Counter is to keep track of FPS
 	count = 0; // keeps track of frames
 	count2 = 0; // Keeps track of invincibility time
@@ -52,7 +53,6 @@ Zero::Zero()
 		health_blocks[i] = false;
 	}
 	init_health = false;
-	
 }
 
 // Adjust Zero's texture box
@@ -126,19 +126,19 @@ void Zero::move()
 		// Only move during certain frames
 		if(!(tcoord[0] >= 0.2 && tcoord[1] == 0.5)){
 			if(direction == LEFT){
-				x1 -= CM_DASH;
-				x2 -= CM_DASH;
-				cannon_position[0] -= CM_DASH;
-				cannon_position[1] -= CM_DASH;
-				hit_box[0] -= CM_DASH;
-				hit_box[1] -= CM_DASH;
+				// Check if possible to move left
+				if(bg->canMove(hit_box[0] - CM_DASH, lowY())){
+					move_horizontal(CM_DASH * -1);
+				} else {
+					tcoord[0] = 0.5;
+				}
 			} else {
-				x1 += CM_DASH;
-				x2 += CM_DASH;
-				cannon_position[0] += CM_DASH;
-				cannon_position[1] += CM_DASH;
-				hit_box[0] += CM_DASH;
-				hit_box[1] += CM_DASH;
+				// Check if possible to move right
+				if(bg->canMove(hit_box[1] + CM_DASH, lowY())){
+					move_horizontal(CM_DASH);
+				} else {
+					tcoord[0] = 0.5;
+				}
 			}
 		}
 	// Normal movements
@@ -146,19 +146,15 @@ void Zero::move()
 		// Move Zero horizontally
 		if(buttons[RUN]){
 			if(direction == LEFT){
-				x1 -= CM_WALK;
-				x2 -= CM_WALK;
-				cannon_position[0] -= CM_WALK;
-				cannon_position[1] -= CM_WALK;
-				hit_box[0] -= CM_WALK;
-				hit_box[1] -= CM_WALK;
+				// Check if possible to move left
+				if(bg->canMove(hit_box[0] - CM_WALK, lowY())){
+					move_horizontal(CM_WALK * -1);
+				}
 			} else {
-				x1 += 2.0;
-				x2 += 2.0;
-				cannon_position[0] += CM_WALK;
-				cannon_position[1] += CM_WALK;
-				hit_box[0] += CM_WALK;
-				hit_box[1] += CM_WALK;
+				// Check if possible to move right
+				if(bg->canMove(hit_box[1] + CM_WALK, lowY())){
+					move_horizontal(CM_WALK);
+				}
 			}
 		}
 	}
@@ -188,6 +184,16 @@ void Zero::move()
 		}
 	}
 }
+
+void Zero::move_horizontal(float distance)
+{
+
+	x1 += distance;
+	x2 += distance;
+	hit_box[0] += distance;
+	hit_box[1] += distance;
+}
+
 
 // Draws Zero's Health bar
 void Zero::drawHealth()

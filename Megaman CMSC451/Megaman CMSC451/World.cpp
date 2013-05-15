@@ -119,7 +119,7 @@ void World::initBossRoom()
 	} else {
 		if(x->getState() != JUMP){
 			initZero = true;
-			zero = new Zero();
+			zero = new Zero(&bg);
 			zero->loadTextures();
 			zAI = new ZeroAI(zero, x);
 			x->setButtons(RUN, false);
@@ -606,8 +606,10 @@ void World::createMissiles()
 	} else if (z_state == SABER || z_state == SABER_MISSILE){
 		float *tempInt = zero->getTextureCoord();
 		// Create saber object
-		if(tempInt[0] >= 0.42 && tempInt[0] < 0.45){
-			saber = new Saber(zero->getCannon(), zero->getDirection(), 1);
+		if(tempInt[0] >= 0.28 && tempInt[0] < 0.45){
+			if(saber != NULL){
+				saber = new Saber(zero->getCannon(), zero->getDirection(), 1);
+			}
 		} else if (tempInt[0] >= 0.45){
 			delete(saber);
 			saber = NULL;

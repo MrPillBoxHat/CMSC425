@@ -4,6 +4,7 @@
 *   and state of the character
 *******************************************************/
 #pragma once
+#include "BackGround.h"
 #include <GL\glut.h>
 
 class Zero {
@@ -19,6 +20,7 @@ class Zero {
 		int counter; // FPS controller
 		int count; // keeps track of times frames reset
 		int count2; // Keeps track of invincibility time
+		BackGround *bg;
 		float tcoord[2];
 		GLuint textures[24]; // stores texture
 		bool buttons[11]; // keeps track of state (buttons pressed)
@@ -50,6 +52,7 @@ class Zero {
 		void die();
 		// Move Zero's coordinates
 		void move();
+		void move_horizontal(float distance);
 		// Draw Zero's Health bar
 		void drawHealth();
 		void gainHealth(int block_number);
@@ -57,7 +60,7 @@ class Zero {
 	// Contains public functions
 	public:
 		// Contructor
-		Zero();
+		Zero(BackGround *inBG);
 		// getters
 		int getState(){return state;}
 		int getDirection(){return direction;}
@@ -67,6 +70,8 @@ class Zero {
 		float *getCannon(){return cannon_position;}
 		float *getHitBox(){return hit_box;}
 		float *getTextureCoord(){return tcoord;}
+		float middle() const { return x1 + (x2 - x1) / 2; }
+		float lowY() const { return y1 + (y2 - y1) / 3; }
 		// setters
 		void setState(int inState){state = inState; buttons[inState] = true;}
 		void setHealth(int amount){health += amount;}
