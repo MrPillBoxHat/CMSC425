@@ -112,6 +112,11 @@ void Sound::xPlayHurtSFX()
 	playDamageSFX();
 }
 
+void Sound::playChargeShotSFX()
+{
+	engine->play2D("Sound Effects/X/charge.wav", false);
+}
+
 /**********************************************************************************************************
 *  Zero SFX
 *	These functions play X's sound effects.  Things such as grunts and other vocals will be played here

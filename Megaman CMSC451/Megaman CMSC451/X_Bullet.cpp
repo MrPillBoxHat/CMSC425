@@ -23,6 +23,40 @@ X_Bullet::X_Bullet(float *position, int inDirection)
 	counter = 0;
 }
 
+// Constructor for charge bullet
+X_Bullet::X_Bullet(float *position, int inDirection, int filler)
+{
+	if(direction == RIGHT){
+		x1 = position[1] + 30.0;
+		x2 = position[1] + 168.0;
+		y1 = position[2] - 32.0;
+		y2 = position[3] + 32.0;
+		float xmid = x1 + ((x2-x1)/2);
+		float ymid = y1 + ((y2-y1)/2);
+		hit_box[0] = xmid - 4.0;
+		hit_box[1] = xmid + 4.0;
+		hit_box[2] = ymid - 3.5;
+		hit_box[3] = ymid + 3.5;
+	} else { 
+		x1 = position[0] - 168.0;
+		x2 = position[0] - 30.0;
+		y1 = position[2] - 32.0;
+		y2 = position[3] - 32.0;
+		float xmid = x1 + ((x2-x1)/2);
+		float ymid = y1 + ((y2-y1)/2);
+		hit_box[0] = xmid - 4.0;
+		hit_box[1] = xmid + 4.0;
+		hit_box[2] = ymid - 3.5;
+		hit_box[3] = ymid + 3.5;
+	}
+	x1_tcoord = 0.0;
+	y2_tcoord = 1.0;
+	damage = -5;
+	state = 0;
+	direction = inDirection;
+	counter = 0;
+}
+
 void X_Bullet::draw(GLuint *textures)
 {
 	// How many frames to jump
@@ -71,6 +105,53 @@ void X_Bullet::draw(GLuint *textures)
 		}
 	} else {
 		if(x1_tcoord >= 0.984375){
+			x1_tcoord = 0.0;
+		}
+	}
+}
+
+void X_Bullet::drawCharge(GLuint *texture)
+{
+	// How many frames to jump
+	float x_offset = 0.25;
+	float y_offset = 1.0;
+	// Draws the frame
+	if(direction == RIGHT){
+		glBindTexture(GL_TEXTURE_2D, textures[XCHARGE_RIGHT]); // select the active texture
+	} else {
+		glBindTexture(GL_TEXTURE_2D, textures[XCHARGE_LEFT]); // select the active texture
+	}
+	// Draw objects
+	glBegin(GL_POLYGON);
+		//real coord
+		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
+		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+	glEnd();
+	if(state != DIE){
+		if(direction == 0){
+			// Move bullet
+			x1 -= 12.0;
+			x2 -= 12.0;
+			hit_box[0] -= 12.0;
+			hit_box[1] -= 12.0;
+		} else {
+			x1 += 12.0;
+			x2 += 12.0;
+			hit_box[0] += 12.0;
+			hit_box[1] += 12.0;
+		}
+	}
+	// update next frame or reset if reached the end
+	// Control FPS
+	x1_tcoord += x_offset;
+	if(state == DIE){
+		// Move bullet to where it will be deleted
+		x1 = -100;
+		x2 = -100;
+	} else {
+		if(x1_tcoord >= 0.9){
 			x1_tcoord = 0.0;
 		}
 	}

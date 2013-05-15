@@ -22,6 +22,7 @@ class X_Bullet
 	public:
 		// Constructor
 		X_Bullet(float *position, int direction);
+		X_Bullet(float *position, int direction, int filler);
 		// getters
 		int getDamage(){return damage;}
 		float getX2(){return x2;}
@@ -34,4 +35,5 @@ class X_Bullet
 		// public functions
 		bool collision(Zero *zero);
 		void draw(GLuint *textures);
+		void drawCharge(GLuint *texture);
 };

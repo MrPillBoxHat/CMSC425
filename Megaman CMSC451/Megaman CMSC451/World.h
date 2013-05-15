@@ -37,8 +37,9 @@ private:
 	std::list<Z_Bullet> z_bullets;
 	Saber *missile;
 	Saber *saber;
+	X_Bullet *chargeShot;
 	BackGround bg;
-	GLuint textures[6];
+	GLuint textures[8];
 	// if in main menu
 	bool main_menu;
 	// checks if a missile was created
@@ -55,6 +56,7 @@ private:
 	void draw_helper();
 	void loadTextures();
 	void loadXBullet();
+	void loadXCharge();
 	void loadZBullet();
 	void loadZBulletMissile();
 	void updateView();
@@ -66,7 +68,8 @@ private:
 	void damage(int damage, int health);
 	void initBossRoom();
 	void resetHitBox();
-	void World::testTexture();
+	void testTexture();
+
 public:
 	World(GLdouble w, GLdouble h);
 	World() {}

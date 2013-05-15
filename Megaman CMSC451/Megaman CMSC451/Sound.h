@@ -30,6 +30,7 @@ class Sound{
 		void playDamageSFX();
 		void playDieSFX();
 		void playHealthSFX();
+		void playChargeShotSFX();
 		// X SFX
 		void xPlayHurtSFX();
 		void xPlayJumpSFX();

@@ -49,6 +49,7 @@ World::World(GLdouble w, GLdouble h)
 	zAI = NULL;
 	missile = NULL;
 	saber = NULL;
+	chargeShot = NULL;
 	create = false;
 	// If in main menu
 	main_menu = true;
@@ -151,9 +152,9 @@ void World::draw_helper()
 		enableTextures();
 		menu->draw();
 	} else {
-		//testTexture();
+		testTexture();
 		enableTextures();
-		bg.draw(cmX);
+		//bg.draw(cmX);
 
 		glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
 		if(zero != NULL){
@@ -335,7 +336,7 @@ void World::processKeysGame(unsigned char key)
 {
 	const int old = cmX;
 	int hero_state = x->getState();
-	if(hero_state != DIE_STATE){
+	if(hero_state != DIE_STATE && hero_state != CHARGE_FIRE){
 		if(hero_state != ENTRY && hero_state != DAMAGE && hero_state != JUMP_OUT && 
 		(zero == NULL || (zero->getInit() && land && zero->getState() != DIE_STATE))){
 			switch(key)
@@ -429,7 +430,7 @@ void World::processKeysGame(unsigned char key)
 							// If not in the air, reset texture frame
 						if(hero_state != JUMP){
 							x->resetTexture();
-							}
+						}
 					}
 					break;
 	
@@ -467,7 +468,7 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 	// Register key-up only if not in main menu
 	if(!main_menu){
 		int hero_state = x->getState();
-		if(hero_state != DIE_STATE){
+		if(hero_state != DIE_STATE && hero_state != CHARGE_FIRE){
 			switch(key)
 			{	
 				case 's': // Kneel
@@ -498,6 +499,24 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 				// Fire
 				case MOVE_FIRE:
 					// Fire charged shot
+					if(x->getIfCharging()){
+						x->setState(FIRE);
+						x->resetTexture();
+						sound->playChargeShotSFX();
+						// Create bullet from cannon position
+						chargeShot = new X_Bullet(x->getCannon(), x->getDirection(), -1);
+						if(hero_state == DASH){
+						// Get out of dash animation
+							if(x->getDirection() == RIGHT){
+								x->setButtons(DASH, false);
+								x->setHitBox(0.0, -8.0, 0.0, 12.0);
+							} else {
+								x->setButtons(DASH, false);
+								x->setHitBox(8.0, 0.0, 0.0, 12.0);
+							}
+						}
+					}
+					x->setButtons(FIRE, false);
 					break;
 			}
 		}
@@ -606,6 +625,28 @@ void World::createMissiles()
 void World::bullet_draw()
 {
 	int x_state = x->getState();
+	// Draw charge shot
+	if(chargeShot != NULL){
+		// Take damage only if not already in damage state
+		if(zero != NULL && chargeShot->collision(zero) && !zero->ifInvincible()){
+			if(zero->getState() == STAND){
+				sound->zeroPlayHurtSFX();
+				zero->resetTexture();
+				zero->setState(DAMAGE);
+			} else {
+				sound->playDamageSFX();
+			}
+			zero->setHealth(chargeShot->getDamage());
+			zero->depleteHealth(zero->getHealth()/5);
+			zero->setInvincibility();
+		}
+		chargeShot->drawCharge(textures);
+		if(chargeShot->getX1() <= cmX-20 || chargeShot->getX2() >= bg.viewWidth+cmX+20){
+			delete(chargeShot);
+			chargeShot = NULL;
+		}
+	}
+
 	// Go through each X_bullet in the world and draw them
 	list<X_Bullet>::iterator it = x_bullets.begin();
 	while(it != x_bullets.end()){
@@ -711,6 +752,7 @@ void World::damage(int damage, int health)
 void World::loadTextures()
 {
 	loadXBullet();
+	loadXCharge();
 	loadZBullet();
 	loadZBulletMissile();
 }
@@ -764,6 +806,63 @@ void World::loadXBullet()
 	cout << "XBullettextureID: " << textures[XBULLETDIE] << endl;
 
 	glBindTexture(GL_TEXTURE_2D, textures[XBULLETDIE]); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+}
+
+void World::loadXCharge()
+{
+	/* loads entry image directly as a new OpenGL texture */
+	textures[XCHARGE_LEFT] = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/Bullet/charge_left.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textures[XCHARGE_LEFT] )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "XBullettextureID: " << textures[XCHARGE_LEFT] << endl;
+
+	glBindTexture(GL_TEXTURE_2D, textures[XCHARGE_LEFT]); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads entry image directly as a new OpenGL texture */
+	textures[XCHARGE_RIGHT] = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/Bullet/charge_right.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textures[XCHARGE_RIGHT] )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "XBullettextureID: " << textures[XCHARGE_RIGHT] << endl;
+
+	glBindTexture(GL_TEXTURE_2D, textures[XCHARGE_RIGHT]); // select the active texture
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	// repeat texture
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

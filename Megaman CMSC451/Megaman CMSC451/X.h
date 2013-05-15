@@ -23,13 +23,15 @@ class X {
 		int counter; // FPS controller
 		int count; // Frame Reset counter
 		int count2; // Invincibility time
+		int charge_counter;
 		float x1_tcoord; // texture x1 coord
 		float y2_tcoord; // texture y2 coord
-		GLuint textures[24]; // stores texture
+		GLuint textures[26]; // stores texture
 		bool buttons[9]; // keeps track of state (buttons pressed)
 		bool falling; // Check if X is falling
 		bool onGround;
 		bool dashed; // Whether x already dashed
+		bool charging; // Whether x is charging
 		int frame_count;
 		bool play_3frame;
 		BackGround *bg; // keeps track of environment
@@ -56,7 +58,9 @@ class X {
 		void slide();
 		void air_fire();
 		void ground_fire();
+		void charge_fire();
 		void charge();
+		void maxCharge();
 		void dash();
 		// Responses
 		void damage();
@@ -88,6 +92,7 @@ class X {
 		float lowY() const { return y1 + (y2 - y1) / 3; }
 		bool ifInvinciple(){return invinciple;}
 		bool getDashed(){return dashed;}
+		bool getIfCharging(){return charging;}
 		// setters
 		void setHealth(int number){health += number;}
 		void setState(int inState){state = inState; buttons[inState] = true;}
