@@ -15,6 +15,8 @@
 using namespace std;
 Sound *sound = new Sound();
 bool ifPlayed = false;
+float charge_tcoord = 0.0;
+float charge2_tcoord = 0.0;
 
 // Contructor
 X::X(BackGround *inBG)
@@ -382,13 +384,6 @@ void X::draw()
 	if(state != ENTRY){
 		drawHealth();
 	}
-	// Draw charging texture
-	if(charging){
-		charge();
-		if(charge_counter >= 80){
-			maxCharge();
-		}
-	}
 	// Determines which action to draw
 	switch(state)
 	{
@@ -425,14 +420,23 @@ void X::draw()
 					y2_tcoord = 0.5;
 				}
 				air_fire();*/
+			// Fire charge shot
 			} else if (charging){
-				
+				charging = false;
+				if(charge_counter < 100){
+					x1_tcoord = 0.546875;
+					charge_counter = 0;
+					ground_fire();
+				} else {
+					charge_counter = 0;
+					state = CHARGE_FIRE;
+				}
 			} else {
 				ground_fire();
 			}
 			break;
-		case CHARGE:
-			charge();
+		case CHARGE_FIRE:
+			charge_fire();
 			break;
 		case DASH:
 			dash();
@@ -444,6 +448,13 @@ void X::draw()
 		case DIE_STATE:
 			die();
 			break;
+	}
+	// Draw charging texture
+	if(charging){
+		charge();
+		if(charge_counter >= 100){
+			maxCharge();
+		}
 	}
 	counter++;
 	// resets counter
@@ -807,7 +818,50 @@ void X::ground_fire()
 		if(x1_tcoord >= 0.984375){
 			x1_tcoord = 0.0;
 			state = STAND;
-			charging = true;
+			// Reset charge state
+			if(!charging && buttons[FIRE]){
+				charging = true;
+			}
+		}
+	}
+}
+
+void X::charge_fire()
+{
+	// How many frames to jump
+	float x_offset = 0.166015625;
+	float y_offset = 1.0;
+	// Readjust where X is being drawn
+	float xx1;
+	float xx2;
+	// Draws the frame
+	if(direction == RIGHT){
+		glBindTexture(GL_TEXTURE_2D, textures[CHARGE_RIGHT]); // select the active texture
+		xx1 = x1 + 5.0;
+		xx2 = x2 + 5.0;
+	} else {
+		glBindTexture(GL_TEXTURE_2D, textures[CHARGE_LEFT]); // select the active texture
+		xx1 = x1 - 5.0;
+		xx2 = x2 - 5.0;
+	}
+	//create flicker effect
+	if(count2 % 2 == 0){
+		// Draw objects
+		glBegin(GL_POLYGON);
+			//real coord
+			glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(xx1-30, y1-10);
+			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(xx2+30, y1-10);
+			glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(xx2+30, y2+80);
+			glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(xx1-30, y2+80);
+		glEnd();
+	}
+	// Want to draw 5 frames per second
+	if(counter % 3 == 0){
+		//update next frame or reset if reached the end
+		x1_tcoord += x_offset;
+		if(x1_tcoord >= 0.99){
+			x1_tcoord = 0.0;
+			state = STAND;
 		}
 	}
 }
@@ -816,25 +870,24 @@ void X::charge()
 {
 	// How many frames to jump
 	float x_offset = 0.099609375;
-	float y_offset = 1.0;
-	glBindTexture(GL_TEXTURE_2D, textures[CHARGE]); // select the active texture
+	glBindTexture(GL_TEXTURE_2D, textures[CHARGE_TEXTURE]); // select the active texture
 	// Draw objects
 	glBegin(GL_POLYGON);
 			//real coord
-		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
-		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
-		glEnd();
+		glTexCoord2d(charge2_tcoord, 0.0);  glVertex2d(x1-20, y1-40);
+		glTexCoord2d(charge2_tcoord + x_offset, 0.0); glVertex2d(x2+20, y1-40);
+		glTexCoord2d(charge2_tcoord + x_offset, 1.0); glVertex2d(x2+20, y2+10);
+		glTexCoord2d(charge2_tcoord, 1.0); glVertex2d(x1-20, y2+10);
+	glEnd();
 	// Want to draw 5 frames per second
-	if(counter % 3 == 0){
+	if(counter % 2 == 0){
 		//update next frame or reset if reached the end
-		x1_tcoord += x_offset;
-		if(x1_tcoord >= 0.99){
-			x1_tcoord = 0.0;
+		charge2_tcoord += x_offset;
+		if(charge2_tcoord >= 0.99){
+			charge2_tcoord = 0.0;
 		}
 	}
-	if(charge_counter < 80){
+	if(charge_counter < 100){
 		charge_counter++;
 	}
 }
@@ -843,22 +896,21 @@ void X::maxCharge()
 {
 	// How many frames to jump
 	float x_offset = 0.25;
-	float y_offset = 1.0;
 	glBindTexture(GL_TEXTURE_2D, textures[MAX_CHARGE]); // select the active texture
 	// Draw objects
 	glBegin(GL_POLYGON);
 			//real coord
-		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
-		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
-		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
-		glEnd();
+		glTexCoord2d(charge_tcoord, 0.0);  glVertex2d(x1, y1-12);
+		glTexCoord2d(charge_tcoord + x_offset, 0.0); glVertex2d(x2, y1-12);
+		glTexCoord2d(charge_tcoord + x_offset, 1.0); glVertex2d(x2, y2-12);
+		glTexCoord2d(charge_tcoord, 1.0); glVertex2d(x1, y2-12);
+	glEnd();
 	// Want to draw 5 frames per second
-	if(counter % 3 == 0){
+	if(counter % 2 == 0){
 		//update next frame or reset if reached the end
-		x1_tcoord += x_offset;
-		if(x1_tcoord >= 0.99){
-			x1_tcoord = 0.0;
+		charge_tcoord += x_offset;
+		if(charge_tcoord >= 0.99){
+			charge_tcoord = 0.0;
 		}
 	}
 }
@@ -1424,7 +1476,113 @@ void X::loadFire()
 // Loads charging images
 void X::loadCharge()
 {
+	/* loads entry image directly as a new OpenGL texture */
+	textures[CHARGE_TEXTURE] = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/charging/charging.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textures[CHARGE_TEXTURE] )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
 
+	cout << "XBullettextureID: " << textures[CHARGE_TEXTURE] << endl;
+
+	glBindTexture(GL_TEXTURE_2D, textures[CHARGE_TEXTURE]); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads entry image directly as a new OpenGL texture */
+	textures[MAX_CHARGE] = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/charging/max_charge.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textures[MAX_CHARGE] )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "XBullettextureID: " << textures[MAX_CHARGE] << endl;
+
+	glBindTexture(GL_TEXTURE_2D, textures[MAX_CHARGE]); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads entry image directly as a new OpenGL texture */
+	textures[CHARGE_LEFT] = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/fire/charge/charge_left.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textures[CHARGE_LEFT] )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "XBullettextureID: " << textures[CHARGE_LEFT] << endl;
+
+	glBindTexture(GL_TEXTURE_2D, textures[CHARGE_LEFT]); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads entry image directly as a new OpenGL texture */
+	textures[CHARGE_RIGHT] = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/fire/charge/charge_right.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textures[CHARGE_RIGHT] )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "XBullettextureID: " << textures[CHARGE_RIGHT] << endl;
+
+	glBindTexture(GL_TEXTURE_2D, textures[CHARGE_RIGHT]); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 }
 
 // Loads dashing images

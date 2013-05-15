@@ -49,6 +49,7 @@ World::World(GLdouble w, GLdouble h)
 	zAI = NULL;
 	missile = NULL;
 	saber = NULL;
+	chargeShot = NULL;
 	create = false;
 	// If in main menu
 	main_menu = true;
@@ -151,9 +152,9 @@ void World::draw_helper()
 		enableTextures();
 		menu->draw();
 	} else {
-		//testTexture();
+		testTexture();
 		enableTextures();
-		bg.draw(cmX);
+		//bg.draw(cmX);
 
 		glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
 		if(zero != NULL){
@@ -335,7 +336,7 @@ void World::processKeysGame(unsigned char key)
 {
 	const int old = cmX;
 	int hero_state = x->getState();
-	if(hero_state != DIE_STATE){
+	if(hero_state != DIE_STATE && hero_state != CHARGE_FIRE){
 		if(hero_state != ENTRY && hero_state != DAMAGE && hero_state != JUMP_OUT && 
 		(zero == NULL || (zero->getInit() && land && zero->getState() != DIE_STATE))){
 			switch(key)
@@ -429,7 +430,7 @@ void World::processKeysGame(unsigned char key)
 							// If not in the air, reset texture frame
 						if(hero_state != JUMP){
 							x->resetTexture();
-							}
+						}
 					}
 					break;
 	
@@ -467,7 +468,7 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 	// Register key-up only if not in main menu
 	if(!main_menu){
 		int hero_state = x->getState();
-		if(hero_state != DIE_STATE){
+		if(hero_state != DIE_STATE && hero_state != CHARGE_FIRE){
 			switch(key)
 			{	
 				case 's': // Kneel
@@ -498,6 +499,24 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 				// Fire
 				case MOVE_FIRE:
 					// Fire charged shot
+					if(x->getIfCharging()){
+						x->setState(FIRE);
+						x->resetTexture();
+						sound->playChargeShotSFX();
+						// Create bullet from cannon position
+						chargeShot = new X_Bullet(x->getCannon(), x->getDirection(), -1);
+						if(hero_state == DASH){
+						// Get out of dash animation
+							if(x->getDirection() == RIGHT){
+								x->setButtons(DASH, false);
+								x->setHitBox(0.0, -8.0, 0.0, 12.0);
+							} else {
+								x->setButtons(DASH, false);
+								x->setHitBox(8.0, 0.0, 0.0, 12.0);
+							}
+						}
+					}
+					x->setButtons(FIRE, false);
 					break;
 			}
 		}
@@ -606,6 +625,32 @@ void World::createMissiles()
 void World::bullet_draw()
 {
 	int x_state = x->getState();
+	// Draw charge shot
+	if(chargeShot != NULL){
+		// Take damage only if not already in damage state
+		if(zero != NULL && chargeShot->collision(zero) && !zero->ifInvincible()){
+			if(zero->getState() == STAND){
+				sound->zeroPlayHurtSFX();
+				zero->resetTexture();
+				zero->setState(DAMAGE);
+			} else {
+				sound->playDamageSFX();
+			}
+			zero->setHealth(chargeShot->getDamage());
+			zero->depleteHealth(zero->getHealth()/5);
+			zero->setInvincibility();
+			chargeShot->setX1Coord(0.0);
+		}
+		if(x->getDirection() == LEFT){
+			chargeShot->draw();
+		} else {
+			chargeShot->draw();
+		}
+		if(chargeShot->getX1() <= cmX-20 || chargeShot->getX2() >= bg.viewWidth+cmX+20){
+			delete(chargeShot);
+		}
+	}
+
 	// Go through each X_bullet in the world and draw them
 	list<X_Bullet>::iterator it = x_bullets.begin();
 	while(it != x_bullets.end()){

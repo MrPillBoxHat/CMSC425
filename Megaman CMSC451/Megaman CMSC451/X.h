@@ -26,7 +26,7 @@ class X {
 		int charge_counter;
 		float x1_tcoord; // texture x1 coord
 		float y2_tcoord; // texture y2 coord
-		GLuint textures[24]; // stores texture
+		GLuint textures[26]; // stores texture
 		bool buttons[9]; // keeps track of state (buttons pressed)
 		bool falling; // Check if X is falling
 		bool onGround;
@@ -58,6 +58,7 @@ class X {
 		void slide();
 		void air_fire();
 		void ground_fire();
+		void charge_fire();
 		void charge();
 		void maxCharge();
 		void dash();
@@ -90,7 +91,7 @@ class X {
 		int middle() const { return x1 + (x2 - x1) / 2; }
 		bool ifInvinciple(){return invinciple;}
 		bool getDashed(){return dashed;}
-		bool getIfCharing(){return charging;}
+		bool getIfCharging(){return charging;}
 		// setters
 		void setHealth(int number){health += number;}
 		void setState(int inState){state = inState; buttons[inState] = true;}

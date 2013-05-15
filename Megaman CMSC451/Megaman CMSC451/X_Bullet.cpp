@@ -38,10 +38,10 @@ X_Bullet::X_Bullet(float *position, int inDirection, int filler)
 		hit_box[2] = ymid - 3.5;
 		hit_box[3] = ymid + 3.5;
 	} else { 
-		x1 = position[0];
-		x2 = position[1];
-		y1 = position[2];
-		y2 = position[3];
+		x1 = position[0] - 168.0;
+		x2 = position[0] - 30.0;
+		y1 = position[2] - 32.0;
+		y2 = position[3] - 32.0;
 		float xmid = x1 + ((x2-x1)/2);
 		float ymid = y1 + ((y2-y1)/2);
 		hit_box[0] = xmid - 4.0;

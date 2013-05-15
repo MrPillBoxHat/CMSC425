@@ -37,6 +37,7 @@ private:
 	std::list<Z_Bullet> z_bullets;
 	Saber *missile;
 	Saber *saber;
+	X_Bullet *chargeShot;
 	BackGround bg;
 	GLuint textures[6];
 	// if in main menu
