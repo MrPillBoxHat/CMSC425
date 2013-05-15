@@ -110,7 +110,7 @@ bool BackGround::canMove(double x1, double y1, double x2, double y2) const
 
 bool BackGround::canMove(double x, double y) const
 {
-	if((x < this->x1 || x >= width)) 
+	if((x < this->x1 || x >= width-25)) 
 		return false; // out of boundary
 
 	const Point2D pt(x, y);
