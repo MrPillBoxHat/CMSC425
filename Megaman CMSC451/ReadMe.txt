@@ -55,9 +55,8 @@ Animation:
 	- can shoot through walls
 	- sometimes dash abruptly ends
 	- X doesn't fall if dashing over a cliff
-	- Walk through some walls (pit)
-	- "falling" off pillars
 	- X character data gets messed up on boss entrance (pressing random buttons)
+	- X doesn;t charge unless in STAND state
 
 	- Possible future bugs
 		- slide hit, need to resize hitbox and texture box
@@ -78,7 +77,6 @@ Things need to implement:
 ______________________________________________________________
 	
 	(X)
-	- No charge shot
 	- dash wall jump
 
 	(Misc)

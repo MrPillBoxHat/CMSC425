@@ -152,7 +152,7 @@ void World::draw_helper()
 		enableTextures();
 		menu->draw();
 	} else {
-		testTexture();
+		//testTexture();
 		enableTextures();
 		bg.draw(cmX);
 

@@ -121,24 +121,25 @@ void Zero::draw()
 // Move Zero's coordinates
 void Zero::move()
 {
+	/*
 	// Dash movement (faster movement)
 	if(buttons[DASH]){
 		// Only move during certain frames
 		if(!(tcoord[0] >= 0.2 && tcoord[1] == 0.5)){
 			if(direction == LEFT){
 				// Check if possible to move left
-				if(bg->canMove(hit_box[0] - CM_DASH, lowY())){
+				//if(bg->canMove(hit_box[0] - CM_DASH, lowY())){
 					move_horizontal(CM_DASH * -1);
-				} else {
-					tcoord[0] = 0.5;
-				}
+			//	} else {
+				//	tcoord[0] = 0.5;
+			//	}
 			} else {
 				// Check if possible to move right
-				if(bg->canMove(hit_box[1] + CM_DASH, lowY())){
+			//	if(bg->canMove(hit_box[1] + CM_DASH, lowY())){
 					move_horizontal(CM_DASH);
-				} else {
-					tcoord[0] = 0.5;
-				}
+			//	} else {
+			//		tcoord[0] = 0.5;
+			//	}
 			}
 		}
 	// Normal movements
@@ -147,14 +148,55 @@ void Zero::move()
 		if(buttons[RUN]){
 			if(direction == LEFT){
 				// Check if possible to move left
-				if(bg->canMove(hit_box[0] - CM_WALK, lowY())){
-					move_horizontal(CM_WALK * -1);
-				}
+		//		if(bg->canMove(hit_box[0] - CM_WALK, lowY())){
+		//			move_horizontal(CM_WALK * -1);
+		//		}
 			} else {
 				// Check if possible to move right
-				if(bg->canMove(hit_box[1] + CM_WALK, lowY())){
+		//		if(bg->canMove(hit_box[1] + CM_WALK, lowY())){
 					move_horizontal(CM_WALK);
-				}
+		//		}
+			}
+		}
+	}*/
+	// Dash movement (faster movement)
+	if(buttons[DASH]){
+		// Only move during certain frames
+		if(!(tcoord[0] >= 0.2 && tcoord[1] == 0.5)){
+			if(direction == LEFT){
+				x1 -= CM_DASH;
+				x2 -= CM_DASH;
+				cannon_position[0] -= CM_DASH;
+				cannon_position[1] -= CM_DASH;
+				hit_box[0] -= CM_DASH;
+				hit_box[1] -= CM_DASH;
+			} else {
+				x1 += CM_DASH;
+				x2 += CM_DASH;
+				cannon_position[0] += CM_DASH;
+				cannon_position[1] += CM_DASH;
+				hit_box[0] += CM_DASH;
+				hit_box[1] += CM_DASH;
+			}
+		}
+	// Normal movements
+	} else {
+		// Move Zero horizontally
+		if(buttons[RUN]){
+			if(direction == LEFT){
+				x1 -= CM_WALK;
+				x2 -= CM_WALK;
+				cannon_position[0] -= CM_WALK;
+				cannon_position[1] -= CM_WALK;
+				hit_box[0] -= CM_WALK;
+				hit_box[1] -= CM_WALK;
+			} else {
+				x1 += 2.0;
+				x2 += 2.0;
+				cannon_position[0] += CM_WALK;
+				cannon_position[1] += CM_WALK;
+				hit_box[0] += CM_WALK;
+				hit_box[1] += CM_WALK;
 			}
 		}
 	}
