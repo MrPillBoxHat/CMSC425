@@ -347,7 +347,6 @@ void World::processKeysGame(unsigned char key)
 						x->setHitBox(-20.0, -20.0, 0.0, 0.0);
 						x->setPosition(-20.0, -20.0, 0.0, 0.0);
 					}
-					x->setButtons(JUMP, false);
 					x->setState(JUMP_OUT);
 				// If not already in the air
 				} else if(hero_state != JUMP){

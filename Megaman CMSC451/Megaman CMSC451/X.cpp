@@ -28,13 +28,13 @@ X::X(BackGround *inBG)
 	// Cannon position after entry animation
 	position[0] = 352.4;
 	position[1] = 433.0;
-	position[2] = 89.0;
-	position[3] = 176.0;
+	position[2] = 87.0;
+	position[3] = 174.0;
 	// Hit box for X
 	hit_box[0] = 325.0;
 	hit_box[1] = 407.2;
-	hit_box[2] = 76.0;
-	hit_box[3] = 155.0;
+	hit_box[2] = 74.0;
+	hit_box[3] = 153.0;
 	health_location[0] = 28.0;
 	health_location[1] = 100.0;
 	health_location[2] = 231.0;
@@ -141,7 +141,8 @@ void X::move()
 				//move out left
 				move_horizontal(CM_WALK * -1);
 			}
-			move_vertical(10.0);
+			move_vertical(7.0);
+			falling = false;
 		 // Move X horizontally
 		 } else if(buttons[RUN]){
 			if(direction == LEFT){
@@ -183,6 +184,13 @@ void X::move()
 		setState(JUMP);
 	} else {
 		groundY = temp->getMaxY();
+		// If he is above the ground
+		if(y1 > groundY && state != JUMP && state != SLIDE && state != JUMP_OUT){
+			resetTexture();
+			setFalling();
+			onGround = false;
+			setState(JUMP);
+		}
 	}
 	//if Sliding down a wall
 	if (state == SLIDE) {
@@ -472,8 +480,8 @@ void X::entry()
 					// Resets coordinates
 					x1 = 317.0;
 					x2 = 418.2;
-					y1 = 74.0;
-					y2 = 188.0;
+					y1 = 72.0;
+					y2 = 186.0;
 					resetTexture();
 				}
 			}
