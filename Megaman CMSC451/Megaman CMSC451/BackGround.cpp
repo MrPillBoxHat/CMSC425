@@ -84,7 +84,6 @@ Rectangle2D * BackGround::getBelow(GLdouble x, GLdouble y)
 			if(ret == nullptr || bx->getMaxY() > ret->getMaxY())
 				ret = bx;
 	}
-	cout << "ret" << ret << ", (x,y): (" << x << ", " << y << ")" << endl;
 	return ret;
 }
 
