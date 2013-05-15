@@ -329,7 +329,8 @@ void World::processKeysGame(unsigned char key)
 {
 	const int old = cmX;
 	int hero_state = x->getState();
-	if(hero_state != ENTRY && hero_state != DAMAGE && hero_state != JUMP_OUT && (zero == NULL || zero->getInit())){
+	if(hero_state != ENTRY && hero_state != DAMAGE && hero_state != JUMP_OUT && 
+	hero_state != DIE_STATE && (zero == NULL || zero->getInit() || zero->getState() != DIE_STATE)){
 		switch(key)
 		{
 			// Jump
@@ -440,6 +441,7 @@ void World::processKeysGame(unsigned char key)
 					x->setState(DASH);
 					//x->setPosition(-20.0, 20.0, 0.0, -10.0);
 				} else if (hero_state == JUMP && !x->getDashed()){
+					sound->playDashSFX();
 					x->resetTexture();
 					x->setState(DASH);
 					x->setButtons(JUMP, false);
