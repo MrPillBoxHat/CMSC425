@@ -154,7 +154,7 @@ void World::draw_helper()
 	} else {
 		testTexture();
 		enableTextures();
-		bg.draw(cmX);
+		//bg.draw(cmX);
 
 		glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
 		if(zero != NULL){
@@ -183,6 +183,12 @@ void World::testTexture()
 		glColor4f(0, 0, 255, 1);
 		glRectf(test4[0], test4[2], test4[1], test4[3]);
 		it++;
+	}
+
+	if(chargeShot != NULL){
+		float *test7 = chargeShot->getHitBox();
+		glColor4f(0, 0, 255, 1);
+		glRectf(test7[0], test7[2], test7[1], test7[3]);
 	}
 
 	if(zero != NULL){

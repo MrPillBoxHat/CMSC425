@@ -32,10 +32,10 @@ X_Bullet::X_Bullet(float *position, int inDirection, int filler)
 	y2 = position[3];
 	float xmid = x1 + ((x2-x1)/2);
 	float ymid = y1 + ((y2-y1)/2);
-	hit_box[0] = xmid - 4.0;
-	hit_box[1] = xmid + 4.0;
-	hit_box[2] = ymid - 3.5;
-	hit_box[3] = ymid + 3.5;
+	hit_box[0] = xmid - 50.0;
+	hit_box[1] = xmid + 50.0;
+	hit_box[2] = ymid - 40.0;
+	hit_box[3] = ymid + 40.0;
 	x1_tcoord = 0.0;
 	y2_tcoord = 1.0;
 	damage = -20;
