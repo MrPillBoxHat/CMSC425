@@ -1,6 +1,4 @@
 #include "X_Bullet.h"
-#include "constants.h"
-#include "Zero.h"
 
 // Constructor
 X_Bullet::X_Bullet(float *position, int inDirection)
