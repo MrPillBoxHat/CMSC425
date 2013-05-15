@@ -141,7 +141,7 @@ void X::move()
 				//move out left
 				move_horizontal(CM_WALK * -1);
 			}
-			move_vertical(7.0);
+			move_vertical(10.0);
 			falling = false;
 		 // Move X horizontally
 		 } else if(buttons[RUN]){
@@ -185,7 +185,8 @@ void X::move()
 	} else {
 		groundY = temp->getMaxY();
 		// If he is above the ground
-		if(y1 > groundY && state != JUMP && state != SLIDE && state != JUMP_OUT){
+		if(y1 > groundY && state != JUMP && state != SLIDE
+			&& state != JUMP_OUT && state != DASH){
 			resetTexture();
 			setFalling();
 			onGround = false;
@@ -344,8 +345,8 @@ void X::gainHealth(int block_number)
 void X::depleteHealth(int block_number)
 {
 	if(!invinciple){
-		// start at the end of the array
 		int i = 27;
+		// start at the end of the array
 		// sets all health blocks to false
 		while(i >= block_number){
 			if(health_blocks[i]){
@@ -353,6 +354,12 @@ void X::depleteHealth(int block_number)
 			}
 			i--;
 		}
+	}
+	if(health_blocks[0] == false){
+		buttons[DASH] = false;
+		buttons[RUN] = false;
+		resetTexture();
+		state = DIE_STATE;
 	}
 }
 
@@ -422,7 +429,7 @@ void X::draw()
 			invinciple = true;
 			damage();
 			break;
-		case DIE:
+		case DIE_STATE:
 			die();
 			break;
 	}
@@ -905,7 +912,37 @@ void X::damage()
 
 void X::die()
 {
-
+	// How many frames to jump
+	float x_offset = 0.0625;
+	float y_offset = 1.0;
+	// Draws the frame
+	if(direction == RIGHT){
+		glBindTexture(GL_TEXTURE_2D, textures[DIE]); // select the active texture
+	} else {
+		glBindTexture(GL_TEXTURE_2D, textures[DIE]); // select the active texture
+	}
+	// Draw objects
+	glBegin(GL_POLYGON);
+		//real coord
+		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
+		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+	glEnd();
+	// Want to draw 5 frames per second
+	if(counter % 15 == 0){
+		sound->playDestructionSFX();
+		//update next frame or reset if reached the end
+		x1_tcoord += x_offset;
+		if(x1_tcoord >= 1.0){
+			glDisable(GL_BLEND);
+			glDisable(GL_TEXTURE_2D);
+			glClear(GL_COLOR_BUFFER_BIT);
+			glutSwapBuffers();
+			Sleep(3000);
+			exit(0);
+		}
+	}
 }
 
 /***********************************************************************************************
@@ -1513,5 +1550,31 @@ void X::loadDamage()
 // Load death image
 void X::loadDie()
 {
+	/* loads jump right image directly as a new OpenGL texture */
+	GLuint textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/die/die.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
 
+	cout << "XtextureID: " << textureID << endl;
+
+	textures[DIE] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 }

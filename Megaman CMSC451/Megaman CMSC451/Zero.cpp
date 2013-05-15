@@ -5,6 +5,7 @@
 *******************************************************/
 #include <iostream>						// input/outout stream
 #include <cstdlib>						// C++ standard definitions
+#include <Windows.h>
 #include <GL/glut.h>                    // GLUT
 #include <GL/glu.h>                     // GLU
 #include <GL/gl.h>                      // OpenGL
@@ -100,7 +101,7 @@ void Zero::draw()
 		case DAMAGE:
 			damage();
 			break;
-		case DIE:
+		case DIE_STATE:
 			die();
 			break;
 	}
@@ -259,6 +260,11 @@ void Zero::depleteHealth(int block_number)
 			health_blocks[i] = false;
 		}
 		i--;
+	}
+	if(health_blocks[0] == false){
+		buttons[DASH] = false;
+		resetTexture();
+		state = DIE_STATE;
 	}
 }
 
@@ -616,7 +622,38 @@ void Zero::damage()
 // Zero death animation
 void Zero::die()
 {
-
+	// How many frames to jump
+	float x_offset = 0.0625;
+	float y_offset = 1.0;
+	// Draws the frame
+	if(direction == RIGHT){
+		glBindTexture(GL_TEXTURE_2D, textures[DIE]); // select the active texture
+	} else {
+		glBindTexture(GL_TEXTURE_2D, textures[DIE]); // select the active texture
+	}
+	// Draw objects
+	glBegin(GL_POLYGON);
+		//real coord
+		//real coord
+		glTexCoord2d(tcoord[0], tcoord[1] - y_offset);  glVertex2d(x1, y1);
+		glTexCoord2d(tcoord[0] + x_offset, tcoord[1] - y_offset); glVertex2d(x2, y1);
+		glTexCoord2d(tcoord[0] + x_offset, tcoord[1]); glVertex2d(x2, y2);
+		glTexCoord2d(tcoord[0], tcoord[1]); glVertex2d(x1, y2);
+	glEnd();
+	// Want to draw 5 frames per second
+	if(counter % 15 == 0){
+		sound2->playDestructionSFX();
+		//update next frame or reset if reached the end
+		tcoord[0] += x_offset;
+		if(tcoord[0] >= 1.0){
+			glDisable(GL_BLEND);
+			glDisable(GL_TEXTURE_2D);
+			glClear(GL_COLOR_BUFFER_BIT);
+			glutSwapBuffers();
+			Sleep(3000);
+			exit(0);
+		}
+	}
 }
 
 // Loads all textures
@@ -1149,5 +1186,31 @@ void Zero::loadDamage()
 // Load Zero's Death texture
 void Zero::loadDie()
 {
+	/* loads jump right image directly as a new OpenGL texture */
+	GLuint textureID = SOIL_load_OGL_texture
+	(
+		"Sprites/Zero/die/die.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textureID )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
 
+	cout << "ZerotextureID: " << textureID << endl;
+
+	textures[DIE] = textureID; // Assign it to the texture array
+	glBindTexture(GL_TEXTURE_2D, textureID); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 }

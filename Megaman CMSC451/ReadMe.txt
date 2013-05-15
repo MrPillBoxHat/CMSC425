@@ -54,8 +54,9 @@ Animation:
 	- dash to wall jump is messed up
 	- can shoot through walls
 	- sometimes dash abruptly ends
-	- wall jump gets stuck in the air
-	- Doesnt fall when over the pit
+	- X doesn't fall if dashing over a cliff
+	- Walk through some walls (pit)
+	- "falling" off pillars
 
 	- Possible future bugs
 		- slide hit, need to resize hitbox and texture box
@@ -67,6 +68,7 @@ Animation:
 	(General)
 	- Fix camera
 	- Add in more implementations
+	- move during boss intro animation
 
 Camera:
 
