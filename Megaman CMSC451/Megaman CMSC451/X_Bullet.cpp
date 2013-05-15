@@ -23,6 +23,40 @@ X_Bullet::X_Bullet(float *position, int inDirection)
 	counter = 0;
 }
 
+// Constructor for charge bullet
+X_Bullet::X_Bullet(float *position, int inDirection, int filler)
+{
+	if(direction == RIGHT){
+		x1 = position[1] + 30.0;
+		x2 = position[1] + 168.0;
+		y1 = position[2] - 32.0;
+		y2 = position[3] + 32.0;
+		float xmid = x1 + ((x2-x1)/2);
+		float ymid = y1 + ((y2-y1)/2);
+		hit_box[0] = xmid - 4.0;
+		hit_box[1] = xmid + 4.0;
+		hit_box[2] = ymid - 3.5;
+		hit_box[3] = ymid + 3.5;
+	} else { 
+		x1 = position[0];
+		x2 = position[1];
+		y1 = position[2];
+		y2 = position[3];
+		float xmid = x1 + ((x2-x1)/2);
+		float ymid = y1 + ((y2-y1)/2);
+		hit_box[0] = xmid - 4.0;
+		hit_box[1] = xmid + 4.0;
+		hit_box[2] = ymid - 3.5;
+		hit_box[3] = ymid + 3.5;
+	}
+	x1_tcoord = 0.0;
+	y2_tcoord = 1.0;
+	damage = -5;
+	state = 0;
+	direction = inDirection;
+	counter = 0;
+}
+
 void X_Bullet::draw(GLuint *textures)
 {
 	// How many frames to jump

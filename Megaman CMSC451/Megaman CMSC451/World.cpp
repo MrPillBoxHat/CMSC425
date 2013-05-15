@@ -711,6 +711,7 @@ void World::damage(int damage, int health)
 void World::loadTextures()
 {
 	loadXBullet();
+	loadXCharge();
 	loadZBullet();
 	loadZBulletMissile();
 }
@@ -764,6 +765,63 @@ void World::loadXBullet()
 	cout << "XBullettextureID: " << textures[XBULLETDIE] << endl;
 
 	glBindTexture(GL_TEXTURE_2D, textures[XBULLETDIE]); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+}
+
+void World::loadXCharge()
+{
+	/* loads entry image directly as a new OpenGL texture */
+	textures[XCHARGE_LEFT] = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/Bullet/charge_left.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textures[XCHARGE_LEFT] )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "XBullettextureID: " << textures[XCHARGE_LEFT] << endl;
+
+	glBindTexture(GL_TEXTURE_2D, textures[XCHARGE_LEFT]); // select the active texture
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	// repeat texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// reasonable filter choices
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	/* loads entry image directly as a new OpenGL texture */
+	textures[XCHARGE_RIGHT] = SOIL_load_OGL_texture
+	(
+		"Sprites/Megaman/Bullet/charge_right.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == textures[XCHARGE_RIGHT] )
+	{
+		cout << "SOIL loading error: " << SOIL_last_result() << endl;
+		exit(0);
+	}
+
+	cout << "XBullettextureID: " << textures[XCHARGE_RIGHT] << endl;
+
+	glBindTexture(GL_TEXTURE_2D, textures[XCHARGE_RIGHT]); // select the active texture
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	// repeat texture
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

@@ -47,11 +47,13 @@ X::X(BackGround *inBG)
 	counter = 0; // Counter is to keep track of FPS
 	count = 0; // Frame controller
 	count2 = 0; // Invincibility Time
+	charge_counter = 0;
 	invinciple = false; // Determine whether X can take damage
 	bg = inBG;
 	falling = false; // X is not falling
 	onGround = true;
 	dashed = false;
+	charging = false;
 	// Initialize health blocks and buttons pressed
 	for(int i = 0; i < 9; i++){
 		buttons[i] = false;
@@ -380,6 +382,13 @@ void X::draw()
 	if(state != ENTRY){
 		drawHealth();
 	}
+	// Draw charging texture
+	if(charging){
+		charge();
+		if(charge_counter >= 80){
+			maxCharge();
+		}
+	}
 	// Determines which action to draw
 	switch(state)
 	{
@@ -416,6 +425,8 @@ void X::draw()
 					y2_tcoord = 0.5;
 				}
 				air_fire();*/
+			} else if (charging){
+				
 			} else {
 				ground_fire();
 			}
@@ -796,14 +807,60 @@ void X::ground_fire()
 		if(x1_tcoord >= 0.984375){
 			x1_tcoord = 0.0;
 			state = STAND;
-			buttons[FIRE] = false;
+			charging = true;
 		}
 	}
 }
 
 void X::charge()
 {
+	// How many frames to jump
+	float x_offset = 0.099609375;
+	float y_offset = 1.0;
+	glBindTexture(GL_TEXTURE_2D, textures[CHARGE]); // select the active texture
+	// Draw objects
+	glBegin(GL_POLYGON);
+			//real coord
+		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
+		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+		glEnd();
+	// Want to draw 5 frames per second
+	if(counter % 3 == 0){
+		//update next frame or reset if reached the end
+		x1_tcoord += x_offset;
+		if(x1_tcoord >= 0.99){
+			x1_tcoord = 0.0;
+		}
+	}
+	if(charge_counter < 80){
+		charge_counter++;
+	}
+}
 
+void X::maxCharge()
+{
+	// How many frames to jump
+	float x_offset = 0.25;
+	float y_offset = 1.0;
+	glBindTexture(GL_TEXTURE_2D, textures[MAX_CHARGE]); // select the active texture
+	// Draw objects
+	glBegin(GL_POLYGON);
+			//real coord
+		glTexCoord2d(x1_tcoord, y2_tcoord - y_offset);  glVertex2d(x1, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord - y_offset); glVertex2d(x2, y1);
+		glTexCoord2d(x1_tcoord + x_offset, y2_tcoord); glVertex2d(x2, y2);
+		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
+		glEnd();
+	// Want to draw 5 frames per second
+	if(counter % 3 == 0){
+		//update next frame or reset if reached the end
+		x1_tcoord += x_offset;
+		if(x1_tcoord >= 0.99){
+			x1_tcoord = 0.0;
+		}
+	}
 }
 
 // Draws and makes X perform a dash

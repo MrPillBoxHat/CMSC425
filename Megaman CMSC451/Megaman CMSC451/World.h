@@ -55,6 +55,7 @@ private:
 	void draw_helper();
 	void loadTextures();
 	void loadXBullet();
+	void loadXCharge();
 	void loadZBullet();
 	void loadZBulletMissile();
 	void updateView();
@@ -66,7 +67,8 @@ private:
 	void damage(int damage, int health);
 	void initBossRoom();
 	void resetHitBox();
-	void World::testTexture();
+	void testTexture();
+
 public:
 	World(GLdouble w, GLdouble h);
 	World() {}
