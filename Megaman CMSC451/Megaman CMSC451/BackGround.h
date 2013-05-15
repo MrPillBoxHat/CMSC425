@@ -16,6 +16,7 @@ public:
 
 	void draw(GLint cmX);
 	void setBoundary(GLdouble w, GLdouble h) { width = w; height = h;}
+	void setStart(GLdouble x) { this->x1 = x; }
 	// Create the boxes for the ground
 	void initGround();
 	// retrieve the rectangle below this point
@@ -27,6 +28,8 @@ public:
 
 private:
 	GLdouble width, height;	
+	GLdouble x1;
+
 	std::vector<Box *> groundTxtr;
 	std::vector<Rectangle2D *> ground;
 

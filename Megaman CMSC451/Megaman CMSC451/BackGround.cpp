@@ -7,11 +7,23 @@ using namespace std;
 
 BackGround::BackGround(void): viewWidth(1000), viewHeight(650)
 {
+	x1 = 0.0;
 }
 
 
 BackGround::~BackGround(void)
 {
+	for(Box *bx : groundTxtr)
+		delete bx;
+	for(Rectangle2D *r : ground)
+		delete r;
+
+	delete view;
+	delete bg;
+	delete grdTxt;
+	delete bossTxt;
+	delete pillarTxt;
+
 }
 
 void BackGround::draw(GLint cmX) 
@@ -80,7 +92,7 @@ Rectangle2D * BackGround::getBelow(GLint x, GLint y)
 
 bool BackGround::canMove(GLint x1, GLint y1, GLint x2, GLint y2) const
 {
-	if((x1 < 0 || x1 >= width) || (x2 < 0 || x2 >= width)) 
+	if((x1 < this->x1 || x1 >= width) || (x2 < this->x1 || x2 >= width)) 
 		return false; // out of boundary
 
 	const Rectangle2D rect(x1, y1, y2-y1, x2-x1);
@@ -94,7 +106,7 @@ bool BackGround::canMove(GLint x1, GLint y1, GLint x2, GLint y2) const
 
 bool BackGround::canMove(GLint x, GLint y) const
 {
-	if((x < 0 || x >= width)) 
+	if((x < this->x1 || x >= width)) 
 		return false; // out of boundary
 
 	const Point2D pt(x, y);
