@@ -57,17 +57,17 @@ X_Bullet::X_Bullet(float *position, int inDirection, int filler)
 	counter = 0;
 }
 
-void X_Bullet::draw(GLuint *textures)
+void X_Bullet::draw(GLuint *texture)
 {
 	// How many frames to jump
 	float x_offset;
 	float y_offset = 1.0;
 	// Draws the frame
 	if(state != DIE){
-		glBindTexture(GL_TEXTURE_2D, textures[XBULLET]); // select the active texture
+		glBindTexture(GL_TEXTURE_2D, texture[XBULLET]); // select the active texture
 		x_offset = 0.5;
 	} else {
-		glBindTexture(GL_TEXTURE_2D, textures[XBULLETDIE]); // select the active texture
+		glBindTexture(GL_TEXTURE_2D, texture[XBULLETDIE]); // select the active texture
 		x_offset = 0.328125;
 	}
 	// Draw objects
@@ -117,9 +117,9 @@ void X_Bullet::drawCharge(GLuint *texture)
 	float y_offset = 1.0;
 	// Draws the frame
 	if(direction == RIGHT){
-		glBindTexture(GL_TEXTURE_2D, textures[XCHARGE_RIGHT]); // select the active texture
+		glBindTexture(GL_TEXTURE_2D, texture[XCHARGE_RIGHT]); // select the active texture
 	} else {
-		glBindTexture(GL_TEXTURE_2D, textures[XCHARGE_LEFT]); // select the active texture
+		glBindTexture(GL_TEXTURE_2D, texture[XCHARGE_LEFT]); // select the active texture
 	}
 	// Draw objects
 	glBegin(GL_POLYGON);

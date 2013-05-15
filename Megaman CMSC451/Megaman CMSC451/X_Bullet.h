@@ -13,7 +13,6 @@ class X_Bullet
 		float x1,x2,y1,y2;
 		float hit_box[4];
 		float x1_tcoord, y2_tcoord;
-		GLuint textures[2];
 		int damage;
 		int state;
 		int direction;
@@ -34,6 +33,6 @@ class X_Bullet
 		void setDead(){state = DIE;}
 		// public functions
 		bool collision(Zero *zero);
-		void draw(GLuint *textures);
+		void draw(GLuint *texture);
 		void drawCharge(GLuint *texture);
 };
