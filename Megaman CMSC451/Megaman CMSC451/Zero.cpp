@@ -650,6 +650,7 @@ void Zero::die()
 			glDisable(GL_TEXTURE_2D);
 			glClear(GL_COLOR_BUFFER_BIT);
 			glutSwapBuffers();
+			sound2->playBossDesturctionSFX();
 			Sleep(3000);
 			exit(0);
 		}

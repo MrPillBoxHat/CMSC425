@@ -212,11 +212,11 @@ void X::jump_move(float groundY)
 	// If normal jump
 	//} else {
 		if(falling){
-			move_vertical(-5.0);
+			move_vertical(-4.0);
 			ifLand(groundY);
 		} else if(!onGround) {
 			// Move X up if not on landing frame
-			move_vertical(5.0);
+			move_vertical(4.0);
 		}	
 	//}
 }
@@ -359,6 +359,7 @@ void X::depleteHealth(int block_number)
 		buttons[DASH] = false;
 		buttons[RUN] = false;
 		resetTexture();
+		invinciple = true;
 		state = DIE_STATE;
 	}
 }
@@ -915,6 +916,7 @@ void X::die()
 	// How many frames to jump
 	float x_offset = 0.0625;
 	float y_offset = 1.0;
+	count2 = 0;
 	// Draws the frame
 	if(direction == RIGHT){
 		glBindTexture(GL_TEXTURE_2D, textures[DIE]); // select the active texture
@@ -939,6 +941,7 @@ void X::die()
 			glDisable(GL_TEXTURE_2D);
 			glClear(GL_COLOR_BUFFER_BIT);
 			glutSwapBuffers();
+			sound->playBossDesturctionSFX();
 			Sleep(3000);
 			exit(0);
 		}

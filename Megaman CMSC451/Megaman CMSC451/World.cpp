@@ -87,7 +87,7 @@ void World::update(void)
 	// AI for Zero and collision can only be used if Zero is initialized
 	if(zero != NULL){
 		// Ask AI what it wants to do
-		if(zero->getInit()){
+		if(zero->getInit() && x->getState() != DIE_STATE){
 			processAI();
 		}
 		// Detect X colliding with Zero
@@ -95,7 +95,9 @@ void World::update(void)
 			x->detec_collision(zero);
 		}
 	}
-	
+	if((zero != NULL && zero->getState() == DIE_STATE) || x->getState() == DIE_STATE){
+		sound->stopSound();
+	}
 	float *x_position = x->getHitBox();
 	// If X reaches boss room
 	if(!initZero && x_position[0] >= 3150.0){
@@ -125,8 +127,7 @@ void World::initBossRoom()
 			x->setState(STAND);
 			x->resetTexture();
 			sound->playMusic("Music/boss.wav");
-
-			bg.setStart( width - bg.viewWidth );
+			land = true;
 		}
 	}
 }
@@ -225,11 +226,11 @@ void World::updateView()
 	// position at X
 	const int pt = x->middle(), end = width - bg.viewWidth / 2;	
 	GLdouble diff = bg.viewWidth;
-	if(pt >= 0 && pt >= (bg.viewWidth / 2) && pt < end && zero == NULL) 
+	if(pt >= 0 && pt >= (bg.viewWidth / 2) && pt < end) 
 	{
 		cmX = pt - (bg.viewWidth / 2);
 
-	} else if(pt >= end || zero != NULL) // the end
+	} else if(pt >= end) // the end
 	{
 		cout << "end" << endl; 
 		cmX = width - bg.viewWidth;
@@ -302,6 +303,7 @@ void World::processKeysMenu(unsigned char key)
 			// Select cursor
 			case 13:
 				sound->playSelectSFX();
+				sound->stopSound();
 				Sleep(250);
 				// if cursor is on continue
 				if(state == CONTINUE){
@@ -331,127 +333,129 @@ void World::processKeysGame(unsigned char key)
 {
 	const int old = cmX;
 	int hero_state = x->getState();
-	if(hero_state != ENTRY && hero_state != DAMAGE && hero_state != JUMP_OUT && 
-	hero_state != DIE_STATE && (zero == NULL || zero->getInit() || zero->getState() != DIE_STATE)){
-		switch(key)
-		{
-			// Jump
-			case MOVE_JUMP:
-				// If sliding down the wall, jump again
-				if(hero_state == SLIDE){
-					sound->xPlayJumpSFX();
-					sound->playJumpSFX();
-					x->resetTexture();
-					// Reset texture/hit Box
-					if(x->getDirection() == LEFT){
-						x->setHitBox(20.0, 20.0, 0.0, 0.0);
-						x->setPosition(20.0, 20.0, 0.0, 0.0);
-					} else {
-						x->setHitBox(-20.0, -20.0, 0.0, 0.0);
-						x->setPosition(-20.0, -20.0, 0.0, 0.0);
-					}
-					x->setState(JUMP_OUT);
-				// If not already in the air
-				} else if(hero_state != JUMP){
-					sound->xPlayJumpSFX();
-					sound->playJumpSFX();
-					if(hero_state == DASH){
-						resetHitBox();
-					}
-					x->setOffGround();
-					x->resetTexture();
-					x->setState(JUMP);
-				} 
-				break;
-
-			// Kneel
-			case 's':
-				break;
-
-			// Move Left
-			case MOVE_LEFT:
-			// Move Right
-			case MOVE_RIGHT:
-				// If not in jump animation
-				if(hero_state != JUMP && hero_state != DASH && hero_state != DAMAGE){
-					x->resetTexture();
-					x->setState(RUN);
-				}
-				// Change direction if in a dash
-				if(key == MOVE_LEFT){
-					// Get out of dash state if moving in opposite direction
-					if(x->getDirection() == RIGHT && hero_state == DASH){
-						x->setButtons(DASH, false);
-						x->setHitBox(0.0, -8.0, 0.0, 12.0);
+	if(hero_state != DIE_STATE){
+		if(hero_state != ENTRY && hero_state != DAMAGE && hero_state != JUMP_OUT && 
+		(zero == NULL || (zero->getInit() && land && zero->getState() != DIE_STATE))){
+			switch(key)
+			{
+				// Jump
+				case MOVE_JUMP:
+					// If sliding down the wall, jump again
+					if(hero_state == SLIDE){
+						sound->xPlayJumpSFX();
+						sound->playJumpSFX();
+						x->resetTexture();
+						// Reset texture/hit Box
+						if(x->getDirection() == LEFT){
+							x->setHitBox(20.0, 20.0, 0.0, 0.0);
+							x->setPosition(20.0, 20.0, 0.0, 0.0);
+						} else {
+							x->setHitBox(-20.0, -20.0, 0.0, 0.0);
+							x->setPosition(-20.0, -20.0, 0.0, 0.0);
+						}
+						x->setState(JUMP_OUT);
+						// If not already in the air
+					} else if(hero_state != JUMP){
+						sound->xPlayJumpSFX();
+						sound->playJumpSFX();
+						if(hero_state == DASH){
+							resetHitBox();
+						}
+						x->setOffGround();
+						x->resetTexture();
+						x->setState(JUMP);
+					} 
+					break;
+	
+				// Kneel
+				case 's':
+					break;
+	
+				// Move Left
+				case MOVE_LEFT:
+					// Move Right
+				case MOVE_RIGHT:
+					// If not in jump animation
+					if(hero_state != JUMP && hero_state != DASH && hero_state != DAMAGE){
 						x->resetTexture();
 						x->setState(RUN);
 					}
-					x->setDirection(LEFT);
-				} else if (key == MOVE_RIGHT){
-					// Get out of dash state if moving in opposite direction
-					if(x->getDirection() == LEFT && hero_state == DASH){
-						x->setButtons(DASH, false);
-						x->setHitBox(8.0, 0.0, 0.0, 12.0);
-						x->resetTexture();
-						x->setState(RUN);
-					}
-					x->setDirection(RIGHT);
-				}
-				// Register button pressed
-				x->setButtons(RUN, true);
-				break;
-
-			// Fire
-			case MOVE_FIRE:
-				// Can only fire max 3 times
-				if(x_bullets.size() < 3){
-					sound->playXBusterSFX();
-					X_Bullet *temp = new X_Bullet(x->getCannon(), x->getDirection());
-					// Create bullet from cannon position
-					x_bullets.push_front(*temp);
-					if(hero_state == DASH){
-						// Get out of dash animation
-						if(x->getDirection() == RIGHT){
+					// Change direction if in a dash
+					if(key == MOVE_LEFT){
+						// Get out of dash state if moving in opposite direction
+							if(x->getDirection() == RIGHT && hero_state == DASH){
 							x->setButtons(DASH, false);
 							x->setHitBox(0.0, -8.0, 0.0, 12.0);
-						} else {
-							x->setButtons(DASH, false);
-							x->setHitBox(8.0, 0.0, 0.0, 12.0);
+							x->resetTexture();
+							x->setState(RUN);
 						}
+						x->setDirection(LEFT);
+						} else if (key == MOVE_RIGHT){
+					// Get out of dash state if moving in opposite direction
+						if(x->getDirection() == LEFT && hero_state == DASH){
+								x->setButtons(DASH, false);
+							x->setHitBox(8.0, 0.0, 0.0, 12.0);
+							x->resetTexture();
+							x->setState(RUN);
+						}
+						x->setDirection(RIGHT);
 					}
-					x->setFrameOn();
-					x->setState(FIRE);
-					// If not in the air, reset texture frame
-					if(hero_state != JUMP){
+						// Register button pressed
+					x->setButtons(RUN, true);
+					break;
+	
+				// Fire
+				case MOVE_FIRE:
+						// Can only fire max 3 times
+					if(x_bullets.size() < 3){
+						sound->playXBusterSFX();
+						X_Bullet *temp = new X_Bullet(x->getCannon(), x->getDirection());
+							// Create bullet from cannon position
+						x_bullets.push_front(*temp);
+						if(hero_state == DASH){
+								// Get out of dash animation
+							if(x->getDirection() == RIGHT){
+								x->setButtons(DASH, false);
+									x->setHitBox(0.0, -8.0, 0.0, 12.0);
+							} else {
+								x->setButtons(DASH, false);
+								x->setHitBox(8.0, 0.0, 0.0, 12.0);
+								}
+						}
+						x->setFrameOn();
+						x->setState(FIRE);
+							// If not in the air, reset texture frame
+						if(hero_state != JUMP){
+							x->resetTexture();
+							}
+					}
+					break;
+	
+				// Dash
+				case MOVE_DASH:
+						// if X not in the air and not already dashing
+					if(hero_state != JUMP && hero_state != DASH && hero_state != DAMAGE){
+						sound->playDashSFX();
+						// Hit box for X
+							if(x->getDirection() == RIGHT){
+							x->setHitBox(0.0, 8.0, 0.0, -12.0);
+						} else {
+								x->setHitBox(-8.0, 0.0, 0.0, -12.0);
+						}
 						x->resetTexture();
-					}
+							x->setState(DASH);
+						//x->setPosition(-20.0, 20.0, 0.0, -10.0);
+					} else if (hero_state == JUMP && !x->getDashed()){
+						sound->playDashSFX();
+						x->resetTexture();
+						x->setState(DASH);
+						x->setButtons(JUMP, false);
+						x->setDash();
+						}
+					break;
 				}
-				break;
-
-			// Dash
-			case MOVE_DASH:
-				// if X not in the air and not already dashing
-				if(hero_state != JUMP && hero_state != DASH && hero_state != DAMAGE){
-					sound->playDashSFX();
-					// Hit box for X
-					if(x->getDirection() == RIGHT){
-						x->setHitBox(0.0, 8.0, 0.0, -12.0);
-					} else {
-						x->setHitBox(-8.0, 0.0, 0.0, -12.0);
-					}
-					x->resetTexture();
-					x->setState(DASH);
-					//x->setPosition(-20.0, 20.0, 0.0, -10.0);
-				} else if (hero_state == JUMP && !x->getDashed()){
-					sound->playDashSFX();
-					x->resetTexture();
-					x->setState(DASH);
-					x->setButtons(JUMP, false);
-					x->setDash();
-				}
-				break;
+			}
 		}
-	}
 	update();
 }
 
@@ -461,37 +465,39 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 	// Register key-up only if not in main menu
 	if(!main_menu){
 		int hero_state = x->getState();
-		switch(key)
-		{	
-			case 's': // Kneel
-			case MOVE_LEFT: // Move Left
-			case MOVE_RIGHT: // Move Right
-				if(hero_state != JUMP_OUT){
-					if(hero_state != STAND && hero_state != JUMP && hero_state != ENTRY && hero_state != SLIDE
-						&& hero_state != DASH && hero_state != DAMAGE && (zero == NULL || zero->getInit())){
-						// Reset state
-							x->setState(STAND);
-						x->resetTexture();
-					// Fall off the wall
-					} else if (hero_state == SLIDE) {
-						if(x->getDirection() == LEFT){
-							x->setHitBox(20.0, 20.0, 0.0, 0.0);
-							x->setPosition(20.0, 20.0, 0.0, 0.0);
-						} else {
-							x->setHitBox(-20.0, -20.0, 0.0, 0.0);
-							x->setPosition(-20.0, -20.0, 0.0, 0.0);
+		if(hero_state != DIE_STATE){
+			switch(key)
+			{	
+				case 's': // Kneel
+				case MOVE_LEFT: // Move Left
+				case MOVE_RIGHT: // Move Right
+					if(hero_state != JUMP_OUT){
+						if(hero_state != STAND && hero_state != JUMP && hero_state != ENTRY && hero_state != SLIDE
+							&& hero_state != DASH && hero_state != DAMAGE && (zero == NULL || zero->getInit())){
+							// Reset state
+									x->setState(STAND);
+							x->resetTexture();
+						// Fall off the wall
+						} else if (hero_state == SLIDE) {
+							if(x->getDirection() == LEFT){
+								x->setHitBox(20.0, 20.0, 0.0, 0.0);
+								x->setPosition(20.0, 20.0, 0.0, 0.0);
+								} else {
+								x->setHitBox(-20.0, -20.0, 0.0, 0.0);
+								x->setPosition(-20.0, -20.0, 0.0, 0.0);
+							}
+							x->setState(JUMP);
+							x->setFalling();
 						}
-						x->setState(JUMP);
-						x->setFalling();
 					}
-				}
-				x->setButtons(RUN, false);
+					x->setButtons(RUN, false);
+						break;
+				
+				// Fire
+				case MOVE_FIRE:
+					// Fire charged shot
 					break;
-			
-			// Fire
-			case MOVE_FIRE:
-				// Fire charged shot
-				break;
+			}
 		}
 	}
 	update();

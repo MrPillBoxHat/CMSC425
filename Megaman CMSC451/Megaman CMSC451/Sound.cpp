@@ -32,13 +32,17 @@ void Sound::playCursorSFX()
 
 void Sound::playSelectSFX()
 {
-	engine->stopAllSounds();
 	engine->play2D("Sound Effects/game/menu_select.wav", false);
 }
 
 void Sound::playDestructionSFX()
 {
 	engine->play2D("Sound Effects/game/destruction.wav", false);
+}
+
+void Sound::playBossDesturctionSFX()
+{
+	engine->play2D("Sound Effects/game/Boss_Destruction.wav", false);
 }
 
 void Sound::playEntrySFX()

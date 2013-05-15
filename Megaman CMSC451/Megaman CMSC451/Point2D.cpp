@@ -7,7 +7,7 @@ Point2D::Point2D(void)
 	y = 0;
 }
 
-Point2D::Point2D(double x, double y) {
+Point2D::Point2D(int x, int y) {
 	this->x = x;
 	this->y = y;
 }

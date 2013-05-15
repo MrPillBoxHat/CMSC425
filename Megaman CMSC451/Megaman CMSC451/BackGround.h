@@ -16,20 +16,17 @@ public:
 
 	void draw(GLint cmX);
 	void setBoundary(GLdouble w, GLdouble h) { width = w; height = h;}
-	void setStart(GLdouble x) { this->x1 = x; }
 	// Create the boxes for the ground
 	void initGround();
 	// retrieve the rectangle below this point
-	Rectangle2D * getBelow(GLdouble x, GLdouble y);
-	bool canMove(GLdouble x, GLdouble y) const;
-	bool canMove(GLdouble x1, GLdouble y1, GLdouble x2, GLdouble y2) const;
+	Rectangle2D * getBelow(GLint x, GLint y);
+	bool canMove(GLint x, GLint y) const;
+	bool canMove(GLint x1, GLint y1, GLint x2, GLint y2) const;
 
 	const GLdouble viewWidth, viewHeight;
 
 private:
-	GLdouble width, height;
-	GLdouble x1;
-
+	GLdouble width, height;	
 	std::vector<Box *> groundTxtr;
 	std::vector<Rectangle2D *> ground;
 
@@ -43,7 +40,7 @@ private:
 	void drawGround();
 	void drawView(GLint cmX);
 	void drawTop();
-	void addBox(GLdouble x1, GLdouble w, GLdouble h, Texture * txt, GLdouble rlH, GLdouble y1=0);
+	void addBox(GLint x1, GLuint w, GLuint h, Texture * txt, GLuint rlH, GLint y1=0);
 };
 
 /*

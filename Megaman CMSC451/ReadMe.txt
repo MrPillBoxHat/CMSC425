@@ -57,6 +57,7 @@ Animation:
 	- X doesn't fall if dashing over a cliff
 	- Walk through some walls (pit)
 	- "falling" off pillars
+	- X character data gets messed up on boss entrance (pressing random buttons)
 
 	- Possible future bugs
 		- slide hit, need to resize hitbox and texture box
@@ -64,11 +65,11 @@ Animation:
 	(Zero)
 	- Zero saber attack needs to dash in front of X, not past X
 	- Saber needs to add sword sheath to animation
+	- Zero's first bullet(attack?) doesn't hurt
 
 	(General)
 	- Fix camera
 	- Add in more implementations
-	- move during boss intro animation
 
 Camera:
 
@@ -84,4 +85,4 @@ ______________________________________________________________
 	- Talking/text
 	- Boss areana/stage entrance
 	- More stages/abilities/items
-	- Implement character Deaths
+	- Fade out screen when finished

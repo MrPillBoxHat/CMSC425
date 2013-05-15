@@ -5,7 +5,7 @@ Rectangle2D::Rectangle2D(void) {
 	Rectangle2D(0, 0, 0 ,0);
 }
 
-Rectangle2D::Rectangle2D(double x, double y, double w, double h) {
+Rectangle2D::Rectangle2D(int x, int y, UINT w, UINT h) {
 	origin = Point2D(x, y);
 	width = w;
 	height = h;
@@ -29,7 +29,7 @@ bool Rectangle2D::intersects(const Rectangle2D &rect) const {
 		   getMaxY() > rect.getMinY();
 }
 
-bool Rectangle2D::between(double p, double x, double length) const {
+bool Rectangle2D::between(int p, int x, int length) const {
 	return x <= p && p <= (x + length);
 }
 
