@@ -57,6 +57,7 @@ Animation:
 	- X doesn't fall if dashing over a cliff
 	- X character data gets messed up on boss entrance (pressing random buttons)
 	- X doesn;t charge unless in STAND state
+	- X teleports up the wall when trying to wall jump sometimes
 
 	- Possible future bugs
 		- slide hit, need to resize hitbox and texture box
