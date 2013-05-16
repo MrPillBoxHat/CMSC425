@@ -19,20 +19,10 @@ ______________________________________________________________
 	- You take damage if you make contact with an enemy
 3) Main Weapon: X buster.
 	- You fire a plasma blast from your arm
+	- Hold the fire button to charge
 
 
 
-Implementations:
-______________________________________________________________
-Animation/Sprites: 
-	- Downloaded a full sprite sheet online
-	- Modified (cut out) each sprite and made a file
-	  containing all the appropriate sprites to simulate
-	  a movement.
-	- Added transparency.
-	- Had to position each sprite in the correct position
-	  in the frame
-	- Animated using openGL texture mapping on GL_POLYGON
 
 
 
@@ -66,6 +56,7 @@ Animation:
 	- Zero saber attack needs to dash in front of X, not past X
 	- Saber needs to add sword sheath to animation
 	- Zero's first bullet(attack?) doesn't hurt
+	- Zero needs collision detection
 
 	(General)
 	- Fix camera
@@ -85,3 +76,4 @@ ______________________________________________________________
 	- Boss areana/stage entrance
 	- More stages/abilities/items
 	- Fade out screen when finished
+	- Add more enemies

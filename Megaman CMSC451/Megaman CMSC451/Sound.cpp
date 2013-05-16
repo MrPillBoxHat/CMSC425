@@ -4,7 +4,7 @@
 #pragma comment(lib, "irrklang.lib")
 using namespace irrklang;
 
-Sound::Sound() : play(false)
+Sound::Sound() : play(true)
 {
 	engine = irrklang::createIrrKlangDevice();
 }
