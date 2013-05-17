@@ -21,18 +21,18 @@ Zero::Zero(BackGround *inBG)
 {
 	health = 140;
 	// Coordinates of entry
-	x1 = 3778.5;
-	x2 = 3957.5;
-	y1 = 484.0;
-	y2 = 662.0;
+	x1 = 3738.5;
+	x2 = 3997.5;
+	y1 = 494.0;
+	y2 = 712.0;
 	// Cannon position after entry animation
 	cannon_position[0] = 3852.4;
 	cannon_position[1] = 3933.0;
 	cannon_position[2] = 89.0;
 	cannon_position[3] = 176.0;
 	// collision box
-	hit_box[0] = 3826.0;
-	hit_box[1] = 3909.2;
+	hit_box[0] = 3831.0;
+	hit_box[1] = 3914.2;
 	hit_box[2] = 75.0;
 	hit_box[3] = 160.0;
 	state = ENTRY;
@@ -236,7 +236,6 @@ void Zero::move_horizontal(float distance)
 	hit_box[1] += distance;
 }
 
-
 // Draws Zero's Health bar
 void Zero::drawHealth()
 {
@@ -334,9 +333,9 @@ void Zero::entry()
 	glEnd();
 	// Update frame pointers
 	// If Zero has not landed
-	if(y1 > 24.0){
-		y1 -= 10.0;
-		y2 -= 10.0;
+	if(y1 > 23.0){
+		y1 -= 13.0;
+		y2 -= 13.0;
 	} else {
 		if(counter % 5 == 0){
 			// go to next frame

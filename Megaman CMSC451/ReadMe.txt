@@ -47,6 +47,8 @@ Animation:
 	- X character data gets messed up on boss entrance (pressing random buttons)
 	- X doesn't charge unless in STAND state
 	- teleports up the wall when trying to wall jump sometimes
+	- glitchy when trying to run/dash while up against the wall
+	- when doing a run dash, if no buttons are held, X should just drop
 
 	- Possible future bugs
 		- slide hit, need to resize hitbox and texture box
@@ -56,6 +58,8 @@ Animation:
 	- Saber needs to add sword sheath to animation
 	- Zero's first bullet(attack?) doesn't hurt
 	- Zero needs collision detection
+	- Zero bullet hit box too tall
+	- Zero flickers on entry
 
 	(General)
 	- Fix camera	
