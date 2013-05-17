@@ -14,7 +14,6 @@ ______________________________________________________________
 1) Navigate through the level and find the boss room
 2) You have a health bar on the left of the screen.
 	- If it completely depletes, you die.
-	- You have 3 lives.
 	- You take damage if enemy fire hits you
 	- You take damage if you make contact with an enemy
 3) Main Weapon: X buster.
@@ -59,10 +58,8 @@ Animation:
 	- Zero needs collision detection
 
 	(General)
-	- Fix camera
+	- Fix camera	
 	- Add in more implementations
-
-Camera:
 
 
 Things need to implement:
