@@ -129,7 +129,6 @@ void World::initBossRoom()
 			x->resetTexture();
 			sound->playMusic("Music/boss.wav");
 			land = true;
-
 			bg.setStart( width - bg.viewWidth );
 		}
 	}
@@ -680,7 +679,7 @@ void World::bullet_draw()
 		// draw bullet
 		it->draw(textures);
 		// If bullet reaches end of the screen, delete it
-		if(it->getX1() <= cmX-20 || it->getX2() >= bg.viewWidth+cmX+20){
+		if(it->getX1() <= cmX-50 || it->getX2() >= bg.viewWidth+cmX+50){
 			it = x_bullets.erase(it);
 		// If bullet hits something
 		} else {

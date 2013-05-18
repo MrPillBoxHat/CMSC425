@@ -53,6 +53,7 @@ Zero::Zero(BackGround *inBG)
 		health_blocks[i] = false;
 	}
 	init_health = false;
+	invincible = false;
 }
 
 // Adjust Zero's texture box
@@ -333,9 +334,9 @@ void Zero::entry()
 	glEnd();
 	// Update frame pointers
 	// If Zero has not landed
-	if(y1 > 23.0){
-		y1 -= 13.0;
-		y2 -= 13.0;
+	if(y1 > 16.0){
+		y1 -= 1.0;
+		y2 -= 1.0;
 	} else {
 		if(counter % 5 == 0){
 			// go to next frame

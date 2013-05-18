@@ -45,21 +45,26 @@ Animation:
 	- sometimes dash abruptly ends
 	- doesn't fall if dashing over a cliff
 	- X character data gets messed up on boss entrance (pressing random buttons)
-	- X doesn't charge unless in STAND state
+	- doesn't charge unless in STAND state
 	- teleports up the wall when trying to wall jump sometimes
 	- glitchy when trying to run/dash while up against the wall
 	- when doing a run dash, if no buttons are held, X should just drop
+	- doesn't die when getting hit in the air
+	- fix charge blast when not max, shoots max shot.
 
 	- Possible future bugs
 		- slide hit, need to resize hitbox and texture box
 
 	(Zero)
-	- Zero saber attack needs to dash in front of X, not past X
+	- saber attack needs to dash in front of X, not past X
 	- Saber needs to add sword sheath to animation
-	- Zero's first bullet(attack?) doesn't hurt
-	- Zero needs collision detection
-	- Zero bullet hit box too tall
-	- Zero flickers on entry
+	- first bullet(attack?) doesn't hurt
+	- needs collision detection
+	- z_bullet hit box too tall
+	- flickers on entry
+	- hit box too large
+	- needs scaling work on entrance ANimation
+	- saber hit box may be created too late
 
 	(General)
 	- Fix camera	

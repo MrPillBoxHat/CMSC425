@@ -1,7 +1,7 @@
 #include "X_Bullet.h"
 
 // Constructor
-X_Bullet::X_Bullet(float *position, int inDirection)
+X_Bullet::X_Bullet(float *position, int inDirection, BackGround *inbg)
 {
 	x1 = position[0];
 	x2 = position[1];
@@ -19,10 +19,11 @@ X_Bullet::X_Bullet(float *position, int inDirection)
 	state = 0;
 	direction = inDirection;
 	counter = 0;
+	bg = inbg;
 }
 
 // Constructor for charge bullet
-X_Bullet::X_Bullet(float *position, int inDirection, int filler)
+X_Bullet::X_Bullet(float *position, int inDirection, int filler, BackGround *inbg)
 {
 	x1 = position[0] - 50.0;
 	x2 = position[1] + 50.0;
@@ -40,6 +41,7 @@ X_Bullet::X_Bullet(float *position, int inDirection, int filler)
 	state = 0;
 	direction = inDirection;
 	counter = 0;
+	bg = inbg;
 }
 
 void X_Bullet::draw(GLuint *texture)
@@ -140,6 +142,11 @@ void X_Bullet::drawCharge(GLuint *texture)
 			x1_tcoord = 0.0;
 		}
 	}
+}
+
+void move()
+{
+
 }
 
 bool X_Bullet::collision(Zero *zero)

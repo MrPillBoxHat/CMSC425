@@ -22,7 +22,7 @@ class Zero {
 		int count2; // Keeps track of invincibility time
 		BackGround *bg;
 		float tcoord[2];
-		GLuint textures[24]; // stores texture
+		GLuint textures[22]; // stores texture
 		bool buttons[11]; // keeps track of state (buttons pressed)
 		bool init_health;
 		bool invincible;
