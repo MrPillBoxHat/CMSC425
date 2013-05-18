@@ -21,6 +21,7 @@ class X_Bullet
 		BackGround *bg;
 		// Moves the bullet and detects whether it hits a wall
 		void move();
+		void auxMove(float distance);
 
 	public:
 		// Constructor

@@ -66,18 +66,7 @@ void X_Bullet::draw(GLuint *texture)
 		glTexCoord2d(x1_tcoord, y2_tcoord); glVertex2d(x1, y2);
 	glEnd();
 	if(state != DIE){
-		if(direction == 0){
-			// Move bullet
-			x1 -= 12.0;
-			x2 -= 12.0;
-			hit_box[0] -= 12.0;
-			hit_box[1] -= 12.0;
-		} else {
-			x1 += 12.0;
-			x2 += 12.0;
-			hit_box[0] += 12.0;
-			hit_box[1] += 12.0;
-		}
+		move();
 	}
 	// update next frame or reset if reached the end
 	// Control FPS
@@ -144,9 +133,32 @@ void X_Bullet::drawCharge(GLuint *texture)
 	}
 }
 
-void move()
+void X_Bullet::move()
 {
+	// If facing LEFT
+	if(direction == LEFT){
+		if(bg->canMove(hit_box[0] - 12.0, hit_box[2], hit_box[1] - 12.0, hit_box[3])){
+			// Move bullet
+			auxMove(-12.0);
+		} else {
+			state = DIE;
+		}
+	} else {
+		if(bg->canMove(hit_box[0] + 12.0, hit_box[2], hit_box[1] + 12.0, hit_box[3])){
+			// Move bullet
+			auxMove(-12.0);
+		} else {
+			state = DIE;
+		}
+	}
+}
 
+void X_Bullet::auxMove(float distance)
+{
+	x1 += distance;
+	x2 += distance;
+	hit_box[0] += distance;
+	hit_box[1] += distance;
 }
 
 bool X_Bullet::collision(Zero *zero)

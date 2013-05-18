@@ -112,7 +112,7 @@ bool BackGround::canMove(double x1, double y1, double x2, double y2) const
 	if((x1 < this->x1 || x1 >= width) || (x2 < this->x1 || x2 >= width)) 
 		return false; // out of boundary
 
-	const Rectangle2D rect(x1, y1, y2-y1, x2-x1);
+	const Rectangle2D rect(x1, y1, x2-x1, y2-y1);
 
 	for(Rectangle2D * bx : ground)
 		if(bx->intersects(rect))

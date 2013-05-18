@@ -121,14 +121,14 @@ void X::move()
 		if(x1_tcoord < 0.5 || state == JUMP){
 			if(direction == LEFT){
 				// Check if possible to move left
-				if(bg->canMove(hit_box[0] - CM_DASH, lowY())){
+				if(bg->canMove(hit_box[0] - CM_DASH, hit_box[2], hit_box[1] - CM_DASH, hit_box[3])){
 					move_horizontal(CM_DASH * -1);
 				} else {
 					x1_tcoord = 0.5;
 				}
 			} else {
 				// Check if possible to move right
-				if(bg->canMove(hit_box[1] + CM_DASH, lowY())){
+				if(bg->canMove(hit_box[0] + CM_DASH, hit_box[2], hit_box[1] + CM_DASH, hit_box[3])){
 					move_horizontal(CM_DASH);
 				} else {
 					x1_tcoord = 0.5;
@@ -152,7 +152,7 @@ void X::move()
 			//const float y = hit
 			if(direction == LEFT){
 				// Check if possible to move left
-				if(bg->canMove(hit_box[0] - CM_WALK, lowY())){
+				if(bg->canMove(hit_box[0] - CM_WALK, hit_box[2], hit_box[1] - CM_WALK, hit_box[3])){
 					move_horizontal(CM_WALK * -1);
 				// change state to wall slide
 				} else if (state != SLIDE && state == JUMP && !onGround) {
@@ -165,7 +165,7 @@ void X::move()
 				}
 			} else {
 				// Check if possible to move right
-				if(bg->canMove(hit_box[1] + CM_WALK, lowY())){
+				if(bg->canMove(hit_box[0] + CM_WALK, hit_box[2], hit_box[1] + CM_WALK, hit_box[3])){
 					move_horizontal(CM_WALK);
 				// change state to wall slide
 				} else if (state != SLIDE && state == JUMP && !onGround) {
