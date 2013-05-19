@@ -43,7 +43,6 @@ Animation:
 	- dash to wall jump is messed up
 	- can shoot through walls
 	- sometimes dash abruptly ends
-	- doesn't fall if dashing over a cliff
 	- X character data gets messed up on boss entrance (pressing random buttons)
 	- doesn't charge unless in STAND state
 	- teleports up the wall when trying to wall jump sometimes

@@ -151,12 +151,16 @@ void World::draw_helper()
 		enableTextures();
 		menu->draw();
 	} else {
-		//testTexture();
 		enableTextures();
 		if(zero != NULL)  //  load boss room
 			bg.loadBossRoom();
 		bg.draw(cmX);
-
+		//testvv
+		glDisable(GL_BLEND);
+		glDisable(GL_TEXTURE_2D);
+		//test^^
+		testTexture();
+		enableTextures();
 		glColor4f(1.0, 1.0, 1.0, 1.0); // Set color
 		if(zero != NULL){
 			zero->draw(); // Draws zero
@@ -168,6 +172,7 @@ void World::draw_helper()
 	// disable texturings
 	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D);
+	
 }
 
 void World::testTexture()
@@ -419,7 +424,7 @@ void World::processKeysGame(unsigned char key)
 						// Can only fire max 3 times
 					if(x_bullets.size() < 3){
 						sound->playXBusterSFX();
-						X_Bullet *temp = new X_Bullet(x->getCannon(), x->getDirection());
+						X_Bullet *temp = new X_Bullet(x->getCannon(), x->getDirection(), &bg);
 							// Create bullet from cannon position
 						x_bullets.push_front(*temp);
 						if(hero_state == DASH){
@@ -511,7 +516,7 @@ void World::processKeyUp(unsigned char key, int x_coord, int y_coord)
 						x->resetTexture();
 						sound->playChargeShotSFX();
 						// Create bullet from cannon position
-						chargeShot = new X_Bullet(x->getCannon(), x->getDirection(), -1);
+						chargeShot = new X_Bullet(x->getCannon(), x->getDirection(), -1, &bg);
 						if(hero_state == DASH){
 						// Get out of dash animation
 							if(x->getDirection() == RIGHT){
